@@ -3,17 +3,35 @@
 /public/hot
 /public/uploads
 /public/storage
+# Ignore public storage
 /storage/*.key
+/storage/*.log
+/storage/app/*.log
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/storage/logs/*
 /vendor
 /.idea
 /.vscode
 /.vagrant
 .env
-.composer*
+.env.example
+composer.lock
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
 *.log
+*.sqlite
 dump.html
+.DS_Store
+# Ignore Node.js files and directories if applicable
+/npm-debug.log
+# Ignore runtime files
+/vendor/bin
+/.phpintel
+# Ignore Homestead files
+/.homestead
