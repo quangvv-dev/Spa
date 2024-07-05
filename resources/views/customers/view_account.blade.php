@@ -1034,7 +1034,6 @@
                     $('#update_category').val(data['category_id']).change();
                     $('.branch').val(data['branch_id']).change();
                     $('#update_action').val(data['person_action']).change();
-
                 });
             });
             $('[data-toggle="datepicker"]').datepicker({

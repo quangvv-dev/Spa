@@ -373,10 +373,13 @@ class CustomerController extends Controller
             $contacts = Contact::where('customer_id', $request->contact)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
             return view('customers._include.contact', compact('contacts'));
         }
-
+        $albums = [];
         if ($request->albums) {
-            $albums = Album::where('customer_id', $request->albums)->first();
-            $albums = !empty($albums) && !empty($albums->images) ? json_decode($albums->images) : [];
+            if (!in_array(Auth::user()->department_id, [DepartmentConstant::ADMIN, DepartmentConstant::KE_TOAN])){
+                $albums = Album::where('customer_id', $request->albums)->first();
+                $albums = !empty($albums) && !empty($albums->images) ? json_decode($albums->images) : [];
+            }
+
             return view('albums.index', compact('albums'));
         }
 
