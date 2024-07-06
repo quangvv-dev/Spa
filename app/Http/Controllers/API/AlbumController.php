@@ -55,11 +55,11 @@ class AlbumController extends BaseApiController
             }
         }
         $data = new AlbumResource($doc);
-        $user = User::find($request->jwtUser->id);
-        if (!in_array($user->department_id, [DepartmentConstant::ADMIN, DepartmentConstant::KE_TOAN])){
-            $data->images =  [];
-            $data->save();
-        }
+//        $user = User::find($request->jwtUser->id);
+//        if (!in_array($user->department_id, [DepartmentConstant::ADMIN, DepartmentConstant::KE_TOAN])){
+//            $data->images =  [];
+//            $data->save();
+//        }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
 
@@ -135,13 +135,7 @@ class AlbumController extends BaseApiController
             $doc = Album::create($input);
         }
         // xử lý phân quyền album ở đây (hiển thị album cho 1 số phòng ban)
-
         $data = new AlbumResource($doc);
-        $user = User::find($request->jwtUser->id);
-        if (!in_array($user->department_id, [DepartmentConstant::ADMIN, DepartmentConstant::KE_TOAN])){
-            $data->images =  [];
-            $data->save();
-        }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
 

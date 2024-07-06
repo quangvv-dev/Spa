@@ -375,7 +375,7 @@ class CustomerController extends Controller
         }
         if ($request->albums) {
             $albums = [];
-            if (!in_array(Auth::user()->department_id, [DepartmentConstant::ADMIN, DepartmentConstant::KE_TOAN])){
+            if (in_array(Auth::user()->department_id, [DepartmentConstant::ADMIN, DepartmentConstant::KE_TOAN])){
                 $albums = Album::where('customer_id', $request->albums)->first();
                 $albums = !empty($albums) && !empty($albums->images) ? json_decode($albums->images) : [];
             }
