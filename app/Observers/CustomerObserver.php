@@ -75,8 +75,8 @@ class CustomerObserver
                         'status_id'   => $customer->status_id,
                         'created_at'  => now(),
                     ]);
-                    $this->actionJobChangeStatus($customer);
                 }
+                $abc =  $this->actionJobChangeStatus($customer);
             }
             if (!empty($text)) {
                 $customer->groupComments()->create([
@@ -92,7 +92,10 @@ class CustomerObserver
 
     protected function actionJobsCreatedCustomer($customer)
     {
-        $output = RuleOutput::where('event', 'create_customer')->first();
+        $output = RuleOutput::where('event', 'create_customer')
+            ->whereHas('rules', function ($q) {
+                $q->where('status', StatusCode::ON);
+            })->first();
         $rule = $output->rules;
         $config = @json_decode(json_decode($rule->configs))->nodeDataArray;
         $jobs = Functions::checkRuleJob($config);
@@ -142,12 +145,16 @@ class CustomerObserver
 
     public function actionJobChangeStatus($customer)
     {
-        $check2 = RuleOutput::where('event', 'change_relation')->first();
+        $check2 = RuleOutput::where('event', 'change_relation')
+            ->whereHas('rules', function ($q) {
+                $q->where('status', StatusCode::ON);
+            })->first();
         $rule = $check2->rules;
         $config = @json_decode(json_decode($rule->configs))->nodeDataArray;
         $jobs = Functions::checkRuleJob($config);
-
-        if (count($jobs)) {
+        $status = array_values(Functions::checkRuleStatusCustomer($config));
+        $accessStatus = $status[0]->configs->group ?? [];
+        if (count($jobs) && in_array($customer->status_id,$accessStatus)) {
             foreach ($jobs as $job) {
                 if (isset($job->configs->type_job) && @$job->configs->type_job == 'cskh') {
                     $user_id = !empty($customer->cskh_id) ? $customer->cskh_id : 0;
@@ -172,7 +179,7 @@ class CustomerObserver
                         $text_category[] = $item->name;
                     }
                 }
-                $text_order = "Ngày chuyển trạng thái : " . $customer->updated_at;
+                $text_order = $prefix. " KH ". @$customer->status->name;
                 $input = [
                     'customer_id'     => @$customer->id,
                     'date_from'       => $delay_unit == 'hours' ? Carbon::now()->addHours($day)->format('Y-m-d') : Carbon::now()->addDays($day)->format('Y-m-d'),
