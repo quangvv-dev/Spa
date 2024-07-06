@@ -55,11 +55,11 @@ class AlbumController extends BaseApiController
             }
         }
         $data = new AlbumResource($doc);
-//        $user = User::find($request->jwtUser->id);
-//        if (!in_array($user->department_id, [DepartmentConstant::ADMIN, DepartmentConstant::KE_TOAN])){
-//            $data->images =  [];
-//            $data->save();
-//        }
+        $user = User::find($request->jwtUser->id);
+        if (!in_array($user->department_id, [DepartmentConstant::ADMIN, DepartmentConstant::KE_TOAN, DepartmentConstant::Y_TA])){
+            $data->images =  [];
+            $data->save();
+        }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
 
