@@ -19,7 +19,7 @@ class AlbumResource extends JsonResource
     {
         $images = @json_decode($this->images);
         $user = User::find($request->jwtUser->id);
-        if (!in_array($user->department_id, [DepartmentConstant::ADMIN, DepartmentConstant::KE_TOAN])){
+        if (!in_array(@$user->department_id, [DepartmentConstant::ADMIN, DepartmentConstant::KE_TOAN])){
             $images = null;
         }
         return [
