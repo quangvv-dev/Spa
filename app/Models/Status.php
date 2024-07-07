@@ -67,7 +67,8 @@ class Status extends Model
     public static function getRelationshipByCustomer($customers)
     {
 
-        $data = self::where('type', StatusCode::RELATIONSHIP)->orderBy('position', 'ASC')->get()->map(function ($item) use ($customers) {
+        $data = self::where('type', StatusCode::RELATIONSHIP)->orderBy('position', 'ASC')->get()->map(function ($item
+        ) use ($customers) {
             $caculate = clone $customers;
             $item->customers_count = $caculate->where('status_id', $item->id)->count();
             return $item;
@@ -78,9 +79,12 @@ class Status extends Model
 
     public static function getRelationshipByCustomerV2($input = [])
     {
-
-        $data = Status::leftJoin('customers as c', 'c.status_id', 'status.id')
-            ->where('status.type', StatusCode::RELATIONSHIP)
+        $base = Status::leftJoin('customers as c', 'c.status_id', 'status.id');
+        if (!empty($input['group'])) {
+            $base = $base->join('customer_groups as cg', 'c.id', 'cg.customer_id')
+                ->where('cg.category_id', $input['group']);
+        }
+        $data = $base->where('status.type', StatusCode::RELATIONSHIP)
             ->select('status.id', 'status.name', 'status.color', DB::raw('COUNT(c.id) as customers_count'))
             ->when(isset($input['branch_id']), function ($query) use ($input) {
                 $query->where('c.branch_id', $input['branch_id']);
@@ -95,11 +99,11 @@ class Status extends Model
                     $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
                     $q->whereDate('c.created_at', getTime(($input['data_time'])));
                 })->when($input['data_time'] == 'THIS_WEEK' ||
-                        $input['data_time'] == 'LAST_WEEK' ||
-                        $input['data_time'] == 'THIS_MONTH' ||
-                        $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                        $q->whereBetween('c.created_at', getTime(($input['data_time'])));
-                    });
+                    $input['data_time'] == 'LAST_WEEK' ||
+                    $input['data_time'] == 'THIS_MONTH' ||
+                    $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
+                    $q->whereBetween('c.created_at', getTime(($input['data_time'])));
+                });
             })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
                 $q->whereBetween('c.created_at', [
                     Functions::yearMonthDay($input['start_date']) . " 00:00:00",
@@ -117,9 +121,10 @@ class Status extends Model
             'customerSources' => function ($query) use ($input) {
                 $query->with([
                     'order_detail' => function ($query) use ($input) {
-                        $query->when(isset($input['list_booking']) && count($input['list_booking']), function ($query) use ($input) {
-                            $query->whereIn('booking_id', $input['list_booking']);
-                        })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                        $query->when(isset($input['list_booking']) && count($input['list_booking']),
+                            function ($query) use ($input) {
+                                $query->whereIn('booking_id', $input['list_booking']);
+                            })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                             $q->where('branch_id', $input['branch_id']);
                         })
                             ->when(isset($input['data_time']), function ($query) use ($input) {
