@@ -57,7 +57,7 @@
                 <table class="table mt0">
                     <tbody>
                     <tr>
-                        <td colspan="2" class="text-center"><h3>{{!empty(setting('title_website'))?setting('title_website'):'Hệ Thống Royal Spa'}}</h3><br></td>
+                        <td colspan="2" class="text-center"><h3>{{@$order->branch->lat??'PHÒNG KHÁM THẨM MỸ THEPYO'}}</h3><br></td>
                     </tr>
                     <tr>
                         <td colspan="2" class="text-center"><b >ĐƠN HÀNG BÁN</b></td>
@@ -68,7 +68,7 @@
                     </tr>
                     <tr class="font12">
                         <td class="padding5">Khách hàng : {{ @$order->customer->full_name }}</td>
-                        <td class="padding5">SĐT: {{ @$order->customer->phone }}</td>
+                        <td class="padding5">SĐT: {{ @$order->customer->account_code }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -143,7 +143,7 @@
                     <tr>
                         <td colspan="4">
                             <div class="text-center"><b>CÁM ƠN QUÝ KHÁCH VÀ HẸN GẶP LẠI</b></div>
-                            <div class="text-center font12">{{'Hotline: '.@$order->branch->phone.' Địa chỉ: '.@$order->branch->address}}</div>
+                            <div class="text-center font12">{{'Hotline: '.@$order->branch->phone.'  Địa chỉ: '.@$order->branch->address}}</div>
                             {{--<div class="text-center font12">Website: thammyroyal.com</div>--}}
                         </td>
                     </tr>
