@@ -99,7 +99,7 @@
 
                     <div class="pull-left">
                         <div class="page-info">
-                            {{ 'Tổng số ' . $docs->total() . ' khách hàng ' . (request()->search ? 'found' : '') }}
+                            {{ 'Tổng số ' . $docs->total() . ' bảng công ' . (request()->search ? 'found' : '') }}
                         </div>
                         <div class="pull-right">
                             {{ $docs->appends(['search' => request()->search ])->links() }}
