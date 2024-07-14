@@ -62,14 +62,6 @@
 
             </div>
             <div id="registration-form">
-                {{--<div class="mt-3 mb-3">--}}
-                {{--<nav class="nav">--}}
-                {{--<a class="nav-link active" href="#">Tất cả (11)</a>--}}
-                {{--<a class="nav-link" href="#">Chờ duyệt (12)</a>--}}
-                {{--<a class="nav-link" href="#">Đã duyệt (45)</a>--}}
-                {{--<a class="nav-link" href="#">Không duyệt</a>--}}
-                {{--</nav>--}}
-                {{--</div>--}}
                 <div class="table-responsive">
                     <table class="table card-table table-vcenter text-nowrap table-primary">
                         <thead class="bg-primary text-white">
@@ -104,9 +96,17 @@
                         @endforelse
                         </tbody>
                     </table>
+
+                    <div class="pull-left">
+                        <div class="page-info">
+                            {{ 'Tổng số ' . $docs->total() . ' khách hàng ' . (request()->search ? 'found' : '') }}
+                        </div>
+                        <div class="pull-right">
+                            {{ $docs->appends(['search' => request()->search ])->links() }}
+                        </div>
+                    </div>
+
                 </div>
-
-
             </div>
             <!-- table-responsive -->
         </div>
