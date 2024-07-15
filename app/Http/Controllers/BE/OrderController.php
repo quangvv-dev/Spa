@@ -209,7 +209,7 @@ class OrderController extends Controller
                 $order->is_upsale = 1;
                 $order->cskh_id = $customer->cskh_id;
             }
-            if (!empty($customer->branch->location_id) && empty($customer->cskh_id)) {
+            if (empty($customer->cskh_id)) {
                 $position = PositionCskh::firstOrCreate(['location_id' => $order->branch_id]);
 //                $position = PositionCskh::where('location_id', 0)->first();
                 $old_position = isset($position->position) ? $position->position : 0;
