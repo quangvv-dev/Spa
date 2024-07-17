@@ -46,7 +46,7 @@ class ZaloService
             'refresh_token' => $result->refresh_token,
             'access_token' => $result->access_token
         ]);
-        return true;
+        return $this->info('Đã hoàn thành');
     }
 
     public function compareDataSchedule($schedule)
