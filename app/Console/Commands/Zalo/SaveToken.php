@@ -31,6 +31,6 @@ class SaveToken extends Command
     public function handle(ZaloService $zaloService)
     {
         $zaloService->saveTokenZalo();
-        return 1;
+        return $this->info('Đã reset token zalo OA thành công !!!');
     }
 }
