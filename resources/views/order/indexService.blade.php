@@ -530,6 +530,24 @@
             $('#voucherModal').modal('show');
         });
 
+        $(document).on('keyup', '.phone', function (e) {
+            $('.save').prop('disabled', false);
+            let current = $(this);
+            current.closest('.phone-group').find('.help-block').html('');
+            $.ajax({
+                url: '/api/check-unique-customers',
+                type:"post",
+                data: {
+                    phone: $(this).val(),
+                },
+                success: function (data) {
+                    if(data == 'true'){
+                        alertify.error('Số điện thoại đã tồn tại')
+                        $('.save').prop('disabled', true);
+                    }
+                }
+            })
+        });
         $(document).on('click', '.remove_row', function (e) {
             $(e.target).closest('tr').remove();
             value_total = 0;
