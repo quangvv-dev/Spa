@@ -203,7 +203,7 @@ class OrderController extends Controller
                 'branch_id' => $param['branch_id'],
             ]);
             $countOrders = Order::select('id')->where('member_id', $customer->id)->count();
-            if (@$countOrders >= 1) {
+            if (@$countOrders > 1) {
                 $customer->old_customer = 1;
                 $order->is_upsale = 1;
                 $order->cskh_id = $customer->cskh_id;
