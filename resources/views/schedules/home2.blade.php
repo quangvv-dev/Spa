@@ -162,6 +162,7 @@
                     });
                     $('#calendar1').fullCalendar('removeEvents');
                     $('#calendar1').fullCalendar('addEventSource', b);
+                    console.log(b)
                 });
             }
 
