@@ -144,9 +144,9 @@
                         let categoryText = !$.isEmptyObject(value.category)?value.category.name:"";
                         b.push({
                             id: value.id,
-                            title: typeText+': '+value.customer.full_name+' -'+categoryText+', ' +', SĐT: ' + (hidden_phone == true ? value.customer.phone : value.customer.phone.slice(0, 7) + 'xxx') + ' Lưu ý: '+value.note,
-                            start: `${data.date}T${data.time_from}:00`,
-                            end: `${data.date}T${data.time_to}:00`,
+                            title: typeText+': '+value.customer.full_name+' -'+categoryText+', ' +', SĐT: ' + (hidden_phone == true ? value.customer.phone : value.customer.phone.slice(0, 7) + 'xxx') + ' Lưu ý: ' + value.note,
+                            start: value.date + 'T' + value.time_from + ':00',
+                            end: value.date + 'T' + value.time_to + ':00',
                             color: col,
                             //data bonus
                             note: value.note,
@@ -331,9 +331,9 @@
                     let categoryText = !$.isEmptyObject(data.category)?data.category.name:"";
                     b.push({
                         id: data.id,
-                        title: typeText+': '+value.customer.full_name+' -'+categoryText+', ' +', SĐT: ' + (hidden_phone == true ? value.customer.phone : value.customer.phone.slice(0, 7) + 'xxx') + ' Lưu ý: '+ value.note,
-                        start: `${data.date}T${data.time_from}:00`,
-                        end: `${data.date}T${data.time_to}:00`,
+                        title: typeText+': '+value.customer.full_name+' -'+categoryText+', ' +', SĐT: ' + (hidden_phone == true ? value.customer.phone : value.customer.phone.slice(0, 7) + 'xxx') + ' Lưu ý: ' + value.note,
+                        start: value.date + 'T' + value.time_from + ':00',
+                        end: value.date + 'T' + value.time_to + ':00',
                         color: col,
                         //data bonus
                         note: data.note,
