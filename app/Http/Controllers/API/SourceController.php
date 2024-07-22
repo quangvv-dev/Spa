@@ -16,7 +16,7 @@ class SourceController extends Controller
     {
         try {
             $source = Source::find($id);
-            $customer_search = Customer::where('phone', $request->phone)->orderByDesc('updated_at')->first();
+            $customer_search = Customer::where('phone', $request->phone)->first();
             if ($customer_search) {
                 return response()->json([
                     'code' => 200,

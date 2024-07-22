@@ -224,7 +224,6 @@ class ScheduleController extends Controller
         }
         if (!count($request->all())) {
             $request->merge(['branch_id' => 1]);
-
         }
         $params = $request->all();
 

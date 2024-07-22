@@ -117,9 +117,9 @@ class StatisticController extends Controller
             $end = now()->endOfMonth()->format('d');
         }
 
-        $cacheKey = 'chamcong' . ($request->month ?? (int)Date::now()->format('m')) . '_' . $request->branch_id;
-        $docs = Cache::remember($cacheKey, 1440, function () use ($request, $year, $end) {
-            return User::select('id', 'full_name', 'approval_code', 'department_id')
+//        $cacheKey = 'chamcong' . ($request->month ?? (int)Date::now()->format('m')) . '_' . $request->branch_id;
+//        $docs = Cache::remember($cacheKey, 1440, function () use ($request, $year, $end) {
+        $docs = User::select('id', 'full_name', 'approval_code', 'department_id')
                 ->when(isset($request->branch_id), function ($q) use ($request) {
                     $q->where('branch_id', $request->branch_id);
                 })->whereNotNull('approval_code')->get()->map(function ($item) use ($end, $year, $request) {
@@ -163,7 +163,7 @@ class StatisticController extends Controller
                         return $fl;
                     }
                 });
-        });
+//        });
 
         if ($request->ajax()) {
             return view('cham_cong.statistic.ajax', compact('end', 'docs'));
