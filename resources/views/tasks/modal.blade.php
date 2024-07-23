@@ -103,7 +103,7 @@
                     </div>
                     <div class="col-md-4 col-xs-12">
                         {!! Form::label('type', 'Loại công việc', array('class' => ' required')) !!}
-                        {!! Form::select('type', [3=>'Của tôi',\App\Constants\StatusCode::GOI_LAI=>'Gọi lại (phân bổ cho Telesale)',\App\Constants\StatusCode::CSKH=>'CSKH (phân bổ cho CSKH)'], null,
+                        {!! Form::select('type', [3=>'Của tôi',\App\Constants\StatusCode::GOI_LAI=>'Gọi lại',\App\Constants\StatusCode::CSKH=>'CSKH'], null,
                         array('class' => 'form-control','id'=>'updateType')) !!}
                     </div>
                     {{--                    <div class="col-md-4 col-xs-12 clockpicker" data-placement="left" data-align="top"--}}
