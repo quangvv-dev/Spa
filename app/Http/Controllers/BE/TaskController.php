@@ -114,8 +114,8 @@ class TaskController extends Controller
     {
         $customer = Customer::find($request->customer_id);
         $request->merge([
-            'user_id' => Auth::user()->id,
-            'priority' => 1,
+            'user_id'   => Auth::user()->id,
+            'priority'  => 1,
             'branch_id' => $customer->branch_id,
         ]);
         $input = $request->except('ajax');
@@ -126,9 +126,11 @@ class TaskController extends Controller
             $input['type'] = StatusCode::CSKH;
         }
 
-        if ($request->type == StatusCode::GOI_LAI) {
+        if ($request->type == StatusCode::CAREPAGE) {
+            $input['user_id'] = Auth::user()->id;
+        } elseif ($request->type == StatusCode::GOI_LAI) {
             $input['user_id'] = $customer->telesales_id;
-        } else if ($request->type == StatusCode::CSKH) {
+        } elseif ($request->type == StatusCode::CSKH) {
             $input['user_id'] = @$customer->cskh_id ?? $customer->telesales_id;
         }
         $task = $this->taskService->create($input);
@@ -226,7 +228,7 @@ class TaskController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param int                      $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -342,8 +344,12 @@ class TaskController extends Controller
         }
         $input = $request->all();
         $myBranch = Auth::user()->branch_id ?? null;
-        $users = User::whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER, DepartmentConstant::CSKH,
-            DepartmentConstant::CARE_PAGE])
+        $users = User::whereIn('department_id', [
+            DepartmentConstant::TELESALES,
+            DepartmentConstant::WAITER,
+            DepartmentConstant::CSKH,
+            DepartmentConstant::CARE_PAGE,
+        ])
             ->when(!empty($myBranch), function ($query) use ($myBranch) {
                 $query->where('branch_id', $myBranch);
             })->pluck('full_name', 'id')->toArray();
@@ -365,8 +371,8 @@ class TaskController extends Controller
         $docs = Task::search($input)->orderByDesc('id')->orderBy('task_status_id')->paginate(StatusCode::PAGINATE_20);
         $status = TaskStatus::select('id', 'name')->get()->transform(function ($item) use ($status) {
             return [
-                'id' => $item->id,
-                'name' => $item->name,
+                'id'    => $item->id,
+                'name'  => $item->name,
                 'count' => @$status->firstWhere('id', $item->id)->count ?? 0,
             ];
         });
