@@ -118,6 +118,9 @@
                     <div class="btn-group ml5">
                         {!! Form::select('role_type', [1=>'Dịch vụ',2=>'Sản phẩm',3=>'Combo'], null, array('class' => 'form-control role_type', 'placeholder'=>'Tất cả đơn')) !!}
                     </div>
+                    <div class="btn-group ml5">
+                        {!! Form::select('is_upsale', [0=>'Đơn mới',1=>'Upsale'], null, array('class' => 'form-control upsale', 'placeholder'=>'Loại đơn')) !!}
+                    </div>
                     @if(empty($checkRole))
                         <div class="btn-group ml5">
                             {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}
@@ -143,6 +146,7 @@
     <input type="hidden" id="order-status">
     <input type="hidden" id="order-type">
     <input type="hidden" id="role_type">
+    <input type="hidden" id="is_upsale">
     <input type="hidden" id="phone">
     <input type="hidden" id="branch_id">
     <input type="hidden" id="support_id">
@@ -177,6 +181,7 @@
             const end_date = $('.filter_end_date').val();
             const order_type = $('#order-type').val();
             const role_type = $('#role_type').val();
+            const is_upsale = $('.upsale').val();
             const phone = $('.phone').val();
             const branch_id = $('.branch_id').val();
             const gifts = $('.gifts').val();
@@ -197,6 +202,7 @@
             }
             $('#group').val(group);
             $('#role_type').val(role_type);
+            $('#is_upsale').val(is_upsale);
             $('#phone').val(phone);
             $('#telesales').val(telesales);
             $('#marketing').val(marketing);
@@ -243,6 +249,7 @@
                 bor_none: bor_none,
                 order_type: order_type,
                 role_type: role_type,
+                is_upsale: is_upsale,
                 phone: phone,
                 branch_id: branch_id,
                 support_id: support_id,
@@ -265,6 +272,7 @@
             const bor_none = $('#bor-none').val();
             const phone = $('#phone').val();
             const role_type = $('#role_type').val();
+            const is_upsale = $('#is_upsale').val();
             const branch_id = $('.branch_id').val();
             const support_id = $('#support_id').val();
 
@@ -284,13 +292,14 @@
                 bor_none: bor_none,
                 order_type: order_type,
                 role_type: role_type,
+                is_upsale: is_upsale,
                 phone: phone,
                 branch_id: branch_id,
                 support_id: support_id,
             });
         });
 
-        $(document).on('change', '.role_type', function () {
+        $(document).on('change', '.role_type, .upsale', function () {
             const order_type = $('#order_type').val();
             const group = $('#group').val();
             const telesales = $('#telesales').val();
@@ -304,9 +313,11 @@
             const bor_none = $('#bor-none').val();
             const phone = $('#phone').val();
             const role_type = $('.role_type').val();
+            const is_upsale = $('.upsale').val();
             const branch_id = $('.branch_id').val();
             const support_id = $('#support_id').val();
 
+            $('#is_upsale').val(is_upsale);
             $('#role_type').val(role_type);
 
             searchAjax({
@@ -322,6 +333,7 @@
                 bor_none: bor_none,
                 order_type: order_type,
                 role_type: role_type,
+                is_upsale: is_upsale,
                 phone: phone,
                 branch_id: branch_id,
                 support_id: support_id,
