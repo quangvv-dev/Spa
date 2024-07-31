@@ -105,7 +105,7 @@ class OrderController extends BaseApiController
                     }
                 }
 
-                $doc = [
+                $docs[] = [
                     'id'            => $item->id,
                     'avatar'        => $item->avatar,
                     'full_name'     => $item->full_name,
@@ -116,7 +116,6 @@ class OrderController extends BaseApiController
                     'rose_money'    => Commission::search($input, 'earn')->sum('earn'),
                     'price'         => array_sum($price) ? array_sum($price) : 0,
                 ];
-                $docs[] = $doc;
             }
         }
         $data = collect($docs)->sortBy('gross_revenue')->reverse()->toArray();
@@ -131,6 +130,9 @@ class OrderController extends BaseApiController
             $request->merge(['group_branch' => $group_branch]);
         }
         $input = $request->all();
+        if (!empty($request->jwtUser->branch_id)) {
+            $request->merge(['group_branch' => $request->jwtUser->branch_id]);
+        }
         $docs = [];
         $data = User::select('id', 'full_name', 'avatar')->where('department_id', UserConstant::PHONG_TVV)
             ->where('active', StatusCode::ON)
@@ -144,7 +146,7 @@ class OrderController extends BaseApiController
                 $input['user_id'] = $item->id;
                 $input['type'] = 0;
                 $order = Order::getAll($input);
-                $doc = [
+                $docs[] = [
                     'id'            => $item->id,
                     'avatar'        => $item->avatar,
                     'full_name'     => $item->full_name,
@@ -152,7 +154,6 @@ class OrderController extends BaseApiController
                     'gross_revenue' => $order->sum('gross_revenue'),
                     'rose_money'    => Commission::search($input)->sum('earn'),
                 ];
-                $docs[] = $doc;
             }
         }
         $data = collect($docs)->sortBy('gross_revenue')->reverse()->toArray();
