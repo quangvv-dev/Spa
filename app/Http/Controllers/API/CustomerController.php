@@ -70,7 +70,7 @@ class CustomerController extends BaseApiController
     public function store(Request $request)
     {
         $validate = [
-            'phone'        => "required",
+            'phone'        => "required|unique:customers,phone",
             'full_name'    => "required",
             'gender'       => "required",
             'telesales_id' => "required",
