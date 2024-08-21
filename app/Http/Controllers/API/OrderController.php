@@ -122,9 +122,7 @@ class OrderController extends BaseApiController
                     'rose_money'    => Commission::search($input, 'earn')->sum('earn'),
                     'price'         => array_sum($price) ?? 0,
                 ];
-                if ($doc['days'] > 0 || $doc['price'] > 0) {
-                    $docs[] = $doc;
-                }
+                $docs[] = $doc;
             }
         }
 
