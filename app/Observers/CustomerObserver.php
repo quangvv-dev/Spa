@@ -32,10 +32,9 @@ class CustomerObserver
     public function created(Customer $customer)
     {
         if (!empty(Auth::user())){
-            dd(1);
+            $name = Auth::user()->full_name;
         }else{
-            dd(@User::find($customer->carepage_id)->full_name);
-
+            $name = @User::find($customer->carepage_id)->full_name;
         }
         if (!empty($customer->facebook)) {
             $this->actionJobsCreatedCustomer($customer);
@@ -50,7 +49,7 @@ class CustomerObserver
             'branch_id'   => $customer->branch_id,
             'status_id'   => $customer->status_id,
             'user_id'     => Auth::user()->id ?? $customer->carepage_id,
-            'messages'    => "<span class='bold text-azure'>Tạo mới KH: </span> " . Auth::user()->full_name??@User::find($customer->carepage_id)->full_name . " thao tác lúc " . date('H:i d-m-Y'),
+            'messages'    => "<span class='bold text-azure'>Tạo mới KH: </span> " . $name . " thao tác lúc " . date('H:i d-m-Y'),
         ]);
     }
 
