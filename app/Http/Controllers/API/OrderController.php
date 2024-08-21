@@ -83,7 +83,7 @@ class OrderController extends BaseApiController
                 $q->whereIn('branch_id', $input['group_branch']);
             })->with('branch')->get();
 
-        {
+        if (count($data)) {
             foreach ($data as $item) {
                 $price = [];
                 $input['support_id'] = $item->id;
