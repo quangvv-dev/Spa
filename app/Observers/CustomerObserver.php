@@ -13,6 +13,7 @@ use App\Models\Status;
 use App\Services\TaskService;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CustomerObserver
@@ -29,7 +30,7 @@ class CustomerObserver
      *
      * @return void
      */
-    public function created(Customer $customer)
+    public function created(Request $request,Customer $customer)
     {
         if (!empty($customer->facebook)) {
             $this->actionJobsCreatedCustomer($customer);
@@ -43,12 +44,12 @@ class CustomerObserver
             'customer_id' => $customer->id,
             'branch_id'   => $customer->branch_id,
             'status_id'   => $customer->status_id,
-            'user_id'     => Auth::user()->id ?? $customer->carepage_id,
-            'messages'    => "<span class='bold text-azure'>Tạo mới KH: </span> " . Auth::user()->full_name . " thao tác lúc " . date('H:i d-m-Y'),
+            'user_id'     => Auth::user()->id ?? @$request->jwtUser->id,
+            'messages'    => "<span class='bold text-azure'>Tạo mới KH: </span> " . Auth::user()->full_name??@$customer->carepage->full_name . " thao tác lúc " . date('H:i d-m-Y'),
         ]);
     }
 
-    public function updated(Customer $customer)
+    public function updated(Request $request,Customer $customer)
     {
         $changedAttributes = $customer->getDirty();
         $oldData = $customer->getOriginal();
@@ -76,14 +77,14 @@ class CustomerObserver
                         'created_at'  => now(),
                     ]);
                 }
-                $abc = $this->actionJobChangeStatus($customer);
+               $this->actionJobChangeStatus($customer);
             }
             if (!empty($text)) {
                 $customer->groupComments()->create([
                     'customer_id' => $customer->id,
                     'branch_id'   => $customer->branch_id,
                     'status_id'   => $customer->status_id,
-                    'user_id'     => Auth::user()->id,
+                    'user_id'     => Auth::user()->id ?? @$request->jwtUser->id,
                     'messages'    => "<span class='bold text-danger'>Chỉnh sửa thông tin: </span> " . $text,
                 ]);
             }
