@@ -400,17 +400,17 @@ class AuthController extends BaseApiController
         $data = [
             [
                 'menu_code'  => MenuConstant::THONG_KE,
-                'department' => [DepartmentConstant::ADMIN],
+                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TU_VAN_VIEN],
                 'name_menu'  => 'THỐNG KÊ',
             ],
             [
                 'menu_code'  => MenuConstant::DOANH_THU,
-                'department' => [DepartmentConstant::ADMIN],
+                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TU_VAN_VIEN],
                 'name_menu'  => 'DOANH THU',
             ],
             [
                 'menu_code'  => MenuConstant::DOANH_THU_THEO_NHOM,
-                'department' => [DepartmentConstant::ADMIN],
+                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TU_VAN_VIEN],
                 'name_menu'  => 'DOANH THU THEO NHÓM',
             ],
             [
