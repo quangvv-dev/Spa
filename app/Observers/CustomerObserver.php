@@ -31,6 +31,7 @@ class CustomerObserver
      */
     public function created(Customer $customer)
     {
+        dd(User::find($customer->carepage_id));
         dd([
             'customer_id' => $customer->id,
             'branch_id'   => $customer->branch_id,
