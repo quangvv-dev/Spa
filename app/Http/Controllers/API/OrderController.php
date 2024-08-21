@@ -74,37 +74,43 @@ class OrderController extends BaseApiController
             $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
             $request->merge(['group_branch' => $group_branch]);
         }
-        $category_price = Category::pluck('price', 'id')->toArray();
         $input = $request->all();
         $docs = [];
         $data = User::select('id', 'full_name', 'avatar')->whereIn('role', [UserConstant::TECHNICIANS])
-            ->where('active', StatusCode::ON)
-            ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
-                $q->where('branch_id', $input['branch_id']);
+            ->when(isset($input['branch_id']), function ($query) use ($input) {
+                $query->where('branch_id', $input['branch_id']);
             })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                 $q->whereIn('branch_id', $input['group_branch']);
-            })->get();
-        if (count($data)) {
+            })->with('branch')->get();
+
+        {
             foreach ($data as $item) {
                 $price = [];
                 $input['support_id'] = $item->id;
                 $input['user_id'] = $item->id;
                 $input['type'] = 0;
                 $order = Order::getAll($input);
-                $history_orders = HistoryUpdateOrder::search($input, 'id')->with('service');
+                unset($input['support_id'], $input['user_id']);
+                $history_orders = HistoryUpdateOrder::search($input)
+                    ->where('user_id', $item->id)->orWhere('support_id', $item->id)->select('id', 'user_id',
+                        'support_id', 'support2_id', 'tip_id', 'service_id')
+                    ->orWhere('support2_id', $item->id)->with('service', 'tip');
                 $history = $history_orders->get();
-
+                $cong_chinh = 0;
+                $cong_phu = 0;
                 if (count($history)) {
                     foreach ($history as $item2) {
-                        if (isset($item2->service)) {
-                            $category_id = $item2->service->category_id ?: 0;
-                            if (!empty($category_price[$category_id])) {
-                                $price[] = (int)$category_price[$category_id];
-                            }
+                        if (isset($item2->tip)) {
+                            $price [] = (int)$item2->tip->price ?: 0;
+                        }
+                        if ($item->id == $item2->user_id) {
+                            $cong_chinh += 1;
+                        } elseif ($item->id == @$item2->support_id || $item->id == @$item2->support2_id) {
+                            $cong_phu += 1;
                         }
                     }
                 }
-
+                $input['user_id'] = $item->id;
                 $doc = [
                     'id'            => $item->id,
                     'avatar'        => $item->avatar,
@@ -112,13 +118,16 @@ class OrderController extends BaseApiController
                     //                    'orders' => $order->count(),
                     //                    'all_total' => $order->sum('all_total'),
                     'gross_revenue' => $order->sum('gross_revenue'),
-                    'days'          => $history_orders->count(),
+                    'days'          => (int) $cong_chinh + (int) $cong_phu,
                     'rose_money'    => Commission::search($input, 'earn')->sum('earn'),
-                    'price'         => array_sum($price) ? array_sum($price) : 0,
+                    'price'         => array_sum($price) ?? 0,
                 ];
-                $docs[] = $doc;
+                if ($doc['days'] > 0 || $doc['price'] > 0 || $doc['days_phu'] > 0) {
+                    $docs[] = $doc;
+                }
             }
         }
+
         $data = collect($docs)->sortBy('gross_revenue')->reverse()->toArray();
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', array_values($data));
