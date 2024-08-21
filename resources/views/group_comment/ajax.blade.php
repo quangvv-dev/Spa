@@ -55,7 +55,7 @@
         background-color: rgb(150, 217, 201);
     }
 
-    .group-comment-table{
+    .group-comment-table {
         overflow-x: hidden;
     }
 
@@ -109,27 +109,25 @@
                                     </p>
                                 @endif
                             </div>
-                            @if (Auth::user()->id == $item->user_id)
+                            @if (Auth::user()->id == $item->user_id && !in_array('comment.edit',setting('permissions')??[]))
                                 <div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
-                                    @if(!in_array('comment.edit',setting('permissions')??[]))
-                                        <a data-original-title="Sửa"  rel="tooltip" style="margin-right: 5px">
-                                            <i class="fas fa-pencil-alt btn-edit-comment" data-id="{{$item->id}}"></i>
-                                        </a>
-                                        <a data-original-title="Xóa" rel="tooltip">
-                                            <i class="fas fa-trash-alt btn-delete-comment" data-id="{{$item->id}}"></i>
-                                        </a>
-                                    @endif
+                                    <a data-original-title="Sửa" rel="tooltip" style="margin-right: 5px">
+                                        <i class="fas fa-pencil-alt btn-edit-comment" data-id="{{$item->id}}"></i>
+                                    </a>
+                                    <a data-original-title="Xóa" rel="tooltip">
+                                        <i class="fas fa-trash-alt btn-delete-comment" data-id="{{$item->id}}"></i>
+                                    </a>
                                 </div>
                             @endif
                         </div>
                         <div class="col-md-11 comment" style="margin-top: 10px;align-items: center;display: flex">
                             @if(isset($item->call))
-                                <label class="bold">File ghi âm:  </label>
+                                <label class="bold">File ghi âm: </label>
                                 <audio controls class="audio-border">
                                     <source src="{{@$item->call->recording_url}}" type="audio/wav">
                                 </audio>
                             @else
-{{--                                <label class="bold">Nội dung: </label>--}}
+                                {{--                                <label class="bold">Nội dung: </label>--}}
                                 <span style="font-style: italic">{!! $item->messages !!}</span>
                             @endif
                         </div>
@@ -138,8 +136,10 @@
                                 <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
                                     <div class="fileupload fileupload-exists"
                                          data-provides="fileupload">
-                                        <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 100px">
-                                            <a href="{{ $item->image }}" class="mobileLightBox"><img src="{{ $item->image }}" alt="image"/></a>
+                                        <div class="fileupload-preview fileupload-exists thumbnail"
+                                             style="max-width: 100px">
+                                            <a href="{{ $item->image }}" class="mobileLightBox"><img
+                                                    src="{{ $item->image }}" alt="image"/></a>
                                         </div>
                                     </div>
                                 </div>
@@ -148,9 +148,9 @@
                     </div>
                 </div>
             @endforeach
-                <div class="pull-right">
-                    {{ $docs->links() }}
-                </div>
+            <div class="pull-right">
+                {{ $docs->links() }}
+            </div>
         @endif
     </table>
 </div>
