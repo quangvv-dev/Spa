@@ -234,11 +234,10 @@
                                         <a data-original-title="Sửa"  rel="tooltip" style="margin-right: 5px">
                                         <i class="fas fa-edit btn-edit-comment" data-id="` + item.id + `"></i>
                                         </a>
-                                        @endif
-
                                         <a data-original-title="Xóa" rel="tooltip">
                                             <i class="fas fa-trash-alt btn-delete-comment" data-id="` + item.id + `"></i>
                                         </a>
+                                        @endif
                                     </div>` : "") +
                             `<div class="col-md-12 comment" style="margin-top: 5px; margin-bottom: 5px; white-space: pre-line;">` + item.messages + `
                                     </div>
@@ -281,13 +280,16 @@
                     <div class="col-md-11"><p><a href="#" class="bold blue">` + data.group_comment.user.full_name + `</a>
                         <span><i class="fa fa-clock"> ` + data.group_comment.created_at + `</i></span></p>
                     </div>` +
-                        (data.id_login == data.group_comment.user_id ? `<div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
+                        (data.id_login == data.group_comment.user_id ? `
+                                    <div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
+                                    @if(!in_array('comment.edit',setting('permissions')??[]))
                                         <a data-original-title="Sửa"  rel="tooltip" style="margin-right: 5px">
                                             <i class="fas fa-edit btn-edit-comment" data-id="` + data.group_comment.id + `"></i>
                                         </a>
                                         <a data-original-title="Xóa" rel="tooltip">
                                             <i class="fas fa-trash-alt btn-delete-comment" data-id="` + data.group_comment.id + `"></i>
                                         </a>
+                                        @endif
                                     </div>` : "") +
                         `<div class="col-md-12 comment" style="margin-top: 5px; margin-bottom: 5px; white-space: pre-line;">` + data.group_comment.messages + `</div>
                     </div>

@@ -115,10 +115,10 @@
                                         <a data-original-title="Sửa"  rel="tooltip" style="margin-right: 5px">
                                             <i class="fas fa-pencil-alt btn-edit-comment" data-id="{{$item->id}}"></i>
                                         </a>
+                                        <a data-original-title="Xóa" rel="tooltip">
+                                            <i class="fas fa-trash-alt btn-delete-comment" data-id="{{$item->id}}"></i>
+                                        </a>
                                     @endif
-                                    <a data-original-title="Xóa" rel="tooltip">
-                                        <i class="fas fa-trash-alt btn-delete-comment" data-id="{{$item->id}}"></i>
-                                    </a>
                                 </div>
                             @endif
                         </div>
