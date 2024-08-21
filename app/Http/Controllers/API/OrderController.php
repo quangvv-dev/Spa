@@ -74,6 +74,9 @@ class OrderController extends BaseApiController
             $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
             $request->merge(['group_branch' => $group_branch]);
         }
+        if (!empty($request->jwtUser->branch_id)) {
+            $request->merge(['branch_id' => $request->jwtUser->branch_id]);
+        }
         $input = $request->all();
         $docs = [];
         $data = User::select('id', 'full_name', 'avatar')->whereIn('role', [UserConstant::TECHNICIANS])
