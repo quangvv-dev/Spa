@@ -31,6 +31,7 @@ class CustomerObserver
      */
     public function created(Customer $customer)
     {
+        dd(Auth::user());
         dd([
             'customer_id' => $customer->id,
             'branch_id'   => $customer->branch_id,
