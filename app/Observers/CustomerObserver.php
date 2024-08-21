@@ -43,7 +43,7 @@ class CustomerObserver
             'customer_id' => $customer->id,
             'branch_id'   => $customer->branch_id,
             'status_id'   => $customer->status_id,
-            'user_id'     => Auth::user()->id,
+            'user_id'     => Auth::user()->id ?? $customer->carepage_id,
             'messages'    => "<span class='bold text-azure'>Tạo mới KH: </span> " . Auth::user()->full_name . " thao tác lúc " . date('H:i d-m-Y'),
         ]);
     }
@@ -76,7 +76,7 @@ class CustomerObserver
                         'created_at'  => now(),
                     ]);
                 }
-                $abc =  $this->actionJobChangeStatus($customer);
+                $abc = $this->actionJobChangeStatus($customer);
             }
             if (!empty($text)) {
                 $customer->groupComments()->create([
@@ -154,7 +154,7 @@ class CustomerObserver
         $jobs = Functions::checkRuleJob($config);
         $status = array_values(Functions::checkRuleStatusCustomer($config));
         $accessStatus = $status[0]->configs->group ?? [];
-        if (count($jobs) && in_array($customer->status_id,$accessStatus)) {
+        if (count($jobs) && in_array($customer->status_id, $accessStatus)) {
             foreach ($jobs as $job) {
                 if (isset($job->configs->type_job) && @$job->configs->type_job == 'cskh') {
                     $user_id = !empty($customer->cskh_id) ? $customer->cskh_id : 0;
@@ -179,7 +179,7 @@ class CustomerObserver
                         $text_category[] = $item->name;
                     }
                 }
-                $text_order = $prefix. " KH ". @$customer->status->name;
+                $text_order = $prefix . " KH " . @$customer->status->name;
                 $input = [
                     'customer_id'     => @$customer->id,
                     'date_from'       => $delay_unit == 'hours' ? Carbon::now()->addHours($day)->format('Y-m-d') : Carbon::now()->addDays($day)->format('Y-m-d'),
