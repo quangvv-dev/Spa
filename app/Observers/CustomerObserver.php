@@ -31,13 +31,12 @@ class CustomerObserver
      */
     public function created(Customer $customer)
     {
-        dd([
-            'customer_id' => $customer->id,
-            'branch_id'   => $customer->branch_id,
-            'status_id'   => $customer->status_id,
-            'user_id'     => Auth::user()->id ?? $customer->carepage_id,
-            'messages'    => "<span class='bold text-azure'>Tạo mới KH: </span> ". !empty(Auth::user()) ?Auth::user()->full_name:@User::find($customer->carepage_id)->full_name . " thao tác lúc " . date('H:i d-m-Y'),
-        ]);
+        if (!empty(Auth::user())){
+            dd(1);
+        }else{
+            dd(2);
+
+        }
         if (!empty($customer->facebook)) {
             $this->actionJobsCreatedCustomer($customer);
         }
