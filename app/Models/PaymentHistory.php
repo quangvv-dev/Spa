@@ -139,6 +139,19 @@ class PaymentHistory extends Model
                 });
             });
         }
+        if (isset($input['locale_id'])) {
+            $detail = $detail->whereHas('order', function ($item) use ($input) {
+                $item->whereHas('customer', function ($q) use ($input) {
+                    $q->where('locale_id', $input['locale_id']);
+                });
+            });
+        }if (isset($input['source_id'])) {
+            $detail = $detail->whereHas('order', function ($item) use ($input) {
+                $item->whereHas('customer', function ($q) use ($input) {
+                    $q->where('source_id', $input['source_id']);
+                });
+            });
+        }
 
         return $detail;
     }

@@ -73,6 +73,7 @@
                     <button type="submit" class="btn btn-primary"> Tìm kiếm</button>
                 </div>
             </div>
+            @include('report_products._include.dropdownFilter')
             {{ Form::close() }}
         </div>
     </div>

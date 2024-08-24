@@ -86,6 +86,10 @@ class SalesController extends Controller
                             $q->whereIn('branch_id', $request->group_branch);
                         })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
                         $q->where('branch_id', $request->branch_id);
+                    })->when(isset($request->locale_id) && $request->locale_id, function ($q) use ($request) {
+                        $q->where('locale_id', $request->locale_id);
+                    })->when(isset($request->source_id) && $request->source_id, function ($q) use ($request) {
+                        $q->where('locale_id', $request->source_id);
                     });
 
                 $orders = Order::select('id', 'member_id', 'all_total', 'gross_revenue')->whereIn('role_type',
@@ -99,8 +103,13 @@ class SalesController extends Controller
                             $q->whereIn('branch_id', $request->group_branch);
                         })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
                         $q->where('branch_id', $request->branch_id);
-                    })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
-                        $qr->where('telesales_id', $item->id);
+                    })->with('orderDetails')->whereHas('customer', function ($qr) use ($item,$request) {
+                        $qr = $qr->where('telesales_id', $item->id);
+                        if (!empty($request->locale_id)){
+                            $qr->where('locale_id', $request->locale_id);
+                        }if (!empty($request->source_id)){
+                            $qr->where('source_id', $request->source_id);
+                        }
                     });
                 $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
 
@@ -127,6 +136,14 @@ class SalesController extends Controller
                             $q->whereIn('branch_id', $request->group_branch);
                         })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
                         $q->where('branch_id', $request->branch_id);
+                    })->when(isset($request->locale_id) && $request->locale_id, function ($q) use ($request) {
+                        $q->whereHas('customer', function ($qr) use ($request) {
+                            $qr->where('locale_id', $request->locale_id);
+                        });
+                    })->when(isset($request->source_id) && $request->source_id, function ($q) use ($request) {
+                        $q->whereHas('customer', function ($qr) use ($request) {
+                            $qr->where('source_id', $request->source_id);
+                        });
                     });
                 $schedules_den = clone $schedules;
                 $schedules_new = clone $schedules;
