@@ -48,7 +48,7 @@
             <div class="row">
                 <div class="col-md-3"><h3 class="card-title bold">XẾP HẠNG TELESALE</h3></div>
             </div>
-            <div class="row mt-3">
+            <div class="row"style="padding-top: 0.5rem">
                 <div class="col-md-2">
                     <input type="hidden" name="start_date" id="start_date">
                     <input type="hidden" name="end_date" id="end_date">
@@ -71,6 +71,13 @@
 
                 <div class="col-lg-1 col-md-6">
                     <button type="submit" class="btn btn-primary"> Tìm kiếm</button>
+                </div>
+                <div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                        <li><a style="display: none" href="#" class="angleDoubleUp">
+                                <i class="fa fa-angle-double-up"></i></a></li>
+                        <li><a href="#" class="angleDoubleDown"><i class="fa fa-angle-double-down"></i></a></li>
+                    </ul>
                 </div>
             </div>
             @include('report_products._include.dropdownFilter')

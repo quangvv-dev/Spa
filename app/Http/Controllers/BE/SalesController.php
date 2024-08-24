@@ -14,6 +14,7 @@ use App\Models\CallCenter;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
+use App\Models\Locale;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
@@ -41,9 +42,13 @@ class SalesController extends Controller
         $this->middleware('permission:report.sale', ['only' => ['index']]);
         $location = Branch::getLocation();
         $branchs = Branch::pluck('name', 'id');
+        $source = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id');
+        $locales = Locale::get()->pluck('name','id');
         view()->share([
             'location' => $location,
             'branchs'  => $branchs,
+            'source'   => $source,
+            'locales'  => $locales,
         ]);
 
     }
