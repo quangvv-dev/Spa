@@ -72,6 +72,7 @@ class CustomerObserver
 
         // Kiểm tra sự thay đổi của các trường khác
         if (count($changedAttributes)) {
+            dd(123);
             $text = '';
             if (!empty(@$changedAttributes['mkt_id']) && !empty(@$oldData['mkt_id'])) {
                 $text = $text . ' <span class="text-purple">MKT: ' . @User::find($oldData['mkt_id'])->full_name . ' --> ' . @User::find($changedAttributes['mkt_id'])->full_name . '</span>';
