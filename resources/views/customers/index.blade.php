@@ -1120,6 +1120,10 @@
 
                     html += '</select>';
                     $(target).find(".telesale-customer").append(html);
+                    $('.select2').select2({ //apply select2 to my element
+                        placeholder: "Người phụ trách",
+                        allowClear: true
+                    });
                 });
             });
             @endif
