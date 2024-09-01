@@ -160,6 +160,7 @@ class SettingController extends Controller
             ->whereIn('cg.category_id', $request->category_id);
         })
             ->whereIn('customers.status_id', $request->status_id)
+            ->where('customers.branch_id', $request->branch_id)
             ->when(isset($request->start_date), function ($q) use ($request) {
                 $q->whereBetween('customers.created_at', [
                     Functions::yearMonthDay($request->start_date) . " 00:00:00",
