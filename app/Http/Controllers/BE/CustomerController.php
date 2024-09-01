@@ -858,7 +858,7 @@ class CustomerController extends Controller
                 'telesales_id' => (int)$request->telesales_id,
             ]);
         }
-        foreach ($clone as $customer) {
+        foreach ($clone->get() as $customer) {
             event('eloquent.updated: ' . get_class($customer), $customer);
         }
     }
