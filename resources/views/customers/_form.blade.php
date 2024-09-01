@@ -87,7 +87,7 @@
                             <span class="help-block">{{ $errors->first('gender', ':message') }}</span>
                         </div>
                     </div>
-                    @if(empty($checkRole))
+                    @if(empty($checkRole)|| \Illuminate\Support\Facades\Auth::user()->deparment_id == \App\Constants\DepartmentConstant::CARE_PAGE)
                         <div class="col-xs-12 col-md-12">
                             <div class="form-group required {{ $errors->has('genitive_id') ? 'has-error' : '' }}">
                                 {!! Form::label('branch_id', 'Chi nhánh',['class'=>'required']) !!}
