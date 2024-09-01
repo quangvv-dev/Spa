@@ -35,6 +35,18 @@
                                                     {!! Form::select('branch_id',@$branchs, null, array('class' => 'form-control','placeholder'=>'Chọn chi nhánh','required'=>true)) !!}
                                                 </div>
                                             </div>
+                                            <div class="col-xs-12 col-md-6 row">
+                                                <div class="col">
+                                                    {!! Form::label('','Ngày bắt đầu') !!}
+                                                    <input type="text" class="form-control filter_start_date" id="datepicker"
+                                                           data-toggle="datepicker" name="start_date">
+                                                </div>
+                                                <div class="col">
+                                                    {!! Form::label('','Ngày kết thúc') !!}
+                                                    <input type="text" class="form-control filter_end_date" id="datepicker"
+                                                           data-toggle="datepicker" name="end_date">
+                                                </div>
+                                            </div>
                                             <div class="col-xs-12 col-md-6">
                                                 <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }}">
                                                     {!! Form::label('status_id', 'Mối quan hệ', array('class' => ' required')) !!}
@@ -43,9 +55,9 @@
                                                 </div>
                                             </div>
                                             <div class="col-xs-12 col-md-6">
-                                                <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }}">
+                                                <div class="form-group required {{ $errors->has('category_id') ? 'has-error' : '' }}">
                                                     {!! Form::label('category_id', 'Nhóm dịch vụ') !!}
-                                                    {!! Form::select('category_id[]',@$category, null, array('class' => 'select2 form-control','data-placeholder'=>'Chọn trạng thái','multiple'=>true,'required'=>true)) !!}
+                                                    {!! Form::select('category_id[]',@$category, null, array('class' => 'select2 form-control','data-placeholder'=>'Nhóm dịch vụ','multiple'=>true,'required'=>true)) !!}
 
                                                 </div>
                                             </div>
@@ -61,19 +73,8 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-xs-12 col-md-6 row">
-                                                <div class="col">
-                                                    {!! Form::label('','Ngày bắt đầu') !!}
-                                                    <input type="text" class="form-control filter_start_date" id="datepicker"
-                                                           data-toggle="datepicker" name="start_date">
-                                                </div>
-                                                <div class="col">
-                                                    {!! Form::label('','Ngày kết thúc') !!}
-                                                    <input type="text" class="form-control filter_end_date" id="datepicker"
-                                                           data-toggle="datepicker" name="end_date">
-                                                </div>
-                                            </div>
-                                            <div class="col bot" style="margin-top: 5px">
+
+                                            <div class="col-md-12 bot" style="margin-top: 5px">
                                                 <button type="submit" class="btn btn-success">Lưu
                                                 </button>
                                             </div>
