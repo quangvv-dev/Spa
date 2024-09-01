@@ -137,8 +137,9 @@ class Customer extends Model
             ->when(isset($conditions['status']), function ($query) use ($conditions) {
                 $query->where('status_id', $conditions['status']);
             })->when(isset($conditions['group']), function ($query) use ($conditions) {
-                $group_customer = CustomerGroup::where('category_id', $conditions['group'])->pluck('customer_id')->toArray();
-                $query->whereIn('id', $group_customer);
+                $query->whereHas('groupCustomer', function ($q) use ($conditions) {
+                    $q->where('customer_groups.category_id', $conditions['group']);
+                });
             })
             ->when(isset($conditions['telesales']), function ($query) use ($conditions) {
                 $query->where('telesales_id', $conditions['telesales']);
