@@ -127,67 +127,66 @@ class Customer extends Model
         $builder->when(isset($conditions['search']), function ($query) use ($conditions) {
             $query->where(function ($q) use ($conditions) {
                 if (is_numeric($conditions['search'])) {
-                    $q->where('phone', $conditions['search'])
-                        ->orWhere('membership', $conditions['search']);
+                    $q->where('customers.phone', $conditions['search'])
+                        ->orWhere('customers.membership', $conditions['search']);
                 } else {
-                    $q->where('account_code', 'like', '%' . $conditions['search']);
+                    $q->where('customers.account_code', 'like', '%' . $conditions['search']);
                 }
             });
         })
             ->when(isset($conditions['status']), function ($query) use ($conditions) {
-                $query->where('status_id', $conditions['status']);
+                $query->where('customers.status_id', $conditions['status']);
             })->when(isset($conditions['group']), function ($query) use ($conditions) {
-                $query->whereHas('groupCustomer', function ($q) use ($conditions) {
-                    $q->where('customer_groups.category_id', $conditions['group']);
-                });
+                $query->join('customer_groups', 'customers.id', '=', 'customer_groups.customer_id')
+                    ->where('customer_groups.category_id', $conditions['group']);
             })
             ->when(isset($conditions['telesales']), function ($query) use ($conditions) {
-                $query->where('telesales_id', $conditions['telesales']);
+                $query->where('customers.telesales_id', $conditions['telesales']);
             })->when(isset($conditions['last_time']), function ($query) use ($conditions) {
-                $query->whereBetween('last_time', [
+                $query->whereBetween('customers.last_time', [
                     now()->subDays($conditions['last_time'])->startOfDay(), now(),
                 ]);
             })->when(isset($conditions['branch_id']) && $conditions['branch_id'], function ($query) use ($conditions) {
-                $query->where('branch_id', $conditions['branch_id']);
+                $query->where('customers.branch_id', $conditions['branch_id']);
             })->when(isset($conditions['group_branch']) && count($conditions['group_branch']), function ($q) use ($conditions) {
-                $q->whereIn('branch_id', $conditions['group_branch']);
+                $q->whereIn('customers.branch_id', $conditions['group_branch']);
             })->when(isset($conditions['marketing']), function ($query) use ($conditions) {
-                $query->where('mkt_id', $conditions['marketing']);
+                $query->where('customers.mkt_id', $conditions['marketing']);
             })->when(isset($conditions['arr_marketing']), function ($query) use ($conditions) {
-                $query->whereIn('mkt_id', $conditions['arr_marketing']);
+                $query->whereIn('customers.mkt_id', $conditions['arr_marketing']);
             })->when(!empty($conditions['cskh_id']), function ($query) use ($conditions) {
-                $query->where('cskh_id', $conditions['cskh_id']);
+                $query->where('customers.cskh_id', $conditions['cskh_id']);
             })->when(isset($conditions['carepage_id']), function ($query) use ($conditions) {
-                $query->where('carepage_id', $conditions['carepage_id']);
+                $query->where('customers.carepage_id', $conditions['carepage_id']);
             })->when(isset($conditions['source_fb']), function ($query) use ($conditions) {
-                $query->where('source_fb', $conditions['source_fb']);
+                $query->where('customers.source_fb', $conditions['source_fb']);
             })->when(isset($conditions['source']), function ($query) use ($conditions) {
-                $query->where('source_id', $conditions['source']);
+                $query->where('customers.source_id', $conditions['source']);
             })->when(isset($conditions['gender']), function ($query) use ($conditions) {
-                $query->where('gender', $conditions['gender']);
+                $query->where('customers.gender', $conditions['gender']);
             })->when(isset($conditions['is_duplicate']), function ($query) use ($conditions) {
-                $query->where('is_duplicate', $conditions['is_duplicate']);
+                $query->where('customers.is_duplicate', $conditions['is_duplicate']);
             })->when(isset($conditions['call_back']), function ($query) {
                 $params = [
                     'date_from' => Carbon::now()->format('Y-m-d'),
                     'task_status_id' => StatusCode::GOI_LAI,
                 ];
                 $task = Task::search($params)->select('customer_id')->pluck('customer_id')->toArray();
-                $query->whereIn('id', $task);
+                $query->whereIn('customers.id', $task);
             })
             ->when(isset($conditions['data_time']) && $conditions['data_time'], function ($query) use ($conditions) {
                 $query->when($conditions['data_time'] == 'TODAY' ||
                     $conditions['data_time'] == 'YESTERDAY', function ($q) use ($conditions) {
-                    $q->whereDate('created_at', getTime(($conditions['data_time'])));
+                    $q->whereDate('customers.created_at', getTime(($conditions['data_time'])));
                 })
                     ->when($conditions['data_time'] == 'THIS_WEEK' ||
                         $conditions['data_time'] == 'LAST_WEEK' ||
                         $conditions['data_time'] == 'THIS_MONTH' ||
                         $conditions['data_time'] == 'LAST_MONTH', function ($q) use ($conditions) {
-                        $q->whereBetween('created_at', getTime(($conditions['data_time'])));
+                        $q->whereBetween('customers.created_at', getTime(($conditions['data_time'])));
                     });
             })->when(isset($conditions['start_date']) && isset($conditions['end_date']), function ($q) use ($conditions) {
-                $date = isset($conditions['search_date']) ? $conditions['search_date'] : 'created_at';
+                $date = isset($conditions['search_date']) ? 'customers'.$conditions['search_date'] : 'customers.created_at';
                 $q->whereBetween($date, [
                     Functions::yearMonthDay($conditions['start_date']) . " 00:00:00",
                     Functions::yearMonthDay($conditions['end_date']) . " 23:59:59",
@@ -199,10 +198,10 @@ class Customer extends Model
                 });
             })
             ->when(isset($conditions['birthday']), function ($query) use ($conditions) {
-                $query->whereRaw('DATE_FORMAT(birthday, "%m-%d") = ?', Carbon::now()->format('m-d'));
+                $query->whereRaw('DATE_FORMAT(customers.birthday, "%m-%d") = ?', Carbon::now()->format('m-d'));
             });
 
-        return $builder;
+        return $builder->select('customers.*');
     }
 
     /**
@@ -219,18 +218,18 @@ class Customer extends Model
             $member = checkTeamLead();
             if (!empty($user->isLeader) && count($member)) {
                 $data = $data->when($user->department_id == DepartmentConstant::CSKH, function ($query) use ($member, $param) {
-                    $query->whereIn('cskh_id', $member);
+                    $query->whereIn('customers.cskh_id', $member);
                 })->when($user->department_id == DepartmentConstant::TELESALES, function ($query) use ($member) {
-                    $query->whereIn('telesales_id', $member);
+                    $query->whereIn('customers.telesales_id', $member);
                 })->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
             } else {
                 if (setting('view_customer_sale') == StatusCode::ON || $user->isLeaderAdmin()) {
                     $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
                 } else {
                     $data = $data->when($user->department_id == DepartmentConstant::CSKH, function ($query) use ($user) {
-                        $query->where('cskh_id', $user->id);
+                        $query->where('customers.cskh_id', $user->id);
                     })->when($user->department_id == DepartmentConstant::TELESALES, function ($query) use ($user) {
-                        $query->where('telesales_id', $user->id);
+                        $query->where('customers.telesales_id', $user->id);
                     });
                 }
             }
