@@ -840,7 +840,7 @@ class CustomerController extends Controller
     public function updateMultipleStatus(Request $request)
     {
         $customer = Customer::whereIn('id', $request->ids);
-        $clone = clone $customer;
+//        $clone = clone $customer;
 
         if (isset($request->status_id)) {
             $customer->update([
@@ -858,9 +858,9 @@ class CustomerController extends Controller
                 'telesales_id' => (int)$request->telesales_id,
             ]);
         }
-        foreach ($clone->get() as $customer) {
-            event('eloquent.updated: ' . get_class($customer), $customer);
-        }
+//        foreach ($clone->get() as $customer) {
+//            event('eloquent.updated: ' . get_class($customer), $customer);
+//        }
     }
 
     public function getListAjax(Request $request)

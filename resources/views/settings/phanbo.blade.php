@@ -43,8 +43,15 @@
                                                 </div>
                                             </div>
                                             <div class="col-xs-12 col-md-6">
+                                                <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }}">
+                                                    {!! Form::label('category_id', 'Nhóm dịch vụ') !!}
+                                                    {!! Form::select('category_id[]',@$category, null, array('class' => 'select2 form-control','data-placeholder'=>'Chọn trạng thái','multiple'=>true,'required'=>true)) !!}
+
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-md-6">
                                                 <div class="form-group required {{ $errors->has('user_id') ? 'has-error' : '' }}">
-                                                    {!! Form::label('telesales_id', 'Trạng thái', array('class' => ' required')) !!}
+                                                    {!! Form::label('telesales_id', 'Chọn sale', array('class' => ' required')) !!}
                                                     <select name="telesales_id[]" class="form-control select2" multiple
                                                             data-placeholder="Chọn nhân viên">
                                                         <option value=""></option>

@@ -9,6 +9,7 @@ use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
+use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Location;
 use App\Models\PaymentBank;
@@ -145,22 +146,26 @@ class SettingController extends Controller
     public function phanbo()
     {
         $branchs = Branch::search()->pluck('name', 'id');// chi nhánh
+        $category = Category::has('customers')->get()->pluck('name', 'id');// chi nhánh
         $telesales = User::whereIn('role', [UserConstant::TELESALES, UserConstant::TP_SALE])->pluck('full_name', 'id');
         $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray();//mối quan hệ
-        return view('settings.phanbo', compact('branchs', 'telesales', 'status'));
+        return view('settings.phanbo', compact('branchs', 'telesales', 'status','category'));
 
     }
 
     public function postPhanBo(Request $request)
     {
-        $customers = Customer::select('id')->where('branch_id', $request->branch_id)
-            ->whereIn('status_id', $request->status_id)
+        $customers = Customer::when(isset($request->category_id), function ($q) use ($request) {
+            $q->join('customer_groups as cg', 'cg.customer_id', '=', 'customers.id')
+            ->whereIn('cg.category_id', $request->category_id);
+        })
+            ->whereIn('customers.status_id', $request->status_id)
             ->when(isset($request->start_date), function ($q) use ($request) {
-                $q->whereBetween('created_at', [
+                $q->whereBetween('customers.created_at', [
                     Functions::yearMonthDay($request->start_date) . " 00:00:00",
                     Functions::yearMonthDay($request->end_date) . " 23:59:59",
                 ]);
-            })->pluck('id')->toArray();
+            })->pluck('customers.id')->toArray();
         $telesale = $request->telesales_id;
         $key = count($request->telesales_id);
         $number_key = (int)round(count($customers) / $key);
