@@ -1160,7 +1160,7 @@
                         telesales_id: account_manager,
                     }
                 }).done(function () {
-                    window.location.reload();
+                    // window.location.reload();
                 });
             });
 
