@@ -10,7 +10,8 @@ class OrderResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -26,10 +27,12 @@ class OrderResource extends JsonResource
             'title'           => $this->type == 0 ? "Đơn nghỉ" : 'Đơn check-in/check-out',
             'description'     => @$this->description,
             'date'            => @$this->date,
+            'created_at'      => @$this->created_at->format('H:i d/m/Y'),
             'date_end'        => @$this->date_end,
             'reason_id'       => @$this->reason_id,
             'reason_text'     => @$this->reason->name,
             'accept_id'       => @$this->accept_id,
+            'accept_name'     => @$this->accept->full_name,
             'time_to'         => !empty($this->time_to) ? array_search($this->time_to, ChamCongConstant::HOURS) : '',
             'time_end'        => !empty($this->time_end) ? array_search($this->time_end, ChamCongConstant::HOURS) : '',
         ];
