@@ -16,6 +16,10 @@ class DonTu extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function accept()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function reason()
     {
