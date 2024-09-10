@@ -12,7 +12,7 @@ class ZaloController extends Controller
 {
     public function __construct()
     {
-        $this->header = ['client-id' => 1335, 'token' => 'NFGor2u5iV3F+jH2F1mYtyIyvpCCvwqJ/pUNde/kWLGZGkuQ2/VNCJw5XypRX3Qs'];
+        $this->header = ['client-id' => 1390, 'token' => 'sD35mnN40UZw+mPs2e4KswYztwe14sPjnEuJ5svBdruMO7TLlgUYbwFWPmf/oloB'];
         $this->converstionUrl = 'https://salework.net/api/open/zalo/v1/conversation/list?group=0';
         $this->converstionDetailUrl = 'https://salework.net/api/open/zalo/v1/conversation/';
     }
