@@ -35,7 +35,7 @@ class CskhController extends BaseApiController
         $data= $this->cskh->getDataNew($input);
         $payments = $this->cskh->getDataPayment($input);
 
-        $users = $this->cskh->transformData($tasks, $orders, $data, $payments,null,$members);
+        $users = $this->cskh->transformData($tasks, $orders, $data, $payments,null,$members,$input);
         $users =  usort_key_max($users->toArray(),'all_payment');
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $users);
     }

@@ -148,13 +148,14 @@ class CskhService
      *
      * @return mixed
      */
-    public function transformData($tasks, $orders, $data, $payments, $call = null, $members = [])
+    public function transformData($tasks, $orders, $data, $payments, $call = null, $members = [],$input)
     {
         $users = User::select('id', 'full_name', 'avatar')
             ->when(count($members), function ($q) use ($members) {
                 $q->whereIn('id', $members);
-            })
-            ->where('users.department_id', DepartmentConstant::CSKH)
+            })->when(!empty($input['branch_id']), function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
+            })->where('users.department_id', DepartmentConstant::CSKH)
             ->where('active', StatusCode::ON)->get();
         return $users->transform(function ($item) use ($tasks, $orders, $data, $payments, $call) {
             return [
