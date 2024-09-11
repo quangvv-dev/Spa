@@ -113,11 +113,14 @@ class SaleService
             ->groupBy('users.id')->get();
     }
 
-    public function transformData($data_new, $order_new, $schedules, $payments, $call, $members = null)
+    public function transformData($data_new, $order_new, $schedules, $payments, $call, $members = null,$input)
     {
         $users = User::select('id', 'full_name', 'avatar')
             ->where('users.department_id', DepartmentConstant::TELESALES)
             ->where('active', StatusCode::ON)
+            ->when(!empty($input['branch_id']), function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
+            })
             ->when(!empty($members), function ($q) use ($members) {
                 $q->whereIn('id', $members);
             })->get();
