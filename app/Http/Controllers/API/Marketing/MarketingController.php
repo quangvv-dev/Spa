@@ -37,7 +37,7 @@ class MarketingController extends BaseApiController
         $branchs = Branch::search()->pluck('name', 'id');
         $location = Branch::getLocation();
         view()->share([
-            'branchs' => $branchs,
+            'branchs'  => $branchs,
             'location' => $location,
         ]);
 
@@ -62,25 +62,31 @@ class MarketingController extends BaseApiController
             $members = !empty($myTeam->members) ? $myTeam->members->pluck('user_id')->toArray() : [];
         }
         $data = User::where('department_id', DepartmentConstant::MARKETING)
-            ->when(count($members), function ($q) use ($members) {
+            ->when(!empty($input['branch_id']), function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
+            })->when(count($members), function ($q) use ($members) {
                 $q->whereIn('id', $members);
             })->where('active', StatusCode::ON)
             ->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
-            $input['marketing'] = $item->id;
-            $customer = Customer::searchApi($input)->select('id');
-            $item->contact = $customer->count();
-            $input['is_upsale'] = OrderConstant::NON_UPSALE;
-            $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
-            $item->orders = $orders->count();
-            $payment = PaymentHistory::search($input, 'price,order_id')->whereHas('order', function ($item) {
-                $item->where('is_upsale', OrderConstant::NON_UPSALE);
-            });
-            $item->gross_revenue = $payment->sum('price');
-            $input['marketing'] = $item->id;
-            $input['date_customers'] = OrderConstant::NON_UPSALE;
-            $item->schedules = Schedule::search($input)->count();
-            return $item;
-        })->sortByDesc('gross_revenue');
+                $input['marketing'] = $item->id;
+                $customer = Customer::searchApi($input)->select('id');
+                $item->contact = $customer->count();
+                $input['is_upsale'] = OrderConstant::NON_UPSALE;
+                $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
+                $item->orders = $orders->count();
+                $payment = PaymentHistory::search($input, 'price,order_id')->whereHas('order', function ($item) {
+                    $item->where('is_upsale', OrderConstant::NON_UPSALE);
+                });
+                $item->gross_revenue = $payment->sum('price');
+                $input['marketing'] = $item->id;
+                $input['date_customers'] = OrderConstant::NON_UPSALE;
+                $item->schedules = Schedule::search($input)->count();
+                return $item;
+            })->filter(function ($item) {
+                if ($item->gross_revenue > 0) {
+                    return $item;
+                }
+            })->sortByDesc('gross_revenue');
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', MarketingResource::collection($data));
 
@@ -90,6 +96,7 @@ class MarketingController extends BaseApiController
      * Thống kê carepage
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function carepage(Request $request)
@@ -111,34 +118,35 @@ class MarketingController extends BaseApiController
             })
             ->where('active', StatusCode::ON)
             ->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
-            $input['carepage_id'] = $item->id;
-            $customer = Customer::searchApi($input)->select('id');
-            $item->contact = $customer->count();
-            $group_user = $customer->pluck('id')->toArray();
-            $input['group_user'] = $group_user;
+                $input['carepage_id'] = $item->id;
+                $customer = Customer::searchApi($input)->select('id');
+                $item->contact = $customer->count();
+                $group_user = $customer->pluck('id')->toArray();
+                $input['group_user'] = $group_user;
 
-            if (count($group_user)) {
-                $schedules = Schedule::search($input)->select('id');
-                $item->schedules = $schedules->count();
+                if (count($group_user)) {
+                    $schedules = Schedule::search($input)->select('id');
+                    $item->schedules = $schedules->count();
 //                $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
-            } else {
-                $item->schedules = 0;
+                } else {
+                    $item->schedules = 0;
 //                $item->schedules_den = 0;
-            }
-            $orders = Order::searchAll($input)->select('id', 'order_id', 'gross_revenue', 'all_total');
-            $item->orders = $orders->count();
-            $item->percent_order = !empty($item->contact) ? round($item->orders / $item->contact, 2) * 100 : 0;
-            $item->percent_schedules = !empty($item->contact) ? round($item->schedules / $item->contact, 2) * 100 : 0;
-            $item->all_total = (int)$orders->sum('all_total');
-            $payment = PaymentHistory::search($input, 'price,order_id')->whereHas('order', function ($item) {
-                $item->where('is_upsale', OrderConstant::NON_UPSALE);
-            });
+                }
+                $orders = Order::searchAll($input)->select('id', 'order_id', 'gross_revenue', 'all_total');
+                $item->orders = $orders->count();
+                $item->percent_order = !empty($item->contact) ? round($item->orders / $item->contact, 2) * 100 : 0;
+                $item->percent_schedules = !empty($item->contact) ? round($item->schedules / $item->contact,
+                        2) * 100 : 0;
+                $item->all_total = (int)$orders->sum('all_total');
+                $payment = PaymentHistory::search($input, 'price,order_id')->whereHas('order', function ($item) {
+                    $item->where('is_upsale', OrderConstant::NON_UPSALE);
+                });
 //            $item->gross_revenue = (int)$orders->sum('gross_revenue');
-            $item->payment = $payment->sum('price');
-            $item->avg = !empty($item->orders) ? round($item->payment / $item->orders, 2) : 0;
+                $item->payment = $payment->sum('price');
+                $item->avg = !empty($item->orders) ? round($item->payment / $item->orders, 2) : 0;
 
-            return $item;
-        })->sortByDesc('payment');
+                return $item;
+            })->sortByDesc('payment');
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', CarepageResource::collection($marketing));
 
     }
@@ -151,45 +159,54 @@ class MarketingController extends BaseApiController
             $input['group_branch'] = $group_branch;
         }
         $users = User::select('id', 'full_name', 'avatar')->where('department_id', DepartmentConstant::WAITER)
-            ->where('active',StatusCode::ON)->get()->map(function ($item) use ($request) {
-            $data_new = Customer::select('id')->where('telesales_id', $item->id)
-                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
-                ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
-                    $q->whereIn('branch_id', $request->group_branch);
-                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
-                    $q->where('branch_id', $request->branch_id);
-                });
+            ->where('active', StatusCode::ON)->get()->map(function ($item) use ($request) {
+                $data_new = Customer::select('id')->where('telesales_id', $item->id)
+                    ->whereBetween('created_at', [
+                        Functions::yearMonthDay($request->start_date) . " 00:00:00",
+                        Functions::yearMonthDay($request->end_date) . " 23:59:59",
+                    ])
+                    ->when(isset($request->group_branch) && count($request->group_branch),
+                        function ($q) use ($request) {
+                            $q->whereIn('branch_id', $request->group_branch);
+                        })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                        $q->where('branch_id', $request->branch_id);
+                    });
 
-            $orders = Order::select('member_id', 'all_total', 'gross_revenue')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
-                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
-                ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
-                    $q->whereIn('branch_id', $request->group_branch);
-                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
-                    $q->where('branch_id', $request->branch_id);
-                })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
-                    $qr->where('telesales_id', $item->id);
-                });
-            $orders2 = clone $orders;
-            $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
-            $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
-            //lich hen
+                $orders = Order::select('member_id', 'all_total', 'gross_revenue')->whereIn('role_type',
+                    [StatusCode::COMBOS, StatusCode::SERVICE])
+                    ->whereBetween('created_at', [
+                        Functions::yearMonthDay($request->start_date) . " 00:00:00",
+                        Functions::yearMonthDay($request->end_date) . " 23:59:59",
+                    ])
+                    ->when(isset($request->group_branch) && count($request->group_branch),
+                        function ($q) use ($request) {
+                            $q->whereIn('branch_id', $request->group_branch);
+                        })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                        $q->where('branch_id', $request->branch_id);
+                    })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
+                        $qr->where('telesales_id', $item->id);
+                    });
+                $orders2 = clone $orders;
+                $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
+                $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
+                //lich hen
 
-            $request->merge(['telesales' => $item->id]);
-            $detail = PaymentHistory::search($request->all(), 'price');//đã thu trong kỳ
-            $detail_new = clone $detail;
+                $request->merge(['telesales' => $item->id]);
+                $detail = PaymentHistory::search($request->all(), 'price');//đã thu trong kỳ
+                $detail_new = clone $detail;
 
-            $item->payment_new = (int)$detail_new->whereHas('order', function ($qr) {
-                $qr->where('is_upsale', OrderConstant::NON_UPSALE);
-            })->sum('price');
-            $item->contact = $data_new->count();
-            $item->order_new = $order_new->count();
-            $item->order_old = $order_old->count();
-            $item->total_new = (int)$order_new->sum('all_total');
-            $item->total_old = (int)$order_old->sum('all_total');
-            $item->all_total = (int)$order_new->sum('all_total') + $order_old->sum('all_total');;
-            $item->all_payment = (int)$detail->sum('price');
-            return $item;
-        })->sortByDesc('all_payment')
+                $item->payment_new = (int)$detail_new->whereHas('order', function ($qr) {
+                    $qr->where('is_upsale', OrderConstant::NON_UPSALE);
+                })->sum('price');
+                $item->contact = $data_new->count();
+                $item->order_new = $order_new->count();
+                $item->order_old = $order_old->count();
+                $item->total_new = (int)$order_new->sum('all_total');
+                $item->total_old = (int)$order_old->sum('all_total');
+                $item->all_total = (int)$order_new->sum('all_total') + $order_old->sum('all_total');;
+                $item->all_payment = (int)$detail->sum('price');
+                return $item;
+            })->sortByDesc('all_payment')
             ->filter(function ($it) {
                 if ($it->all_payment > 0 || $it->customer_new) {
                     return $it;
@@ -208,7 +225,7 @@ class MarketingController extends BaseApiController
     public function getMarketingUser()
     {
         $marketing = User::select('id', 'full_name')->where('department_id', DepartmentConstant::MARKETING)
-            ->where('active',StatusCode::ON)->get();
+            ->where('active', StatusCode::ON)->get();
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $marketing);
     }
 
@@ -226,7 +243,7 @@ class MarketingController extends BaseApiController
         }
         $data = [];
         $marketing = User::select('id')->where('department_id', DepartmentConstant::MARKETING)
-            ->where('active',StatusCode::ON)
+            ->where('active', StatusCode::ON)
             ->when(isset($input['mkt_id']) && $input['mkt_id'], function ($query) use ($input) {
                 $query->where('id', $input['mkt_id']);
             })->get();
@@ -247,7 +264,8 @@ class MarketingController extends BaseApiController
 //                $schedules = Schedule::search($input)->select('id');
                 $schedules = Schedule::getBooks2($input)->select('id');
                 $data['schedules'] = $schedules->count();
-                $data['schedules_den'] = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
+                $data['schedules_den'] = $schedules->whereIn('status',
+                    [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
                     ->whereHas('customer', function ($qr) {
                         $qr->where('old_customer', 0);
                     })->count();
@@ -294,7 +312,8 @@ class MarketingController extends BaseApiController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -305,7 +324,8 @@ class MarketingController extends BaseApiController
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request)
@@ -322,7 +342,8 @@ class MarketingController extends BaseApiController
             if (count($input['group_user'])) {
                 $schedules = Schedule::search($input)->select('id');
                 $item->schedules = $schedules->count();
-                $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+                $item->schedules_den = $schedules->whereIn('status',
+                    [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
             } else {
                 $item->schedules = 0;
                 $item->schedules_den = 0;
@@ -359,8 +380,9 @@ class MarketingController extends BaseApiController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -371,7 +393,8 @@ class MarketingController extends BaseApiController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
@@ -384,6 +407,7 @@ class MarketingController extends BaseApiController
      * Bảng xếp hạng MKT
      *
      * @param Request $request
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function ranking(Request $request)
@@ -393,13 +417,13 @@ class MarketingController extends BaseApiController
         }
 
         $input = $request->all();
-        $marketing = User::where('department_id', DepartmentConstant::MARKETING)->where('active',StatusCode::ON)
+        $marketing = User::where('department_id', DepartmentConstant::MARKETING)->where('active', StatusCode::ON)
             ->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
-            $input['marketing'] = $item->id;
-            $data = Order::searchAll($input)->select('gross_revenue');
-            $item->gross_revenue = $data->sum('gross_revenue');
-            return $item;
-        })->sortByDesc('gross_revenue')->toArray();
+                $input['marketing'] = $item->id;
+                $data = Order::searchAll($input)->select('gross_revenue');
+                $item->gross_revenue = $data->sum('gross_revenue');
+                return $item;
+            })->sortByDesc('gross_revenue')->toArray();
 
         $my_key = array_keys(array_column((array)$marketing, 'id'), Auth::user()->id);
 
