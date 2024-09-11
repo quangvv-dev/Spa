@@ -142,6 +142,10 @@ class SaleService
             $result['percentOrder'] = (int)$result['phoneNew'] > 0 ? round($result['orderNew'] / $result['phoneNew'] * 100, 2) : 0;
             $result['avg'] = (int)$result['orderNew'] > 0  ? round((int)$result['totalNew'] / (int)$result['orderNew']) : 0;
             return $result;
+        })->filter(function ($item) {
+            if ($item['totalNew'] > 0) {
+                return $item;
+            }
         });
     }
 
