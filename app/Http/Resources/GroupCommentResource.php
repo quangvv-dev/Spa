@@ -20,6 +20,7 @@ class GroupCommentResource extends JsonResource
             'id'          => @$this->id,
             'customer_id' => @$this->customer_id,
             'user_name'   => @$this->user->full_name,
+            'avatar'      => @$this->user->avatar,
             'messages'    => @$this->messages,
             'created_at'  => @$this->created_at,
             'images'      => $this->image,
