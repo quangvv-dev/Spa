@@ -233,12 +233,10 @@ class Customer extends Model
                     });
                 }
             }
-        } else {
-            $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
         }
         if (isset($param['search'])) {
             unset($param['branch_id']);
-            $data = self::latest()->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+            $data = self::latest();
         }
 //        if (isset($param['branch_id']) && $param['branch_id']) {
 //            if ( empty($param['search'])) {

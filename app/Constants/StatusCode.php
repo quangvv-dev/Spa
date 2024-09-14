@@ -50,6 +50,7 @@ class StatusCode
     const PAGINATE_20 = 20;
     const PAGINATE_60 = 60;
     const PAGINATE_1000 = 1000;
+    const PAGINATE_5000 = 5000;
     const PAGINATE_500 = 500;
 
     const ON = 1;
