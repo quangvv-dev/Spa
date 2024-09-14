@@ -320,20 +320,49 @@ class TaskController extends Controller
      */
     public function statisticIndex(Request $request)
     {
-        if (empty($request->data_time) && empty($request->start_date) && empty($request->end_date)) {
-            $request->merge(['data_time' => 'THIS_MONTH']);
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
         }
-        $users = User::whereIn('department_id', [UserConstant::TELESALES, UserConstant::WAITER, UserConstant::TP_SALE])
-            ->pluck('full_name', 'id')->toArray();
-        $title = 'Danh sách công việc';
         $input = $request->all();
-        $docs = Task::search($input)->paginate(StatusCode::PAGINATE_20);
+        $myBranch = Auth::user()->branch_id ?? null;
+        $users = User::whereIn('department_id', [
+            DepartmentConstant::TELESALES,
+            DepartmentConstant::WAITER,
+            DepartmentConstant::CSKH,
+            DepartmentConstant::CARE_PAGE,
+        ])
+            ->when(!empty($myBranch), function ($query) use ($myBranch) {
+                $query->where('branch_id', $myBranch);
+            })->pluck('full_name', 'id')->toArray();
+        if (Auth::user()->department_id != DepartmentConstant::ADMIN) {
+            if (empty($input['user_id'])) {
+                $input['user_id'] = Auth::user()->id;
+            }
+            if (!empty($request->role)) {
+                $input['member'] = myTeamMember();
+                unset($input['user_id']);
+            }
+            $users = !empty($input['member']) ? User::whereIn('id', $input['member'])->pluck('full_name',
+                'id')->toArray() : collect();
+        } else {
+            $input['branch_id'] = $myBranch;
+        }
+
+        $status = Task::groupByStatus($input)->get();
+        $docs = Task::search($input)->orderByDesc('id')->orderBy('task_status_id')->paginate(StatusCode::PAGINATE_20);
+        $status = TaskStatus::select('id', 'name')->get()->transform(function ($item) use ($status) {
+            return [
+                'id'    => $item->id,
+                'name'  => $item->name,
+                'count' => @$status->firstWhere('id', $item->id)->count ?? 0,
+            ];
+        });
 
         if ($request->ajax()) {
-            return view('tasks.ajax_statistical', compact('docs'));
+            return view('tasks.ajax_statistical', compact('docs', 'status'));
         }
 
-        return view('tasks.statistical', compact('title', 'docs', 'users'));
+        return view('tasks.statistical', compact('docs', 'users', 'status'));
     }
 
     /**

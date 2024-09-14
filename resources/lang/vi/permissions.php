@@ -49,7 +49,7 @@ return [
     'post.customer'            => "DS khách hàng từ form",
     'order.list'               => "Danh sách đơn hàng",
     'order.index_payment'      => "Đã thu trong kỳ",
-    'tasks.employee'           => "Theo dõi công việc CSKH SALE (Quản lý)",
+    'tasks.employee'           => "Theo dõi công việc CSKH SALE",
     'sms'                      => "QL tin nhắn",
     'settings'                 => "Cài đặt chung hệ thống (gói nạp)",
     'leaderSale'               => "Đặc quyền TP SALE",

@@ -18,11 +18,14 @@ class ChamCongController extends BaseApiController
     public function store(Request $request)
     {
 //        $data = "{\"NameMachine\":\"HN1\",\"Info\":[{\"MachineNumber\":\"1\",\"DateTimeRecord\":\"2\/6\/2023 1:58:07 PM\",\"IndRedID\":\"1\"},{\"MachineNumber\":\"1\",\"DateTimeRecord\":\"2\/6\/2023 2:10:11 PM\",\"IndRedID\":\"1\"},{\"MachineNumber\":\"1\",\"DateTimeRecord\":\"2\/6\/2023 2:10:19 PM\",\"IndRedID\":\"1\"},{\"MachineNumber\":\"1\",\"DateTimeRecord\":\"2\/7\/2023 8:54:42 AM\",\"IndRedID\":\"1\"}]}";
-        \DB::table('settings')->insert(['setting_key' => now()->format("Y-m-d H:i:s"), 'setting_value' => json_encode($request->all())]);
+        \DB::table('settings')->insert([
+            'setting_key'   => now()->format("Y-m-d H:i:s"),
+            'setting_value' => json_encode($request->all()),
+        ]);
         $data = $request->all();
 
         $collect = array_reverse($data['Info']);
-        foreach (array_chunk($collect,300) as $k => $item) {
+        foreach (array_chunk($collect, 300) as $k => $item) {
             if ($k == 10) {
                 return $this->responseApi(ResponseStatusCode::OK, 'Đẩy chấm công thành công!!');
             }
@@ -42,19 +45,16 @@ class ChamCongController extends BaseApiController
             $user_code = User::find($user->id)->code;
         }
         $docs = Salary::where('approval_code', $user_code)->where('month', $month)->where('year', $year)->first();
-        if ($docs) {
-            $data = [
-                'title' => json_decode($docs->data)->key,
-                'value' => json_decode($docs->data)->value,
-            ];
-        } else {
-            $data = [
+        if (!$docs) {
+            return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', [
                 'title' => [],
                 'value' => [],
-            ];
+            ]);
         }
-
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', [
+            'title' => json_decode($docs->data)->key,
+            'value' => json_decode($docs->data)->value,
+        ]);
     }
 
     public function history(Request $request)
@@ -87,7 +87,7 @@ class ChamCongController extends BaseApiController
                     'approval' => 0,
                     'time'     => !empty($startDate) ? $startDate->format('H:i') . ' - Không có' : '',
                     'donTu'    => '',
-                    'late'    => 0,
+                    'late'     => 0,
                     'early'    => 0,
                     'full_day' => $year . '-' . $curentMonth . '-' . ($i < 10 ? '0' . $i : $i),
                 ];
@@ -104,8 +104,8 @@ class ChamCongController extends BaseApiController
                     'approval' => $diff > 9.5 ? 1 : round($diff / 9.5, 2),
                     'time'     => $startDate->format('H:i') . ' - ' . $endDate->format('H:i'),
                     'donTu'    => $check,
-                    'late'  => $late > 0 ? $late : 0,
-                    'early' => $early > 0 ? $early : 0,
+                    'late'     => $late > 0 ? $late : 0,
+                    'early'    => $early > 0 ? $early : 0,
                     'full_day' => $year . '-' . $curentMonth . '-' . ($i < 10 ? '0' . $i : $i),
                 ];
             }

@@ -65,7 +65,7 @@ class RoleController extends Controller
         'post.customer',
         'order.index_payment',
         'tasks.employee',
-        'tasks.index',
+//        'tasks.index',
         'sms',
         'settings',
         'marketing.fanpage',
