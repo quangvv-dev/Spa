@@ -217,7 +217,7 @@ class ScheduleController extends Controller
     public function homePage(Request $request)
     {
         $group = Category::where('type',StatusCode::SERVICE)->pluck('name', 'id')->toArray();
-        $status = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();
+        $sale = User::select('id', 'full_name')->where('department_id', DepartmentConstant::TELESALES)->pluck('full_name', 'id')->toArray();
         $now = Carbon::now()->format('Y-m-d');
         if (!empty(Auth::user()->branch_id)) {
             $request->merge(['branch_id' => Auth::user()->branch_id]);
@@ -239,7 +239,7 @@ class ScheduleController extends Controller
         if ($request->ajax()) {
             return $docs;
         }
-        return view('schedules.home2', compact('status', 'title', 'docs', 'now', 'user', 'customer','group'));
+        return view('schedules.home2', compact('sale', 'title', 'docs', 'now', 'user', 'customer','group'));
     }
 
     /**

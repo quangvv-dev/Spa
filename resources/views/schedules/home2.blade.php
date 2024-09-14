@@ -23,6 +23,9 @@
         left: -13.5%;
         top: 2%;
     }
+    .btn.white.account_relation.position {
+        height: 40px;
+    }
 
     @media (max-width: 1366px) {
         .btn.white.account_relation.position {
@@ -40,9 +43,9 @@
         <div class="card">
             <div class="card-header row">
                 {{--<div class="col-md-6">--}}
-                @foreach($color as $k => $item)
-                    <div data-id="{{$k}}" class="btn white account_relation position"
-                         style="background: @switch($k)
+                    @foreach($color as $k => $item)
+                        <div data-id="{{$k}}" class="btn white account_relation position"
+                             style="background: @switch($k)
                          @case(1)
                          {{'#63cff9'}}
                          @break
@@ -62,23 +65,24 @@
                          {{'#f36a26'}}
                          @break
                          @endswitch;margin-left: 3px;text-align: left">
-                        <input class="status" id="{{$k}}" type="checkbox" data-id="{{$k}}">
-                        <label>{{$item}}</label>
+                            <input class="status" id="{{$k}}" type="checkbox" data-id="{{$k}}">
+                            <label>{{$item}}</label>
+                        </div>
+                    @endforeach
+                    <div class="col">
+                        {!! Form::select('type', \App\Models\Schedule::SCHEDULE_TYPE,null, array( 'id'=>'type','class' => 'form-control','placeholder'=>'Loại lịch')) !!}
                     </div>
-                @endforeach
-                <div class="col">
-                    {!! Form::select('type', \App\Models\Schedule::SCHEDULE_TYPE,null, array( 'id'=>'type','class' => 'form-control','placeholder'=>'Loại lịch')) !!}
-                </div>
-                <div class="col">
-                    {!! Form::text('customer_plus', $customer, array( 'id'=>'customer_plus','class' => 'form-control','placeholder'=>'SĐT khách hàng')) !!}
-                </div>
-                <div class="col">
-                    {!! Form::select('status', $status,null, array( 'id'=>'status','class' => 'form-control','placeholder'=>'Nguồn')) !!}
-                </div>
-                <div class="col">
-                    {!! Form::select('branch_id', $branchs,\Illuminate\Support\Facades\Auth::user()->branch_id?:1, array( 'id'=>'branch_id','class' => 'form-control','placeholder'=>'T.cả chi nhánh')) !!}
-                </div>
-
+                    <div class="col">
+                        {!! Form::text('customer_plus', $customer, array( 'id'=>'customer_plus','class' => 'form-control','placeholder'=>'SĐT | Mã khách hàng')) !!}
+                    </div>
+                <form style="margin: auto">
+                    <div class="col">
+                        {!! Form::select('person_action', $sale,null, array( 'id'=>'person_action','class' => 'select2 form-control','placeholder'=>'Nhân viên tạo lịch')) !!}
+                    </div>
+                </form>
+                    <div class="col">
+                        {!! Form::select('branch_id', $branchs,\Illuminate\Support\Facades\Auth::user()->branch_id?:1, array( 'id'=>'branch_id','class' => 'form-control','placeholder'=>'T.cả chi nhánh')) !!}
+                    </div>
             </div>
             <input type="hidden" id="status_val">
             <div class="side-app">
@@ -95,7 +99,6 @@
 
             function searchAjax(data) {
                 // $('#calendar1').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
-
                 $.ajax({
                     url: "{{ Url('schedules/') }}",
                     method: "get",
@@ -255,7 +258,7 @@
                 let user = $('#person_action').val();
                 let branch_id = $('#branch_id').val();
                 let type = $('#type').val();
-                searchAjax({customer: val, branch_id: branch_id, status: status, user: user, date: date, search: arr,type:type});
+                searchAjax({customer: val, branch_id: branch_id, user: status, user: user, date: date, search: arr,type:type});
 
             });
 
