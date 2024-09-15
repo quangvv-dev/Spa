@@ -32,7 +32,7 @@
                     <td class="text-center">{{@$s->customer->full_name}}<br>
                         <span class="small-tip">({{@str_limit(auth()->user()->permission('phone.open') ? @$s->customer->phone : substr(@$s->customer->phone,7,'xxx')}})</span>
                     </td>
-                    <td class="text-center small-tip">{{Str::limit(auth()->user()->permission('phone.open') ? $s->name : preg_replace('/\b\d{10}\b/','',$s->name), 30)}}</td>
+                    <td class="text-center small-tip">{{Str::limit(preg_replace('/\b\d{10}\b/','',$s->name), 30)}}</td>
                     <td class="text-center">{{$s->type==\App\Constants\NotificationConstant::CALL?'Gọi điện':'CSKH'}}</td>
                     <td class="text-center">
                         @if($s->task_status_id ==  \App\Constants\StatusCode::NEW_TASK)
