@@ -17,7 +17,7 @@
             <th class="text-white text-center">Ngày thực hiện</th>
             <th class="text-white text-center">Nhân viên</th>
             <th class="text-white text-center">Khách hàng</th>
-            {{--            <th class="text-white text-center">Công việc</th>--}}
+                        <th class="text-white text-center">Công việc</th>
             <th class="text-white text-center">Loại công việc</th>
             <th class="text-white text-center">Trạng thái</th>
         </tr>
@@ -34,7 +34,7 @@
                     </td>
                     {{--                    <td class="text-center">{{$s->name}}</td>--}}
                     <td class="text-center">{{$s->type==\App\Constants\NotificationConstant::CALL?'Gọi điện':'CSKH'}}</td>
-                    <td class="text-center">{{Str::limit($s->description, 20)}}</td>
+                    <td class="text-center small-tip">{{Str::limit($s->name, 30)}}</td>
                     <td class="text-center">
                         @if($s->task_status_id ==  \App\Constants\StatusCode::NEW_TASK)
                             <a class="tag tag-azure" data-toggle="modal" data-target="#myModal" data-id="{{$s->id}}" data-content="{{json_encode($s)}}">Mới</a>
