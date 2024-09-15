@@ -152,7 +152,7 @@ class CustomerObserver
                                         'customer_status' => @$customer->status_id,
                                         'type'            => $type,
                                         'sms_content'     => Functions::vi_to_en($sms_content),
-                                        'name'            => $prefix . @$customer->full_name . ' - ' . @$customer->phone . ' - nhóm ' . implode(",",
+                                        'name'            => $prefix . @$customer->full_name . ' - ' . @$customer->account_code . ' - nhóm ' . implode(",",
                                                 $text_category) . ' ,' . @$customer->branch->name,
                                         'description'     => $text_order . "--" . replaceVariable($sms_content,
                                                 @$customer->full_name, @$customer->phone,
@@ -168,17 +168,17 @@ class CustomerObserver
                                             UserConstant::IS_LEADER);
                                     })->where('active', StatusCode::ON)->get();
                                     $task->users()->attach($follow);
-                                    $title = $task->type == NotificationConstant::CALL ? '💬💬💬 Bạn có công việc gọi điện mới !'
-                                        : '📅📅📅 Bạn có công việc chăm sóc mới !';
-                                    Notification::insert([
-                                        'title'      => $title,
-                                        'user_id'    => $task->user_id,
-                                        'type'       => $task->type,
-                                        'task_id'    => $task->id,
-                                        'status'     => NotificationConstant::HIDDEN,
-                                        'created_at' => $task->date_from . ' ' . $task->time_from,
-                                        'data'       => json_encode((array)['task_id' => $task->id]),
-                                    ]);
+//                                    $title = $task->type == NotificationConstant::CALL ? '💬💬💬 Bạn có công việc gọi điện mới !'
+//                                        : '📅📅📅 Bạn có công việc chăm sóc mới !';
+//                                    Notification::insert([
+//                                        'title'      => $title,
+//                                        'user_id'    => $task->user_id,
+//                                        'type'       => $task->type,
+//                                        'task_id'    => $task->id,
+//                                        'status'     => NotificationConstant::HIDDEN,
+//                                        'created_at' => $task->date_from . ' ' . $task->time_from,
+//                                        'data'       => json_encode((array)['task_id' => $task->id]),
+//                                    ]);
                                 }
                             }
                             // end cong viec
