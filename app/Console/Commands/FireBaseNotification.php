@@ -50,7 +50,7 @@ class  FireBaseNotification extends Command
             foreach ($tasks as $task) {
                 $data = [
                     'title' => 'Hôm nay bạn có ' . $task->count . ' công việc CSKH',
-                    'url'   => route('tasks.index'),
+                    'url'   => url('tasks-employee'),
                 ];
                 $firebaseService->setupReference('notification/' . $task->user_id, $data);
             }
