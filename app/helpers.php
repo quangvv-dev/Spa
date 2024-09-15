@@ -166,6 +166,17 @@ if (!function_exists('checkRoleAlready')) {
         return $user;
     }
 }
+if (!function_exists('myTeamMember')) {
+    function myTeamMember()
+    {
+        $user = \App\Models\TeamMember::where('user_id',
+            \Illuminate\Support\Facades\Auth::user()->id)->first();
+
+        return !empty($user) ? \App\Models\TeamMember::where('team_id', $user->team_id)
+            ->pluck('user_id')->toArray() : [];
+//        return isset($user->members) ? $user->members->pluck('user_id')->toArray() : [];
+    }
+}
 
 if (!function_exists('checkTeamLead')) {
     function checkTeamLead()
