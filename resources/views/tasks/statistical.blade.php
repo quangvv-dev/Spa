@@ -78,10 +78,10 @@
 
         $(document).on('click', '.tag', function(e) {
             let data = $(this).data('content');
-            $('#name').val(data.name).change();
+            $('#name').val(data.name.replace(/\b\d{10}\b/g,'')).change();
             $("#customer").attr("href",'/customers/'+data.customer.id);
             $('.name-customer').html(data.customer.full_name+'  ('+data.customer.account_code+')').change();
-            $('.phone-customer').val(data.customer.phone).change();
+            $('.phone-customer').val(data.customer.phone.substring(0, 7)+"xxx").change();
             $('#user_id').val(data.user.full_name).change();
             $('#date_from').val(data.date_from).change();
             $('#time_from').val(data.time_from).change();
