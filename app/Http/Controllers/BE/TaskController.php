@@ -333,7 +333,7 @@ class TaskController extends Controller
         ])
             ->when(!empty($myBranch), function ($query) use ($myBranch) {
                 $query->where('branch_id', $myBranch);
-            })->pluck('full_name', 'id')->toArray();
+            })->where('active', StatusCode::ON)->pluck('full_name', 'id')->toArray();
         if (Auth::user()->department_id != DepartmentConstant::ADMIN) {
             if (empty($input['user_id'])) {
                 $input['user_id'] = Auth::user()->id;
