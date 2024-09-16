@@ -238,7 +238,7 @@
                             <img width="15" height="15" src="{{asset('assets/images/zalo_icon.png')}}">
                         </a>
                     </td>
-                    <td class="text-center phone-customer {{in_array(3,$user_filter_grid) ? '':'display-none'}}" data-customer-id="{{ $customer->id }}">
+                    <td class="text-center phone-customer {{in_array(3,$user_filter_grid) ? '':'display-none'}}" data-phone="{{$customer->phone}}" data-customer-id="{{ $customer->id }}">
                         <a href="callto:{{ $customer->phone }}">{{ str_limit($customer->phone,7,'xxx') }}
                         </a>
 {{--                        <a href=""><i style="color: red !important" class="{!! $customer->is_duplicate == 1 ? "fa fa fa-copy" :'' !!}"></i></a>--}}

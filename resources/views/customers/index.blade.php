@@ -964,22 +964,63 @@
                     $(target).find(".name-customer").append(html);
                 });
             });
+
+            function encryptedPhoneNumber(phoneNumber) {
+                const key = CryptoJS.enc.Utf8.parse('PBX3ttnMJNS3274M2zVRtR738d5HByjc');
+
+                const encrypted = CryptoJS.AES.encrypt(phoneNumber, key, {
+                    mode: CryptoJS.mode.ECB,
+                    padding: CryptoJS.pad.Pkcs7
+                });
+
+                const encryptedHex = encrypted.ciphertext.toString(CryptoJS.enc.Hex);
+
+                return encryptedHex;
+            }
+
             $(document).on('dblclick', '.phone-customer', function (e) {
-                let target = $(e.target).parent();
-                $(target).find('.phone-customer').empty();
-                let id = $(this).data('customer-id');
-                let html = '';
-
+                let ext = "{{\Illuminate\Support\Facades\Auth::user()->caller_number??0}}";
+                if(ext == 0){
+                    alertify.warning('Tài khoản chưa có mã tổng đài !',5);
+                    return false;
+                }
                 $.ajax({
-                    url: "ajax/customers/" + id,
-                    method: "get",
-                    data: {id: id}
-                }).done(function (data) {
-
-                    html += `<textarea data-id=` + data.id + ` class="phone-result" style="width: auto; height: 58px; font-size: 14px; overflow-y: hidden;"> ` + data.phone + `</textarea>`;
-                    $(target).find(".phone-customer").append(html);
+                    url: 'https://api.mobilesip.vn/v1/click2call',
+                    type: 'GET',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer 88d4b615ef0c4afdb3485fce4d90a300-ZDZmZTRkMmUtM2UxOS00ZjMzLWIzOTUtOGEzNmRkMWQ2Mzc5');
+                    },
+                    data: {
+                        'ext':ext,
+                        'phone':encryptedPhoneNumber($(this).data('phone')),
+                        'is_encode':true,
+                        'encrypt_method':'aes'
+                    },
+                    success: function () {
+                        alertify.success('Kết nối cuộc gọi thành công !',5);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error); // Log ra lỗi trong console
+                        alertify.error('Kết nối cuộc gọi thất bại !',5);
+                    },
                 });
             });
+            // $(document).on('dblclick', '.phone-customer', function (e) {
+            //     let target = $(e.target).parent();
+            //     $(target).find('.phone-customer').empty();
+            //     let id = $(this).data('customer-id');
+            //     let html = '';
+            //
+            //     $.ajax({
+            //         url: "ajax/customers/" + id,
+            //         method: "get",
+            //         data: {id: id}
+            //     }).done(function (data) {
+            //
+            //         html += `<textarea data-id=` + data.id + ` class="phone-result" style="width: auto; height: 58px; font-size: 14px; overflow-y: hidden;"> ` + data.phone + `</textarea>`;
+            //         $(target).find(".phone-customer").append(html);
+            //     });
+            // });
 
             $(document).on('focusout', '.handsontableInput', function (e) {
                 let target = $(e.target).parent();
