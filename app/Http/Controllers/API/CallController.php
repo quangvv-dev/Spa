@@ -9,6 +9,7 @@ use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Http\Resources\CallCenterResource;
 use App\Models\CallCenter;
+use App\Models\Customer;
 use App\Models\HistorySms;
 use App\Models\Post;
 use App\User;
@@ -72,7 +73,8 @@ class CallController extends BaseApiController
                 }
                 CallCenter::create($input);
             } else {
-                return $this->responseApi(ResponseStatusCode::MOVED_PERMANENTLY, 'CRM NOT SAVE INBOUND', $request->all());
+                return $this->responseApi(ResponseStatusCode::MOVED_PERMANENTLY, 'CRM NOT SAVE INBOUND',
+                    $request->all());
             }
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $request->all());
 
@@ -99,6 +101,12 @@ class CallController extends BaseApiController
     public function callOut()
     {
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
+    }
+
+    public function getAccountCode(Request $request)
+    {
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS',
+            Customer::select('account_code')->where('phone', $request->phone)->first());
     }
 
     /**

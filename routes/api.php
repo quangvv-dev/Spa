@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 */
 Route::post('test-firebase_token', 'API\ThuChiController@testSendFirebase');
 Route::post('callcenter/hangup', 'API\CallController@hangUp');//Api dành cho 3CX
+Route::get('callcenter/account_code', 'API\CallController@getAccountCode');//Api dành cho 3CX
 
 Route::post('callcenter/crmSendCallLog', 'API\CallController@hangUp');//api dành cho GTC Telecom
 Route::post('callcenter/crmSendIncomingCall', 'API\CallController@inComing');//api dành cho GTC Telecom
