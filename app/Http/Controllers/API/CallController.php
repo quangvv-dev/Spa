@@ -108,8 +108,11 @@ class CallController extends BaseApiController
         if ($request->api_key != md5('quangphuong9685@gmail.com')) {
             return $this->responseApi(ResponseStatusCode::UNAUTHORIZED, 'API KEY WRONG');
         }
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS',
-            Customer::select('account_code')->where('phone', $request->phone)->first());
+        $user = Customer::select('account_code')->where('phone', $request->phone)->first();
+        if (empty($user)) {
+            return $this->responseApi(ResponseStatusCode::NOT_FOUND, 'NOT FOUND');
+        }
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS',$user);
     }
 
     /**
