@@ -105,6 +105,9 @@ class CallController extends BaseApiController
 
     public function getAccountCode(Request $request)
     {
+        if ($request->api_key != md5('quangphuong9685@gmail.com')) {
+            return $this->responseApi(ResponseStatusCode::UNAUTHORIZED, 'API KEY WRONG');
+        }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS',
             Customer::select('account_code')->where('phone', $request->phone)->first());
     }
