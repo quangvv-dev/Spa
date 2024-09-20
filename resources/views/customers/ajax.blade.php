@@ -239,7 +239,7 @@
                         </a>
                     </td>
                     <td class="text-center phone-customer {{in_array(3,$user_filter_grid) ? '':'display-none'}}" data-phone="{{$customer->phone}}" data-customer-id="{{ $customer->id }}">
-                        <a href="callto:{{ $customer->phone }}">{{ str_limit($customer->phone,7,'xxx') }}
+                        <a href="javascript:void(0)">{{ str_limit($customer->phone,7,'xxx') }}
                         </a>
 {{--                        <a href=""><i style="color: red !important" class="{!! $customer->is_duplicate == 1 ? "fa fa fa-copy" :'' !!}"></i></a>--}}
                         @if(!empty($customer->call_back))
