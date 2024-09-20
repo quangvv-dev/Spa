@@ -28,7 +28,7 @@ class CallController extends BaseApiController
      */
     public function hangUp(Request $request)
     {
-        if ($request->api_key != md5('quangphuong9685@gmail.com')) {
+        if ($request->api_key != md5('quangphuong9685@gmail.com') && $request->header('authorization') != md5('quangphuong9685@gmail.com')) {
             return $this->responseApi(ResponseStatusCode::UNAUTHORIZED, 'API KEY WRONG');
         }
         $server = setting('server_call_center');
