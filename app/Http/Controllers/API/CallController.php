@@ -212,7 +212,7 @@ class CallController extends BaseApiController
             $response = GuzzleHttpCall($url, 'GET', $header);
             return $this->responseApi(ResponseStatusCode::OK, 'Kết nối cuộc gọi thành công!', $response);
         } catch (\Exception $exception) {
-            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Kết nối cuộc gọi thất bại!',
+            return $this->responseApi(ResponseStatusCode::INTERNAL_SERVER_ERROR, 'Kết nối cuộc gọi thất bại!',
                 ['error' => $exception->getMessage()]);
         }
     }
