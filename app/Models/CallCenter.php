@@ -65,6 +65,6 @@ class CallCenter extends Model
                 Functions::yearMonthDay($param['end_date']) . " 23:59:59",
             ]);
         });
-        return $data->orderByDesc('id');
+        return $data;
     }
 }

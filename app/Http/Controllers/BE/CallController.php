@@ -40,7 +40,7 @@ class CallController extends Controller
         $answers = clone $docs;
         $answers = $answers->where('call_status', 'ANSWERED');
 
-        $docs = $docs->take(StatusCode::PAGINATE_1000)->paginate(StatusCode::PAGINATE_20);
+        $docs = $docs->take(StatusCode::PAGINATE_1000)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
         if ($request->ajax()) {
             return view('call_center.ajax', compact('docs', 'answers'));
         }
