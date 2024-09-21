@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Response;
 
 class CallController extends Controller
 {
-
-
     public function __construct()
     {
         $telesales = User::whereNotNull('caller_number')->where('active', StatusCode::ON)->pluck('full_name', 'caller_number');
@@ -42,7 +40,7 @@ class CallController extends Controller
         $answers = clone $docs;
         $answers = $answers->where('call_status', 'ANSWERED');
 
-        $docs = $docs->paginate(StatusCode::PAGINATE_20);
+        $docs = $docs->take(StatusCode::PAGINATE_1000)->paginate(StatusCode::PAGINATE_20);
         if ($request->ajax()) {
             return view('call_center.ajax', compact('docs', 'answers'));
         }
