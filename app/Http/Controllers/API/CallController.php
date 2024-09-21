@@ -15,6 +15,8 @@ use App\Models\Post;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Crypt;
 
 class CallController extends BaseApiController
 {
@@ -45,9 +47,10 @@ class CallController extends BaseApiController
                 'call_status'   => $status,
                 'recording_url' => $request->RecordingPath,
             ];
-        }elseif (isset($server) && $server == StatusCode::SERVER_CGV_TELECOM){
+        } elseif (isset($server) && $server == StatusCode::SERVER_CGV_TELECOM) {
             if (!in_array(strtoupper($request->status), ['ANSWERED', 'BUSY'])) {
-                return $this->responseApi(ResponseStatusCode::MOVED_PERMANENTLY, 'CRM ONLY SAVE ANSWERED & BUSY', $request->all());
+                return $this->responseApi(ResponseStatusCode::MOVED_PERMANENTLY, 'CRM ONLY SAVE ANSWERED & BUSY',
+                    $request->all());
             }
             $status = strtoupper($request->status) == 'ANSWERED' ? 'ANSWERED' : (strtoupper($request->status) == 'BUSY' ? 'MISSED CALL' : 'NOT-AVAILABLE');
             $input = [
@@ -60,8 +63,7 @@ class CallController extends BaseApiController
                 'call_status'   => $status,
                 'recording_url' => $request->recording_url,
             ];
-        }
-        else {
+        } else {
             $input = $request->only('caller_number', 'answer_time', 'dest_number', 'call_status', 'recording_url',
                 'caller_id', 'call_type', 'start_time');
             if (!isset($input['answer_time'])) {
@@ -127,7 +129,7 @@ class CallController extends BaseApiController
         if (empty($user)) {
             return $this->responseApi(ResponseStatusCode::NOT_FOUND, 'NOT FOUND');
         }
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS',$user);
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $user);
     }
 
     /**
@@ -195,8 +197,51 @@ class CallController extends BaseApiController
             }
         }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
-
     }
 
+    public function clickToCall(Request $request)
+    {
+        $user = User::find($request->jwtUser->id);
+        if (empty($user->caller_number)) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Tài khoản chưa có mã tổng đài!');
+        }
+        $accessToken = '88d4b615ef0c4afdb3485fce4d90a300-ZDZmZTRkMmUtM2UxOS00ZjMzLWIzOTUtOGEzNmRkMWQ2Mzc5';
+        $header = ['Authorization' => 'Bearer ' . $accessToken];
+        $url = 'https://api.mobilesip.vn/v1/click2call?ext=' . $user->caller_number . '&phone=' . $this->encryptedPhoneNumber($request->phone) . '&is_encode=true&encrypt_method=aes';
+        try {
+            $response = GuzzleHttpCall($url, 'GET', $header);
+            return $this->responseApi(ResponseStatusCode::OK, 'Kết nối cuộc gọi thành công!', $response);
+        } catch (\Exception $exception) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Kết nối cuộc gọi thất bại!',
+                ['error' => $exception->getMessage()]);
+        }
+    }
+
+    function encryptedPhoneNumber($phoneNumber)
+    {
+        // Khóa mã hóa 32 byte tương đương với AES-256
+        $key = 'PBX3ttnMJNS3274M2zVRtR738d5HByjc';
+
+        // Mã hóa AES-256 với chế độ ECB và PKCS7 padding
+        $encrypted = openssl_encrypt(
+            $phoneNumber,            // Dữ liệu cần mã hóa
+            'aes-256-ecb',           // Thuật toán mã hóa AES với 256-bit key, ECB mode
+            $key,                    // Khóa mã hóa
+            OPENSSL_RAW_DATA          // Output trả về dữ liệu nhị phân (binary)
+        );
+
+        // Chuyển kết quả mã hóa thành chuỗi hexadecimal
+        return bin2hex($encrypted);
+    }
+
+    function encryptedPhoneNumber1($phoneNumber)
+    {
+        $key = 'PBX3ttnMJNS3274M2zVRtR738d5HByjc';
+        $encrypted = openssl_encrypt($phoneNumber, 'AES-128-ECB', $key, OPENSSL_RAW_DATA);
+        if ($encrypted === false) {
+            return null; // Xử lý lỗi khi không thể mã hóa
+        }
+        return bin2hex($encrypted);
+    }
 
 }

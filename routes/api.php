@@ -34,6 +34,7 @@ Route::group(['namespace' => 'API'], function () {
 
 Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], function () {
     Route::post('block-user', 'AuthController@blockUser');
+    Route::get('click-to-call', 'API\CallController@clickToCall');
 
     Route::get('admin/menu-permissions', 'AuthController@menuPermission');// menu app thong ke
     Route::post('upload/images', 'BaseApiController@apiUpload');
