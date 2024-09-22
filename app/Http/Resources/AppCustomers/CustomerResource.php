@@ -19,7 +19,7 @@ class CustomerResource extends JsonResource
         $phone = $this->phone;
         if (!empty($request->jwtUser)) {
             $user = User::find($request->jwtUser->id);
-            $phone = @$user->permission('phone.open') ? str_limit($phone, 7, 'xxx') : $phone;
+            $phone = @$user->permission('phone.open') ? $phone : str_limit($phone, 7, 'xxx');
         }
         if ($request->type == 'full_data') {
             return [
