@@ -221,7 +221,6 @@ class CallController extends BaseApiController
     {
         // Khóa mã hóa 32 byte tương đương với AES-256
         $key = 'PBX3ttnMJNS3274M2zVRtR738d5HByjc';
-
         // Mã hóa AES-256 với chế độ ECB và PKCS7 padding
         $encrypted = openssl_encrypt(
             $phoneNumber,            // Dữ liệu cần mã hóa
@@ -229,18 +228,7 @@ class CallController extends BaseApiController
             $key,                    // Khóa mã hóa
             OPENSSL_RAW_DATA          // Output trả về dữ liệu nhị phân (binary)
         );
-
         // Chuyển kết quả mã hóa thành chuỗi hexadecimal
-        return bin2hex($encrypted);
-    }
-
-    function encryptedPhoneNumber1($phoneNumber)
-    {
-        $key = 'PBX3ttnMJNS3274M2zVRtR738d5HByjc';
-        $encrypted = openssl_encrypt($phoneNumber, 'AES-128-ECB', $key, OPENSSL_RAW_DATA);
-        if ($encrypted === false) {
-            return null; // Xử lý lỗi khi không thể mã hóa
-        }
         return bin2hex($encrypted);
     }
 
