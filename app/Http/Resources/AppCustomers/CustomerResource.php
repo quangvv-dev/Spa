@@ -17,15 +17,15 @@ class CustomerResource extends JsonResource
     public function toArray($request)
     {
         $phone = $this->phone;
-//        if (!empty($request->jwtUser)) {
-//            $user = User::find($request->jwtUser->id);
-//            $phone = @$user->permission('phone.open') ? $phone : str_limit($phone, 7, 'xxx');
-//        }
+        if (!empty($request->jwtUser)) {
+            $user = User::find($request->jwtUser->id);
+            $phone = @$user->permission('phone.open') ? $phone : str_limit($phone, 7, 'xxx');
+        }
         if ($request->type == 'full_data') {
             return [
                 'id'               => @$this->id,
                 'full_name'        => @$this->full_name,
-                'phone'            => $phone,
+                'phone'            => $this->phone,
                 'phone_click2call' => $phone,
                 'telesales_id'     => @$this->telesales_id,
                 'mkt_id'           => @$this->mkt_id,
