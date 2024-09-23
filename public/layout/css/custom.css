@@ -1,0 +1,81 @@
+/* .content__right {
+    border: none;
+    height: auto;
+} */
+/* .content__right__header {
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    border: 1px solid #2E2E2E;
+} */
+.modal-custom input[type=text] {
+    line-height: 18.9px;
+}
+.menu .active .active-border {
+    bottom: -6px;
+}
+.content__right .menu {
+    padding-bottom: 6px;
+}
+
+.suppoter .item {
+    padding: 16px 0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20%;
+    border: 1px dashed #999999;
+    border-radius: 8px;
+    gap: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    background: #2E2E2E;
+}
+.suppoter .item.active {
+    display: block;
+    padding: 10px 14.5px;
+    border: none;
+    cursor: context-menu;
+}
+.suppoter .item.active .left{
+    width: 88%;
+}
+.suppoter .item.active .full-name{
+    line-height: 19.8px;
+    white-space: nowrap; 
+    width: 90%; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+.suppoter-modal .list-bs .item.active {
+    position: relative;
+}
+.suppoter-modal .list-bs .item.active .icon {
+    position: absolute;
+    top: 52px;
+    right: 37px;
+}
+.suppoter-modal .list-bs .item.active div {
+    color: var(--color-info);
+
+}
+
+.content__right-hotline table .active {
+    color: #3FD599;
+    background: #182A23;
+    padding: 8px 12px;
+    border-radius: 25px;
+}
+
+audio::-webkit-media-controls-panel {
+    background-color: unset;
+  }
+  
+  audio::-webkit-media-controls-play-button {
+    background-color: #B1D4E0;
+    border-radius: 50%;
+  }
+  
+  audio::-webkit-media-controls-play-button:hover {
+    background-color: rgba(177,212,224, .7);
+  }

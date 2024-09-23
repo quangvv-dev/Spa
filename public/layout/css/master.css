@@ -1,0 +1,698 @@
+@font-face {
+    font-family: svn-lage;
+    src: url("./fonts/SVN-Gilroy\ Light.otf");
+}
+@font-face {
+    font-family: svn-medium;
+    src: url("./fonts/SVN-Gilroy\ Medium.otf");
+}
+@font-face {
+    font-family: svn-regular;
+    src: url("./fonts/SVN-Gilroy\ Regular.otf");
+}
+@font-face {
+    font-family: svn-small;
+    src: url("./fonts/SVN-Gilroy\ Xlight.otf");
+}
+@font-face {
+    font-family: sopher;
+    src: url("./fonts/Philosopher-Regular.ttf");
+}
+
+html {
+    min-height: 100%;
+}
+
+body {
+    min-height: 100%;
+}
+
+:root {
+    --color-gradient: linear-gradient(274.34deg, rgba(96, 195, 219, 0) -1.01%, #60C3DB 30.51%, rgba(96, 195, 219, 0) 91.69%);
+    --color-gradient2: linear-gradient(130.35deg, #FAF9F7 -2.76%, #2AABE2 53.97%);
+    --color-primary: #3BDBFF;
+    --color-info: #00AEFF;
+    --color-dark: #999999;
+    --color-warning: #FFC544;
+    --color-orange: #FF6B00;
+    --color-green: #3FD599;
+    --color-danger: #FF0060;
+    --color-yellow: #FDDE55;
+    --bg-main: #131313;
+}
+.font-sopher {
+    font-family: sopher;
+}
+.font-svn-lage {
+    font-family: svn-lage;
+}
+.font-svn-medium {
+    font-family: svn-medium;
+}
+.font-svn-regular {
+    font-family: svn-regular;
+}
+.font-svn-small {
+    font-family: svn-small;
+}
+.bg-main {
+    background-color: var(--bg-main);
+}
+.bg-gradient {
+    background: radial-gradient(120.26% 166.07% at -4.23% -32.74%, #1A2749 0%, #253763 36.39%, #121B34 75.39%, #0C1124 100%);
+}
+.color-main {
+    color: var(--bg-main) !important;
+}
+.color-primary {
+    color: var(--color-primary) !important;
+}
+
+.color-info {
+    color: var(--color-info) !important;
+}
+
+.color-dark {
+    color: var(--color-dark) !important;
+}
+
+.color-warning {
+    color: var(--color-warning) !important;
+}
+
+.color-orange {
+    color: var(--color-orange) !important;
+}
+
+.color-green {
+    color: var(--color-green) !important;
+}
+
+.color-white {
+    color: #fff !important;
+}
+.color-yellow {
+    color: var(--color-yellow) !important;
+}
+.color-danger {
+    color: var(--color-danger);
+}
+
+body {
+    background: rgba(19, 19, 19, 1);
+    font-family: svn-medium;
+    font-size: 14px;
+    text-align: left;
+    color: #fff;
+}
+
+.header {
+    height: 80px;
+    /* background: rgba(19, 19, 19, 1); */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(#131313, #131313) padding-box,
+        var(--color-gradient);
+    border-bottom: 2px solid transparent;
+
+}
+
+.header .nav-item {
+    padding: 0 12px;
+    cursor: pointer;
+}
+
+.header .down {
+    width: 16px;
+}
+
+.header .navbar-nav {
+    align-items: center;
+}
+
+.header .navbar-nav .nav-item .show-text {
+    display: none;
+}
+
+.nav-item .gradient-btn:hover .show-text {
+    display: inline-block;
+}
+
+.active .gradient-btn .show-text {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: auto !important;
+}
+
+.active .gradient-btn,
+.nav-item .gradient-btn:hover {
+    background: linear-gradient(#2E2E2E, #2E2E2E) padding-box,
+        linear-gradient(274.34deg, rgba(96, 195, 219, 0) -1.01%, #60C3DB 30.51%, rgba(96, 195, 219, 0) 91.69%) border-box;
+    color: #fff;
+    padding: 12px 24px;
+    border: 1px solid transparent;
+    border-radius: 60px;
+    display: inline-block;
+}
+
+
+
+
+.gradient-btn {
+    transition: all calc(400* 1ms) cubic-bezier(.42, .01, .58, 1);
+}
+
+.header .navbar-nav .nav-item .show-text {
+    display: inline-block;
+    opacity: 0;
+    visibility: hidden;
+    width: 0;
+    vertical-align: middle;
+    transition: all calc(500* 1ms) cubic-bezier(.42, .01, .58, 1);
+    white-space: nowrap;
+    /* overflow: hidden; */
+}
+
+.nav-item .gradient-btn:hover .show-text {
+    opacity: 1;
+    visibility: visible;
+    width: auto;
+}
+
+
+
+
+
+
+
+/* .header .center .nav-item {
+
+} */
+
+
+
+
+
+.profile {
+    gap: 16px;
+}
+
+.username {
+    padding: 0 4px;
+}
+
+.notice {
+    width: 44px;
+    height: 44px;
+}
+
+.notice .dropdown-menu {
+    width: 495px;
+    height: 553px;
+    border-radius: 16px;
+    background: linear-gradient(var(--bg-main), var(--bg-main)) padding-box,
+        linear-gradient(128.23deg, #FAF9F7 9.05%, #579DE2 51.94%, #2185A5 94.82%) border-box;
+    border: 1px solid transparent;
+    top: 2px !important;
+    left: -250px !important;
+    padding: 24px 0px;
+    overflow-y: auto;
+
+}
+
+.notice .dropdown-menu .dropdown-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 36px;
+    border-top: 1px solid #36354A;
+}
+
+.notice .notice__title {
+    white-space: nowrap;
+    width: 276px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.notice .notice__content {
+    padding-left: 0;
+    white-space: nowrap;
+    width: 276px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.notice .dropdown-menu .dropdown-item:hover {
+    background: unset;
+}
+
+.notice .dropdown-menu .dropdown-item:first-child {
+    border-top: none;
+    padding-top: 0;
+}
+
+.notice .dropdown-menu .dropdown-item:last-child {
+    border-bottom: 1px solid #36354A;
+}
+
+.notice .dropdown-menu::-webkit-scrollbar {
+    width: 7px;
+    height: 8px;
+    border-radius: 60px;
+}
+.notice .active {
+    background: #252525;
+
+}
+
+.header .dropdown>a {
+    background: unset;
+    border: unset;
+    outline: none;
+    padding: 0;
+}
+
+.header .show>.btn-secondary.dropdown-toggle {
+    background-color: unset;
+}
+
+.header .show>.btn-secondary:focus {
+    box-shadow: unset;
+}
+
+.btn-secondary:focus {
+    box-shadow: unset;
+}
+
+.header .dropdown-toggle::after {
+    display: none;
+}
+
+.linear-text {
+    font-family: sopher;
+    background: linear-gradient(107.54deg, #FFFFFF 4.13%, #999999 48.62%, #FFFFFF 93.12%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.customer {
+    margin: 24px 0 20px 0;
+}
+
+.customer__left {
+    gap: 16px;
+}
+
+.customer__right {
+    gap: 12px;
+}
+
+.menu img {
+    margin-right: 8px;
+}
+
+.menu span {
+    color: rgba(153, 153, 153, 1);
+    font-family: svn-lage;
+}
+
+.menu .active {
+    position: relative;
+}
+.menu .active span {
+    color: var(--color-primary);
+}
+.menu .squares-four.active span {
+    color: rgba(59, 219, 255, 1);
+}
+
+.menu .smiley.active span {
+    color: rgba(199, 240, 255, 1);
+}
+
+.menu .phone-slash .activespan {
+    color: rgba(255, 107, 0, 1);
+}
+
+.menu .chat-teardrop-dots.active span {
+    color: rgba(0, 174, 255, 1);
+}
+
+.menu .hand.active span {
+    color: rgba(255, 197, 68, 1);
+}
+
+.menu .basket.active span {
+    color: rgba(59, 219, 255, 1);
+}
+
+.menu>div {
+    display: flex;
+    align-items: center;
+}
+
+.menu .basket.active span {
+    color: rgba(59, 219, 255, 1);
+}
+
+.menu .active .active-border {
+    width: 100%;
+    height: 5px;
+    bottom: -12px;
+    border-radius: 8px 8px 0px 0px;
+    background: #2AABE2;
+    position: absolute;
+}
+
+.menu {
+    border-bottom: 1px solid #36354A;
+    padding-bottom: 12px;
+}
+
+.more-menu {
+    display: none;
+}
+
+.action {
+    color: var(--color-primary);
+    /* border-right: 1px solid #36354A; */
+    padding-right: 12px;
+    background: url(images/Line.png) right no-repeat;
+}
+
+.action:last-child {
+    background: none;
+}
+
+.content {
+    padding-left: 64px;
+    margin-bottom: 30px;
+}
+
+.table input[type="checkbox"] {
+    width: 15.75px;
+    height: 15.75px;
+}
+
+.content__table {
+    width: 100%;
+    overflow-x: auto;
+    max-height: 700px;
+    overflow-y: hidden;
+    position: relative;
+}
+
+.content__table thead th {
+    position: sticky;
+    top: -1px;
+    font-weight: 500;
+    line-height: 14.7px;
+}
+.content__table thead th input[type="checkbox"]{
+    position: absolute;
+    top: 12px;
+    left: 16px;
+}
+
+.content__table1 {
+    width: 100%;
+    max-height: 750px;
+    position: relative;
+    overflow: auto;
+}
+.content__table1 th{
+    font-weight: 500;
+    height: 39px;
+    position: sticky;
+    top: -1px;
+}
+.content__table1 thead th input[type="checkbox"]{
+    position: absolute;
+    top: 12px;
+    left: 16px;
+}
+
+.table .no-data {
+    height: 200px;
+}
+
+.table .no-data img {
+    position: absolute;
+    left: 45%;
+    top: 30%;
+}
+
+.pagination {
+    background: #36354A;
+    padding: 4px 12px;
+    border-radius: 8px;
+}
+
+.customer-detail {
+    min-height: 100%;
+    width: 576px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    background: var(--bg-main);
+    border-left: 1px solid #C4F2FF;
+    display: none;
+    z-index: 1111;
+}
+
+.customer-detail.active {
+    display: block;
+}
+
+.customer-detail .detail {
+    padding: 64px 24px 31px 24px;
+}
+
+.customer-detail .detail .detail__info {
+    background: var(--color-gradient2);
+    padding: 24px 0 24px 24px;
+    border-radius: 24px;
+}
+
+.customer-detail .detail .detail__info div:first-child {
+    font-family: sopher;
+    font-size: 24px;
+    color: var(--bg-main);
+    font-weight: 700;
+}
+
+.select-custom {
+    display: flex;
+    justify-content: space-between;
+    background: #2E2E2E;
+    color: #fff;
+    height: 48px;
+    padding: 13.5px 16px;
+    outline: none;
+    border-radius: 8px;
+}
+.select-custom.select-custom-outline {
+    background: #131313;
+    border: 1px solid #686777;
+}
+
+.textarea-custom {
+    background: #2E2E2E;
+    outline: none;
+    padding: 16px;
+    border-radius: 8px;
+    border: none;
+}
+
+.detail__pagination {
+    width: 220px;
+    top: 10px !important;
+    left: -137px !important;
+    background: radial-gradient(120.26% 166.07% at -4.23% -32.74%, #1A2749 0%, #253763 36.39%, #121B34 75.39%, #0C1124 100%) padding-box,
+        linear-gradient(130.35deg, #FAF9F7 -2.76%, #2AABE2 53.97%) border-box;
+
+    color: #fff;
+    padding: 9px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+}
+
+.dropdown__time {
+    width: 114px;
+    top: 10px !important;
+    left: -85px !important;
+    background: radial-gradient(120.26% 166.07% at -4.23% -32.74%, #1A2749 0%, #253763 36.39%, #121B34 75.39%, #0C1124 100%) padding-box,
+        linear-gradient(130.35deg, #FAF9F7 -2.76%, #2AABE2 53.97%) border-box;
+    color: #fff;
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+}
+
+.dropdown__time.dropdown-menu {
+    min-width: unset;
+}
+
+.dropdown-custom::after {
+    content: unset;
+}
+
+.dropdown__status {
+    width: 527px;
+    border-radius: 8px;
+    background-color: #2E2E2E;
+    color: #fff;
+}
+
+.select-custom__dropdown {
+    max-height: 460px;
+    overflow: auto;
+}
+
+.select-custom__dropdown div.item {
+    padding-left: 40px;
+}
+.select-custom__dropdown div.item:last-child {
+    margin-bottom: 9px;
+}
+
+.select-custom__dropdown div.active {
+    color: var(--color-info);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-left: 16px;
+}
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -1em;
+    margin-left: -1px;
+    display: none;
+}
+
+.dropdown:hover>.dropdown-menu {
+    display: block;
+    /* Hiển thị submenu của Menu 1 */
+    position: absolute;
+}
+
+.dropdown-submenu:hover .dropdown-menu {
+    display: block;
+    /* Hiển thị submenu con của Submenu 2 */
+}
+
+.center .dropdown-menu a.dropdown-item:hover {
+    color: var(--color-primary) !important;
+}
+
+.navbar-nav .dropdown-menu {
+    position: absolute;
+    padding: 0;
+    width: 198px;
+    border-radius: 16px;
+    /* background-color: var(--bg-main); */
+    background: linear-gradient(var(--bg-main), var(--bg-main)) padding-box,
+        linear-gradient(128.23deg, #FAF9F7 9.05%, #579DE2 51.94%, #2185A5 94.82%) border-box;
+    border: 1px solid transparent;
+    /* margin-top: 6px; */
+
+}
+
+.navbar-nav .dropdown-menu.show {
+    position: absolute !important;
+    display: block !important;
+    top: 22% !important;
+    left: -24px !important;
+}
+
+.navbar-nav .dropdown-menu .dropdown-item {
+    color: #fff;
+    padding: 12px 24px;
+    /* background: var(--bg-main) !important; */
+}
+
+.navbar-nav .dropdown-menu .dropdown-item:hover {
+    background: var(--bg-main) !important;
+}
+
+.navbar-nav .dropdown-menu .dropdown-submenu .dropdown-menu {
+    padding: 12px 24px 0 24px;
+    padding: 12px 24px 0 24px;
+    border: 1px solid;
+    border-top-left-radius: unset;
+    border-bottom-left-radius: unset;
+    left: 101%;
+}
+
+.navbar-nav .dropdown-menu .dropdown-submenu .dropdown-menu .dropdown-item {
+    padding: 12px 0;
+}
+
+.navbar-nav .dropdown-menu>.dropdown-item:last-child {
+    margin-bottom: 12px;
+}
+
+/* .navbar-nav .dropdown-menu .dropdown-item:first-child{
+    padding-top: 24px;
+}
+.navbar-nav .dropdown-submenu .dropdown-item:first-child{
+    padding-top: 0;
+} */
+.navbar-nav .dropdown-menu .dropdown-item.dropdown-toggle {}
+
+.navbar-nav .dropdown-menu .dropdown-menu__header,
+.navbar-nav .dropdown-menu .dropdown-menu__header:hover {
+    font-family: sopher;
+    background: -webkit-linear-gradient(107.54deg, #FFFFFF 4.13%, #999999 48.62%, #FFFFFF 93.12%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+
+    text-shadow: -10px -10px 20px 0px #00AEFF inset;
+    padding: 12px 24px;
+    font-size: 24px;
+
+}
+
+.dropdown-menu__border {
+    padding: 4px 24px 4px 24px;
+    ;
+}
+
+.dropdown-menu__border div {
+    height: 1px;
+    background: #686777;
+}
+.content__table td {
+    padding: 8.5px 12px;
+    line-height: 14.7px;
+}
+
+.notification {
+    display: flex;
+    width: 388px;
+    background: radial-gradient(120.26% 166.07% at -4.23% -32.74%, #1A2749 0%, #253763 36.39%, #121B34 75.39%, #0C1124 100%) padding-box,
+        linear-gradient(130.35deg, #FAF9F7 -2.76%, #2AABE2 53.97%) border-box;
+    color: #fff;
+    padding: 20px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    position: fixed;
+    right: 24px;
+    bottom: 42px;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.select2 .select2-selection__rendered {
+    font-family: svn-lage;
+}

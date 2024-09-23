@@ -1,0 +1,574 @@
+.container {
+    max-width: 100%;
+    padding: 0 64px;
+}
+
+.container-fluid {
+    padding: 0;
+}
+
+.row {
+    margin: 0;
+}
+
+.col-2,
+.col-3,
+.col-4,
+.col-5,
+.col-6,
+.col-7,
+.col-8,
+.col-9,
+.col-10 {
+    padding: 0;
+}
+
+.btn {
+    border-radius: 8px;
+}
+
+.btn:hover {
+    color: unset;
+}
+
+.btn-primary {
+    border: 1px;
+    background: linear-gradient(130.35deg, #FAF9F7 -2.76%, #2AABE2 53.97%);
+}
+
+.btn-outline-default {
+    border-color: #686777;
+    color: #fff;
+}
+
+.btn-gradient {
+    background: linear-gradient(var(--bg-main), var(--bg-main)) padding-box, linear-gradient(128.23deg, #FAF9F7 9.05%, #579DE2 51.94%, #2185A5 94.82%) border-box;
+    color: #fff;
+    border: 1px solid transparent;
+}
+
+.btn-gradient1 {
+    background: radial-gradient(120.26% 166.07% at -4.23% -32.74%, #1A2749 0%, #253763 36.39%, #121B34 75.39%, #0C1124 100%) padding-box, linear-gradient(130.35deg, #FAF9F7 -2.76%, #2AABE2 53.97%) border-box;
+    color: #fff;
+    border: 1px solid transparent;
+}
+
+.btn-lg {
+    width: 169px;
+    height: 48px;
+    line-height: 1;
+}
+
+.btn-icon img {
+    width: 16px;
+}
+
+.btn-lg.btn-icon img {
+    width: 18px;
+}
+
+.btn.icon-right img {
+    width: 16px;
+    height: 16px;
+    margin-left: 12px;
+}
+
+.fs-16 {
+    font-size: 16px;
+    line-height: 16.8px;
+}
+
+.fs-12 {
+    font-size: 12px;
+}
+
+.fs-14 {
+    font-size: 14px;
+    line-height: 14.7px;
+}
+
+.fs-18 {
+    font-size: 18px;
+    line-height: 18.19px;
+}
+
+.fs-24 {
+    font-size: 24px;
+}
+
+.fs-28 {
+    font-size: 28px;
+}
+
+.fs-32 {
+    font-size: 32px;
+}
+
+.fs-36 {
+    font-size: 36px;
+}
+
+.fw-600 {
+    font-size: 600px !important;
+}
+
+.fw-700 {
+    font-weight: 700 !important;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.gap-4 {
+    gap: 4px;
+}
+
+.gap-8 {
+    gap: 8px;
+}
+
+.gap-12 {
+    gap: 12px;
+}
+
+.gap-16 {
+    gap: 16px;
+}
+
+.gap-24 {
+    gap: 24px;
+}
+
+.p-12-16 {
+    padding: 12px 16px !important;
+}
+
+.p-12 {
+    padding: 12px;
+}
+
+.p-16 {
+    padding: 16px !important;
+}
+
+.p-24 {
+    padding: 24px !important;
+}
+
+.pr-16 {
+    padding-right: 16px;
+}
+
+.pl-16 {
+    padding-left: 16px;
+}
+
+.ml-16 {
+    margin-left: 16px;
+}
+
+.mr-16 {
+    margin-right: 16px;
+}
+
+.w-16 {
+    width: 16px !important;
+}
+
+.w-40 {
+    width: 40px !important;
+}
+
+.w-100 {
+    width: 100% !important;
+}
+
+.w-232 {
+    width: 232px !important;
+}
+
+.w-266 {
+    width: 266px !important;
+}
+
+.w-314 {
+    width: 314px !important;
+}
+
+.w-50p {
+    width: 50% !important;
+}
+
+.h-16 {
+    height: 16px;
+}
+
+.h-40 {
+    height: 40px !important;
+}
+
+.h-48 {
+    height: 48px;
+}
+
+.h-150 {
+    height: 150px;
+}
+
+.h-253 {
+    height: 253px;
+}
+
+.mt-6 {
+    margin-top: 6px;
+}
+
+.mt-8 {
+    margin-top: 8px;
+}
+
+.mt-12 {
+    margin-top: 12px;
+}
+
+.mt-16 {
+    margin-top: 16px;
+}
+
+.mt-24 {
+    margin-top: 24px;
+}
+
+.mt-36 {
+    margin-top: 36px;
+}
+
+.mb-16 {
+    margin-bottom: 16px;
+}
+
+.mr-8 {
+    margin-right: 8px;
+}
+
+.dark-text {
+    color: rgba(199, 240, 255, 1);
+}
+
+.pdl-2 {
+    padding-right: 2px;
+}
+
+.max-width-700 {
+    max-width: 700px !important;
+}
+
+
+.select2 .selection {
+    border-radius: 8px;
+}
+
+.select2 .selection .select2-selection--single {
+    border-radius: 8px;
+    background: rgba(19, 19, 19, 1);
+    border-color: #686777;
+    display: flex;
+    align-items: center;
+    padding: 19px;
+}
+
+.select2 .selection .select2-selection--single .select2-selection__rendered {
+    color: #fff;
+    padding-left: 0;
+    margin-left: -9px;
+    padding-right: 12px;
+}
+
+.select2 .select2-selection__arrow {
+    background-image: url("images/Down.png");
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    width: 16px !important;
+    height: 16px !important;
+    top: 35% !important;
+    right: 12px !important;
+
+}
+
+.select2.select2-container {
+    /* width: unset !important; */
+    min-width: 100px;
+}
+
+.select2-container .select2-search__field {
+    outline: none;
+}
+
+/* .select2-container .select2-dropdown--below {
+    background-color: rgba(19, 19, 19, 1);
+} */
+.select2-container .select2-results__options {
+    background-color: rgba(19, 19, 19, 1);
+}
+
+.select2-custom .selection .select2-selection--single {
+    background: #2E2E2E;
+    border: none;
+}
+
+.select2-custom.h-48 .selection .select2-selection--single {
+    height: 48px;
+}
+
+
+.search__input {
+    border-radius: 8px;
+    background-color: #36354A;
+
+}
+
+.search__input input {
+    height: 100%;
+    /* background: red; */
+    background-color: #36354A;
+
+    border: none;
+    outline: none;
+
+    color: #fff;
+    width: calc(100% - 46px);
+}
+
+.search__input img {
+    padding: 12px 0 12px 16px;
+}
+
+.icon-double-down {
+    background-image: url("images/Icon.png");
+}
+
+.icon-double-up {
+    background-image: url("images/Icon.png");
+    transform: rotate(182deg);
+}
+
+.table {
+    color: #fff;
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 1px solid #686777;
+}
+
+.table-bordered thead th {
+    background-color: #36354A;
+}
+
+.table-bordered td,
+.table-bordered th {
+    border: 1px solid #686777;
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: rgba(255, 255, 255, .05);
+}
+
+.table-bordered {
+    border: unset;
+}
+
+.vertical-middle {
+    vertical-align: middle !important;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 8px;
+    border-radius: 60px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #36354A;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #999999;
+    border-radius: 8px;
+}
+
+.line-height-1 {
+    line-height: 1;
+}
+
+.modal-custom {}
+
+.modal-custom .modal-header {
+    border-bottom: 1px solid #2E2E2E;
+    padding: 24px;
+}
+
+.modal-custom .modal-body {
+    padding: 24px;
+}
+
+.modal-custom .modal-content {
+    background: #131313;
+    border-radius: 24px;
+
+}
+
+.modal-custom .modal-content .modal-title-custom {
+    margin-bottom: 0;
+    line-height: 1.5;
+}
+
+.datepicker-custom {
+    position: relative;
+}
+
+.datepicker-custom input {
+    border-radius: 8px !important;
+    background: #2e2e2e !important;
+    border: none;
+    outline: none;
+    padding: 12px 16px;
+    font-size: 18px;
+    color: #999999;
+}
+
+.datepicker-custom .icon {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+}
+
+input[type=text].default,
+input[type=number].default {
+    background: #2e2e2e;
+    padding: 12px 16px;
+    border-radius: 8px;
+    outline: none;
+    color: #999;
+    border: none;
+    width: 100%;
+}
+
+.box {
+    border: 1px solid #2e2e2e;
+    border-radius: 16px;
+}
+
+.daterangepicker {
+    color: black;
+}
+
+.daterangepicker:before {
+    content: none;
+}
+
+.daterangepicker::after {
+    content: none;
+}
+
+
+
+.container__checkbox {
+    display: block;
+    position: relative;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container__checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 15.75px;
+    width: 15.75px;
+    border: 1.5px solid #fff;
+    border-radius: 2px;
+}
+
+
+/* When the checkbox is checked, add a blue background */
+.container__checkbox input:checked~.checkmark {
+    background-color: #fff;
+    border: none;
+    border-radius: 2px;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.container__checkbox input:checked~.checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.container__checkbox .checkmark:after {
+    left: 5px;
+    top: 2.5px;
+    width: 5px;
+    height: 8px;
+    border: solid black;
+    border-width: 0 2px 2px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+
+
+
+
+.w-400 {
+    width: 400px;
+}
+
+
+@media (min-width: 1200px){
+    .checkmark {
+        left: -8px;
+    }
+}
+
+@media (min-width: 1365px){
+    .checkmark {
+        left: -6px;
+    }
+}
+@media (min-width: 1399px){
+    .checkmark {
+        left: -3px;
+    }
+}
+@media (min-width: 1599px){
+    .checkmark {
+        left: 2px;
+    }
+}

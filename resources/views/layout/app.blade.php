@@ -195,7 +195,6 @@
             </div>
         </div>
         @php
-
                 @endphp
 
         @if(setting('expiry') &&  date('Y-m-d')>setting('expiry'))
