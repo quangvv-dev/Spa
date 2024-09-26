@@ -3,9 +3,12 @@
         display: block !important;
     }
 </style>
-<i style="font-size: 20px;cursor: pointer"
-   class="dropdown-toggle nav-link fa fa-filter pointer"
-   aria-expanded="true"></i>
+<i style="cursor: pointer; padding: 0;"
+   class="dropdown-toggle nav-link pointer"
+   aria-expanded="true">
+    <img src="{{asset('layout/images/Icon_hover.png')}}">
+</i>
+
 <div class="dropdown-menu-custom dropdown-menu dropdown-menu-right show"
      style="padding: 10px; width: 650px; display: none;border: 1px solid #3b8fec;">
     <div class="row">

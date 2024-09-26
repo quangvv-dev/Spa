@@ -113,7 +113,7 @@ body {
     justify-content: space-between;
     align-items: center;
     background: linear-gradient(#131313, #131313) padding-box,
-        var(--color-gradient);
+    var(--color-gradient);
     border-bottom: 2px solid transparent;
 
 }
@@ -149,7 +149,7 @@ body {
 .active .gradient-btn,
 .nav-item .gradient-btn:hover {
     background: linear-gradient(#2E2E2E, #2E2E2E) padding-box,
-        linear-gradient(274.34deg, rgba(96, 195, 219, 0) -1.01%, #60C3DB 30.51%, rgba(96, 195, 219, 0) 91.69%) border-box;
+    linear-gradient(274.34deg, rgba(96, 195, 219, 0) -1.01%, #60C3DB 30.51%, rgba(96, 195, 219, 0) 91.69%) border-box;
     color: #fff;
     padding: 12px 24px;
     border: 1px solid transparent;
@@ -213,7 +213,7 @@ body {
     height: 553px;
     border-radius: 16px;
     background: linear-gradient(var(--bg-main), var(--bg-main)) padding-box,
-        linear-gradient(128.23deg, #FAF9F7 9.05%, #579DE2 51.94%, #2185A5 94.82%) border-box;
+    linear-gradient(128.23deg, #FAF9F7 9.05%, #579DE2 51.94%, #2185A5 94.82%) border-box;
     border: 1px solid transparent;
     top: 2px !important;
     left: -250px !important;
@@ -513,7 +513,7 @@ body {
     top: 10px !important;
     left: -137px !important;
     background: radial-gradient(120.26% 166.07% at -4.23% -32.74%, #1A2749 0%, #253763 36.39%, #121B34 75.39%, #0C1124 100%) padding-box,
-        linear-gradient(130.35deg, #FAF9F7 -2.76%, #2AABE2 53.97%) border-box;
+    linear-gradient(130.35deg, #FAF9F7 -2.76%, #2AABE2 53.97%) border-box;
 
     color: #fff;
     padding: 9px;
@@ -526,7 +526,7 @@ body {
     top: 10px !important;
     left: -85px !important;
     background: radial-gradient(120.26% 166.07% at -4.23% -32.74%, #1A2749 0%, #253763 36.39%, #121B34 75.39%, #0C1124 100%) padding-box,
-        linear-gradient(130.35deg, #FAF9F7 -2.76%, #2AABE2 53.97%) border-box;
+    linear-gradient(130.35deg, #FAF9F7 -2.76%, #2AABE2 53.97%) border-box;
     color: #fff;
     padding: 10px;
     border: 1px solid transparent;
@@ -602,7 +602,7 @@ body {
     border-radius: 16px;
     /* background-color: var(--bg-main); */
     background: linear-gradient(var(--bg-main), var(--bg-main)) padding-box,
-        linear-gradient(128.23deg, #FAF9F7 9.05%, #579DE2 51.94%, #2185A5 94.82%) border-box;
+    linear-gradient(128.23deg, #FAF9F7 9.05%, #579DE2 51.94%, #2185A5 94.82%) border-box;
     border: 1px solid transparent;
     /* margin-top: 6px; */
 
@@ -665,7 +665,7 @@ body {
 
 .dropdown-menu__border {
     padding: 4px 24px 4px 24px;
-    ;
+;
 }
 
 .dropdown-menu__border div {
@@ -681,7 +681,7 @@ body {
     display: flex;
     width: 388px;
     background: radial-gradient(120.26% 166.07% at -4.23% -32.74%, #1A2749 0%, #253763 36.39%, #121B34 75.39%, #0C1124 100%) padding-box,
-        linear-gradient(130.35deg, #FAF9F7 -2.76%, #2AABE2 53.97%) border-box;
+    linear-gradient(130.35deg, #FAF9F7 -2.76%, #2AABE2 53.97%) border-box;
     color: #fff;
     padding: 20px;
     border: 1px solid transparent;
