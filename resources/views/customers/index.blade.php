@@ -986,7 +986,7 @@
                     return false;
                 }
                 $.ajax({
-                    url: 'https://api.mobilesip.vn/v1/click2call',
+                    url: 'https://api.mobilesip.vn/v1/click2call/async',
                     type: 'GET',
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader('Authorization', 'Bearer 88d4b615ef0c4afdb3485fce4d90a300-ZDZmZTRkMmUtM2UxOS00ZjMzLWIzOTUtOGEzNmRkMWQ2Mzc5');
