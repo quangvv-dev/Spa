@@ -59,7 +59,7 @@ class CallController extends BaseApiController
                 'start_time'    => $request->time_started,
                 'caller_number' => $request->from_number,
                 'dest_number'   => $request->to_number,
-                'answer_time'   => $request->duration,
+                'answer_time'   => $request->billsec??$request->duration,
                 'call_status'   => $status,
                 'recording_url' => $request->recording_url,
             ];
