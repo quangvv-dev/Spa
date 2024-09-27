@@ -21,6 +21,8 @@
             line-height: 20px;
             font-size: 11px;
             border: none;
+            background: #131313;
+            color: white;
         }
 
         .description-cus:focus, .description-cus:hover {
