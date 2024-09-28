@@ -69,7 +69,7 @@
                     </div>
                     <div class="col-12 form-group">
                         {!! Form::label('sms_group', 'Nội dung tin nhắn', array('class' => ' required')) !!}
-                        {!! Form::textArea('sms_group', setting('sms_group'), array('class' => 'form-control autocomplete-textarea','id'=>'sms_group','maxlength'=>152)) !!}
+                        {!! Form::textArea('sms_group', setting('sms_group'), array('class' => 'form-control textarea-custom autocomplete-textarea','id'=>'sms_group','maxlength'=>152)) !!}
                         <span class="help-block">Lưu ý nội dung tin nhắn không dấu</span>
                     </div>
                 </div>

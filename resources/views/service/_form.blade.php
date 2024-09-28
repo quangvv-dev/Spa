@@ -81,7 +81,7 @@
                     <div class="form-group required {{ $errors->has('enable') ? 'has-error' : '' }}">
                         {!! Form::label('description', 'Mô tả') !!}
 
-                        {!! Form::textarea('description',old('description')?:null, array('class' => 'form-control','row'=>8)) !!}
+                        {!! Form::textarea('description',old('description')?:null, array('class' => 'form-control textarea-custom','row'=>8)) !!}
                         <span class="help-block">{{ $errors->first('enable', ':message') }}</span>
                     </div>
                 </div>

@@ -1,9 +1,9 @@
-<div class="modal fade text-left" id="modalSourceFB" tabindex="-1" role="dialog" aria-labelledby="modalFanpagePost"
+<div class="modal fade modal-custom text-left" id="modalSourceFB" tabindex="-1" role="dialog" aria-labelledby="modalFanpagePost"
      style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-main">
-                <h5 class="modal-title" id="myModalLabel">Thêm mới nguồn</h5>
+                <h5 class="modal-title-custom linear-text fs-24" id="myModalLabel">Thêm mới nguồn</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>

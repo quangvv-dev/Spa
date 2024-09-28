@@ -181,7 +181,7 @@
             }).done(function (data) {
                 $.each(data.data, function (index, value) {
                     html += ` <tr>
-                    <th scope="row">` + index + `</th>
+                    <th class="text-center">` + index + `</th>
                     <td class="text-center">` + value.orders.created_at + `</td>
                     <td class="text-center">` + value.earn.toLocaleString('ja-JP') + `</td>
                     <td class="text-center">` + value.orders.all_total.toLocaleString('ja-JP') + `</td>
@@ -217,7 +217,7 @@
             }).done(function (data) {
                 $.each(data.data, function (index, value) {
                     html += ` <tr>
-                    <th scope="row">` + index + `</th>
+                    <th class="text-center">` + index + `</th>
                     <td class="text-center">` + value.orders.created_at + `</td>
                     <td class="text-center">` + value.earn.toLocaleString('ja-JP') + `</td>
                     <td class="text-center">` + value.orders.all_total.toLocaleString('ja-JP') + `</td>

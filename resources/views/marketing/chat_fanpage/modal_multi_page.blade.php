@@ -1,10 +1,10 @@
 <!-- Modal -->
-<div class="modal fade" id="modalMultiPage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade modal-custom" id="modalMultiPage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document" style="max-width: 80%;">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Chế độ gộp trang</h5>
+                <h5 class="modal-title-custom linear-text fs-24" id="exampleModalLabel">Chế độ gộp trang</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

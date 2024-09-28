@@ -15,7 +15,7 @@
         @if(@count($tasks))
             @foreach($tasks as $k => $s)
                 <tr>
-                    {{--<th scope="row">{{$k}}</th>--}}
+                    {{--<th class="text-center">{{$k}}</th>--}}
                     <td class="text-center">{{$s->date_from}}</td>
                     <td class="text-center">{{@$s->user->full_name}}</td>
                     {{--<td class="text-center">{{@$s->customer->full_name}}</td>--}}

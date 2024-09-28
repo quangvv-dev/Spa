@@ -4,7 +4,7 @@
         margin-bottom: 5px;
     }
 </style>
-<div class="modal fade" id="roleTypeModal" role="dialog">
+<div class="modal fade modal-custom" id="roleTypeModal" role="dialog">
     <div class="modal-dialog modal-xs">
         <!-- Modal content-->
         <div class="modal-content">

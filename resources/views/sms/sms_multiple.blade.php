@@ -16,20 +16,20 @@
             <div class="col-md-12 row">
                 <div class="col-3 form-group">
                     {!! Form::label('list_name', 'Danh sách tên KH', array('class' => ' required')) !!}
-                    {!! Form::textArea('list_name', null, array('class' => 'form-control autocomplete-textarea','rows'=>7)) !!}
+                    {!! Form::textArea('list_name', null, array('class' => 'form-control autocomplete-textarea textarea-custom','rows'=>7)) !!}
                     <span
                         class="help-block">Có thể nhập nhiều tên khách hàng cách nhau bằng dấu ";" hoặc xuống dòng</span>
                 </div>
                 <div class="col-3 form-group">
                     {!! Form::label('list_phone', 'Danh sách SĐT', array('class' => ' required')) !!}
-                    {!! Form::textArea('list_phone', null, array('class' => 'form-control autocomplete-textarea','rows'=>7)) !!}
+                    {!! Form::textArea('list_phone', null, array('class' => 'form-control autocomplete-textarea textarea-custom','rows'=>7)) !!}
                     <span
                         class="help-block">Có thể nhập nhiều số điện thoại cách nhau bằng dấu ";" hoặc xuống dòng</span>
                 </div>
 
                 <div class="col-6 form-group">
                     {!! Form::label('content', 'Nội dung tin nhắn KH đặt lịch', array('class' => ' required')) !!}
-                    {!! Form::textArea('content', setting('content_multiple_sms'), array('class' => 'form-control autocomplete-textarea','required'=>true,'rows'=>7)) !!}
+                    {!! Form::textArea('content', setting('content_multiple_sms'), array('class' => 'form-control autocomplete-textarea textarea-custom','required'=>true,'rows'=>7)) !!}
                     <span class="help-block">Lưu ý nội dung tin nhắn không dấu</span>
                 </div>
             </div>

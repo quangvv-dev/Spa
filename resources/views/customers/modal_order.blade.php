@@ -1,9 +1,9 @@
 <!-- Large Modal -->
-<div id="largeModal" class="modal fade">
+<div id="largeModal" class="modal fade modal-custom">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content history-update-order">
             <div class="modal-header pd-x-20">
-                <h6 class="modal-title">Lịch sử liệu trình </h6>
+                <h6 class="modal-title-custom linear-text fs-24">Lịch sử liệu trình </h6>
                 <div class="col-md-3">
                     {!! Form::select('list_service', [], null, array('id'=>'list_service','class' => 'form-control')) !!}
                 </div>

@@ -1,4 +1,4 @@
-<div class="modal fade" id="modalSendSMS" role="dialog">
+<div class="modal fade modal-custom" id="modalSendSMS" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content" style="height: 25%">
@@ -12,7 +12,7 @@
 
                     <div class="col-md-12">
                         <i style="color: red">Nội dung gửi tin</i><br>
-                        <textarea class="form-control autocomplete-textarea" id="sms_group" maxlength="152" name="sms_group" rows="5"></textarea>
+                        <textarea class="form-control autocomplete-textarea textarea-custom" id="sms_group" maxlength="152" name="sms_group" rows="5"></textarea>
                     </div>
 
                     <input type="hidden" name="customer_id" value="{{@$customer->id}}">

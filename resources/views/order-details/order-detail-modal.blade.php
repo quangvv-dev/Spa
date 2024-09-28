@@ -3,7 +3,7 @@
         color: black;
     }
 </style>
-<div class="modal fade" id="orderDetailModal" role="dialog">
+<div class="modal fade modal-custom" id="orderDetailModal" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">

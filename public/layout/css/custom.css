@@ -422,7 +422,7 @@ body {
     top: 12px;
     left: 16px;
 }
-
+ /*Quang css*/
 input {
     background-color: #131313 !important;
     border: 1px solid #686777 !important;
@@ -444,10 +444,19 @@ label{
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
-th, td, span, button, p, a {
+a, th, td, span, button, p, h1, h2, h3, h4, h5 option {
     font-family: 'Sopher' !important; /* Sử dụng 'sans-serif' như một font fallback */
 }
-
+.textarea-custom {
+    background-color: #131313 !important;
+    /*background: #2E2E2E;*/
+    color: #fff;
+    outline: none;
+    padding: 16px;
+    border-radius: 8px;
+    border: none;
+}
+/*end quang css*/
 .table thead th {
     background-color: #36354A;
 }

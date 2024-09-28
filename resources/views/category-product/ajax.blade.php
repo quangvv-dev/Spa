@@ -13,7 +13,7 @@
         @if(@count($docs))
             @foreach($docs as $k => $s)
                 <tr>
-                    <th class="text-center">{{$k}}</th>
+                    <td class="text-center">{{$k}}</td>
                     <td class="text-center">{{$s->name}}</td>
                     <td class="text-center">{{$s->code}}</td>
                     <td class="text-center">{{@$s->categories->name}}

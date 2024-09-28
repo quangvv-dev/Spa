@@ -1,4 +1,4 @@
-<div class="modal fade modal-task" id="myModal" role="dialog">
+<div class="modal fade modal-custom modal-task" id="myModal" role="dialog">
     <div class="modal-dialog modal-lg">
         <!-- Modal content-->
         <div class="modal-content">

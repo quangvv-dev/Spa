@@ -33,13 +33,13 @@
 
     </section>
     <!-- // card-actions section end -->
-    <div class="modal fade text-left" id="add_new" tabindex="-1" role="dialog"
+    <div class="modal fade modal-custom text-left" id="add_new" tabindex="-1" role="dialog"
          aria-labelledby="myModalLabel35"
          style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-main">
-                    <h5 class="modal-title" id="myModalLabel35"> Cập nhật số seeding</h5>
+                    <h5 class="modal-title-custom linear-text fs-24" id="myModalLabel35"> Cập nhật số seeding</h5>
                     <button type="button" class="close" data-dismiss="modal"
                             aria-label="Close">
                         <span aria-hidden="true">×</span>

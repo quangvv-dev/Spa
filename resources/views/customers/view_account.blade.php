@@ -336,7 +336,7 @@
                     <div class="left d-flex align-items-center gap-8">
                         <div class="d-flex align-items-center gap-16">
                             <img src="{{$customer->avatar?:'/default/noavatar.png'}}" width="85" height="85" alt="" style="border-radius: 50%;">
-                            <span class="color-white font-sopher fs-24">{{ $customer->full_name }}</span>
+                            <span class="color-white linear-text fs-24">{{ $customer->full_name }}</span>
                         </div>
 
                         <span class="color-white dot">.</span>

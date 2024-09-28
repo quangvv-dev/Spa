@@ -11,9 +11,8 @@
         @if(@count($docs))
             @foreach($docs as $k => $s)
                 <tr>
-                    <th scope="row">{{$k}}</th>
+                    <td class="text-center">{{$k}}</td>
                     <td class="text-center">{{$s->name}}</td>
-                    </td>
                     <td class="text-center">
                         <a class="btn update" href="#" data-id="{{$s->id}}" title="Chỉnh sửa lịch hẹn"
                            data-toggle="modal" data-target="#updateModal"><i class="fas fa-edit"></i></a>

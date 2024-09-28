@@ -1,5 +1,5 @@
 <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
-<div class="modal fade" id="myModalExport" role="dialog">
+<div class="modal fade modal-custom" id="myModalExport" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content" style="height: 25%">

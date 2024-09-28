@@ -14,7 +14,11 @@
         @if(count(@$docs))
             @foreach($docs as $k => $s)
                 <tr data-id="{{$s->id}}" data-position='{{$s->position}}'>
-                    <th scope="row">{{$k}}</th>
+<<<<<<< HEAD
+                    <th class="text-center">{{$k}}</th>
+=======
+                    <td class="text-center">{{$k}}</td>
+>>>>>>> 9629d3f8 (modal custom)
                     <td class="text-center">{{$s->name}}</td>
                     <td class="text-center">{{$s->code}}</td>
                     <td class="text-center">

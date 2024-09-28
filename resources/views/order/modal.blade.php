@@ -1,9 +1,9 @@
-<div id="paymentModal" class="modal fade mt30 bs-example-modal-sm in"
+<div id="paymentModal" class="modal fade modal-custom mt30 bs-example-modal-sm in"
      tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-backdrop="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel" style="width: 100%">Thanh toán đơn hàng</h5>
+                <h5 class="modal-title-custom linear-text fs-24" id="exampleModalLabel" style="width: 100%">Thanh toán đơn hàng</h5>
                 <br>
                 <p style="width: 100%; color: red">Số tiền tích lũy: {{ number_format(@$order->customer->wallet) }}</p>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -50,7 +50,7 @@
                     </div>
                     <div class="col-xs-12 col-md-12">
                         {!! Form::label('description', 'Ghi chú', array('class' => ' required')) !!}
-                        <textarea row="2" class="form-control description" name="description"></textarea>
+                        <textarea row="2" class="form-control description" name="description textarea-custom"></textarea>
                         <span id="wallet-error" class="help-block" style="display: none">Số dư ví không đủ (tối đa {{ number_format(@$order->customer->wallet) }})</span>
                     </div>
                 </div>

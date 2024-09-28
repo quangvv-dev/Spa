@@ -295,7 +295,7 @@
                                 <div>
                                     <small style="color: orangered">Chuột phải vào vùng dưới để thêm đối tượng</small>
                                 </div>
-                                <textarea style="display:none" name="configs" cols="30"
+                                <textarea class="textarea-custom" style="display:none" name="configs" cols="30"
                                           rows="10">{{!empty($rule->configs) ? $rule->configs : '{}' }}</textarea>
                                 <div style="position:relative">
                                     <div id="myDiagramDiv" style="width:100%; height:600px; border: 1px solid;"></div>
