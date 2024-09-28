@@ -32,7 +32,7 @@
         @if (count($users))
             @foreach($users as $user)
                 <tr>
-{{--                    <th scope="row">{{ $user->code }}</th>--}}
+{{--                    <th class="text-center">{{ $user->code }}</th>--}}
 {{--                    <td class="text-center">{{ $user->approval_code }}</td>--}}
                     <td class="text-center"><a href="{{route('users.edit',$user->id)}}">{{ $user->full_name }}</a>
                         <br>

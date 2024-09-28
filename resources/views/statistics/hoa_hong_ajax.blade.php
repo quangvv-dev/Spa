@@ -17,7 +17,7 @@
         <tbody>
         @forelse($users as $key=>$item)
             <tr>
-                <th scope="row">{{$key+1}}</th>
+                <th class="text-center">{{$key+1}}</th>
                 <td class="text-center">
                     {{$item->full_name}}
                     <br>

@@ -33,9 +33,9 @@
         }
     }
 
-    thead > tr th {
-        background: #fff !important;
-    }
+    /*thead > tr th {*/
+    /*    background: #fff !important;*/
+    /*}*/
 
 </style>
 @section('content')

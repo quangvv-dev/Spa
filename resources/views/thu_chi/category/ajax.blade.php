@@ -13,7 +13,7 @@
         @if(@count($docs))
             @foreach($docs as $k => $s)
                 <tr>
-                    <th scope="row">{{$k+1}}</th>
+                    <th class="text-center">{{$k+1}}</th>
                     <td class="text-center">
                         <input type="text" class="name txt-dotted" value="{{$s->name}}">
                     </td>

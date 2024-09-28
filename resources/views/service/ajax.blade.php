@@ -16,10 +16,10 @@
         @if(@count($docs))
             @foreach($docs as $k => $s)
                 <tr>
-                    <th scope="row">{{$k+1}}</th>
-                    <th scope="row">
+                    <td class="text-center">{{$k+1}}</td>
+                    <td class="text-center">
                         <img src="{{App\Helpers\Functions::getImageModels($s,'services','images')}}" class="rounded-circle" height="60" width="60" />
-                    </th>
+                    </td>
                     <td class="text-center">{{@$s->name}}</td>
                     <td class="text-center">{{@$s->code}}</td>
                     <td class="text-center">{{@$s->trademarks->name}}</td>

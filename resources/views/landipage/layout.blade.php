@@ -63,15 +63,15 @@
 
                 </div>
                 <div class="row row-cards">
-                    <div class="row">
-                        <div class="col-xl-12">
-                            <div class="page-title-box">
-                                <h4 class="page-title float-left">@yield('title')</h4>
-                                <div class="clearfix"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
+{{--                    <div class="row">--}}
+{{--                        <div class="col-xl-12">--}}
+{{--                            <div class="page-title-box">--}}
+{{--                                <h4 class="page-title float-left">@yield('title')</h4>--}}
+{{--                                <div class="clearfix"></div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div>--}}
                         @if(Session::has('status'))
                             <div class="alert alert-info alert-dismissible fade show" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -93,7 +93,7 @@
                                 @endphp
                             </div>
                         @endif
-                    </div>
+{{--                    </div>--}}
                     @yield('content')
                 </div>
             </div>

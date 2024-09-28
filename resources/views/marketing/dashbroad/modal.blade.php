@@ -1,10 +1,10 @@
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade modal-custom" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         {!! Form::open(array('url' => 'ajax/marketing/add-line-price-marketing', 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
         <div class="modal-content">
             <div class="modal-header bg-main">
-                <h3 class="modal-title">THÊM DỮ LIỆU NGÂN SÁCH THEO NGÀY</h3>
+                <h3 class="modal-title-custom linear-text fs-24">THÊM DỮ LIỆU NGÂN SÁCH THEO NGÀY</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

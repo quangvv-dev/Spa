@@ -13,7 +13,7 @@
         @if(@count($docs))
             @foreach($docs as $k => $s)
                 <tr>
-                    <th scope="row">{{$k}}</th>
+                    <td class="text-center">{{$k}}</td>
                     <td class="text-center">{{$s->name}}</td>
                     <td class="text-center">{{@number_format($s->order_price)}}</td>
                     <td class="text-center">{{@number_format($s->price)}}

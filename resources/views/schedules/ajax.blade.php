@@ -15,7 +15,7 @@
         @if(@count($schedules))
             @foreach($schedules as $k => $s)
                 <tr>
-                    <th scope="row">{{$k}}</th>
+                    <td class="text-center">{{$k}}</td>
                     <td class="text-center">{{$s->date}}</td>
                     <td class="text-center">{{$s->time_from}}</td>
                     <td class="text-center">{{@$s->time_to}}</td>

@@ -148,8 +148,8 @@
             <div class="modal-header"
                  style="background-image: url({{asset('assets/plugins/vong-quay/img/backlist.png')}});background-size: contain;">
                 <div class="row" style="display: flex;justify-content:center;">
-                    <p class="modal-title">Chúc mừng phần quà của bạn là:</h4>
-                    <p style="font-size: 16px; color: red;" class="modal-title" id="gift">Kẹo bông gòn 45%</span>
+                    <p class="modal-title-custom linear-text fs-24">Chúc mừng phần quà của bạn là:</h4>
+                    <p style="font-size: 16px; color: red;" class="modal-title-custom linear-text fs-24" id="gift">Kẹo bông gòn 45%</span>
                 </div>
             </div>
             <!-- Modal body -->

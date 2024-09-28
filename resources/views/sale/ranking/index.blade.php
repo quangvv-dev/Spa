@@ -122,7 +122,7 @@
             <form action="{{url()->current()}}" method="get" id="gridForm">
                 <div class="card-header fix-header bottom-card add-paginate">
                     <div class="row" style="width: 100%;">
-                        <div class="fs-28 font-sopher">Bảng xếp hạng</div>
+                        <div class="fs-28 linear-text">Bảng xếp hạng</div>
                         <div class="col-md-3">
                             <input type="hidden" name="start_date" id="start_date">
                             <input type="hidden" name="end_date" id="end_date">

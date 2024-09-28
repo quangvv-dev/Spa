@@ -1,0 +1,12 @@
+.detail__pagination {
+    width: 220px;
+    top: 10px !important;
+    left: -137px !important;
+    background: radial-gradient(120.26% 166.07% at -4.23% -32.74%, #1A2749 0%, #253763 36.39%, #121B34 75.39%, #0C1124 100%) padding-box,
+    linear-gradient(130.35deg, #FAF9F7 -2.76%, #2AABE2 53.97%) border-box;
+
+    color: #fff;
+    padding: 9px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+}

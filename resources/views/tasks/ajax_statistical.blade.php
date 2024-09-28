@@ -27,7 +27,7 @@
             @if(@count($docs))
                 @foreach($docs as $k => $s)
                     <tr>
-                        <td scope="row">{{$k}}</td>
+                        <td class="text-center">{{$k}}</td>
                         <td class="text-center">{{$s->date_from}}</td>
                         <td class="text-center">{{@$s->user->full_name}}</td>
                         <td class="text-center">{{@$s->customer->full_name}}<br>

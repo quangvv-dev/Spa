@@ -14,7 +14,7 @@
         @if(@count($docs))
             @foreach($docs as $k => $s)
                 <tr>
-                    <th scope="row">{{$k+1}}</th>
+                    <td class="text-center">{{$k+1}}</td>
                     <td class="text-center">{{$s->title}}</td>
                     <td class="text-center">{{$s->type== \App\Constants\PromotionConstant::PERCENT?'THEO % ĐƠN HÀNG':'THEO SỐ TIỀN'}}</td>
                     <td class="text-center">{{$s->code}}</td>

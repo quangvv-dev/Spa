@@ -12,7 +12,7 @@
         <tbody>
         @forelse($docs as $k => $item)
             <tr>
-                <th scope="row">{{$k+1}}</th>
+                <td class="text-center">{{$k+1}}</td>
                 <td class="text-center">{{date('d-m-Y', strtotime($item->created_at))}}</td>
                 <td class="text-center">{{$item->name}}</td>
                 <td class="text-center">{{@$item->department->name}}</td>

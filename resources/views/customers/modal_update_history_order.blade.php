@@ -3,11 +3,11 @@
         color: #0a0c0d !important;
     }
 </style>
-<div class="modal fade" id="updateHistoryOrderModal" role="dialog" aria-hidden="true">
+<div class="modal fade modal-custom" id="updateHistoryOrderModal" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="example-Modal3">Liệu trình</h5>
+                <h5 class="modal-title-custom linear-text fs-24" id="example-Modal3">Liệu trình</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -60,7 +60,7 @@
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('description') ? 'has-error' : '' }}">
                             {!! Form::label('description', 'Ghi chú', array('class' => ' required')) !!}
-                            {!! Form::textarea('description', null, array('class' => 'form-control', 'rows' => 3)) !!}
+                            {!! Form::textarea('description', null, array('class' => 'form-control textarea-custom', 'rows' => 3)) !!}
                             <span class="help-block">{{ $errors->first('phone', ':message') }}</span>
                         </div>
                     </div>

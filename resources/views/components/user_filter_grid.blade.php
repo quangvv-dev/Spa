@@ -9,8 +9,8 @@
     <img src="{{asset('layout/images/Icon_hover.png')}}">
 </i>
 
-<div class="dropdown-menu-custom dropdown-menu dropdown-menu-right show"
-     style="padding: 10px; width: 650px; display: none;border: 1px solid #3b8fec;">
+<div class="detail__pagination dropdown-menu-custom dropdown-menu dropdown-menu-right show"
+     style="padding: 10px; width: 130%; display: none;border: 1px solid #3b8fec;">
     <div class="row">
         @if(isset($user_filter_list) && count($user_filter_list))
             @foreach($user_filter_list as $key => $item)
@@ -29,7 +29,7 @@
     <div class="row">
         <div class="col item">
             <label>
-                <input type="button" class="btn btn-primary saveFilter" value="Lưu lại">
+                <button type="button" class="btn btn-primary saveFilter">Lưu lại</button>
             </label>
         </div>
     </div>

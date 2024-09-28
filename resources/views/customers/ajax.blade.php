@@ -60,8 +60,7 @@
     <div class="d-flex gap-24 menu">
         <div class="squares-four pointer account_relation status active">
             <img src="{{asset('layout/images/SquaresFour_active.png')}}" alt="">
-            <span>Tất cả</span>
-            {{--            ({{$statuses->sum('customers_count')}})--}}
+            <span class="text-white">Tất cả  ({{$statuses->sum('customers_count')}})</span>
             <div class="active-border"></div>
         </div>
     </div>
@@ -73,25 +72,22 @@
         </button>
     </div>
 
-    <div class="scrollmenu col-md-7 d-flex gap-24 menu">
+    <div class="scrollmenu col-md-8 d-flex gap-24 menu">
         @php
             $customers_count = 0;
         @endphp
         @foreach(@$statuses as $k => $item)
 
-            <btn class="smiley pointer account_relation status" data-name="{{$item->id}}">
+            <div class="smiley pointer account_relation status" data-name="{{$item->id}}">
                 <img src="{{asset('layout/images/Smiley.png')}}" alt="">
                 <span style="color: {{$item->color ?:''}}">{{ $item->name }} ({{ @$item->customers_count }})</span>
-            </btn>
-{{--            <button class="status btn white account_relation position btn-new" data-name="{{$item->id}}"--}}
-{{--                    style="background: {{$item->color ?:''}}">{{ $item->name }}<span--}}
-{{--                    class="not-number-account white noti-reletion">{{ @$item->customers_count }}</span></button>--}}
+            </div>
             @php
             $customers_count += $item->customers_count;
             @endphp
         @endforeach
     </div>
-    <div class="col-md-4 d-flex justify-content-end">
+    <div class="col-md-3 d-flex justify-content-end">
         <div class="d-flex gap-16" style="margin-right: 30px;">
             <div class="d-flex align-items-center pagination1 gap-8" style="background: #36354A;">
                 <div>
@@ -113,7 +109,7 @@
                         {{--<i class="fa fa-eye dropdown-toggle" role="button" data-toggle="dropdown" style="margin-top: 8px; margin-left: 5px;"></i>--}}
                         <img src="{{asset('layout/images/Eye_active.png')}}" alt="" class="dropdown-toggle pointer" role="button" data-toggle="dropdown">
                         <span class="tooltiptext">Hiển thị số trang</span>
-                        <ul class="dropdown-menu pull-right tl mt5" role="menu" style="border-top:1px;left: -132px;">
+                        <ul class="detail__pagination dropdown-menu pull-right tl mt5" role="menu" style="border-top:1px;left: -132px;">
                             <li><a class="b-white b-hover limiting {{@$_COOKIE['defaultPagination'] == 20?'active_limit bold':''}}" data-limit="20">Hiển thị 20 kết quả/trang</a></li>
                             <li><a class="b-white b-hover limiting {{@$_COOKIE['defaultPagination'] == 50?'active_limit bold':''}}" data-limit="50">Hiển thị 50 kết quả/trang</a></li>
                             <li><a class="b-white b-hover limiting {{@$_COOKIE['defaultPagination'] == 100?'active_limit bold':''}}" data-limit="100">Hiển thị 100 kết quả/trang</a></li>
@@ -237,7 +233,7 @@
                     </td>
                 @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::MARKETING)
                         <td class="text-center {{in_array(4,$user_filter_grid) ? '':'display-none'}}" style="position: relative;max-width: 146px">
-                            <textarea class="description-cus">{{ $customer->message }}</textarea>
+                            <textarea class="description-cus textarea-custom">{{ $customer->message }}</textarea>
                         </td>
                     @endif
                     <td class="text-center category-db {{in_array(5,$user_filter_grid) ? '':'display-none'}}"
@@ -246,7 +242,7 @@
                     <td class="text-center telesale-customer {{in_array(7,$user_filter_grid) ? '':'display-none'}}"
                         data-customer-id="{{$customer->id}}">{{ @$customer->telesale->full_name }}</td>
                     <td class="text-center {{in_array(8,$user_filter_grid) ? '':'display-none'}}" style="position: relative;max-width: 146px">
-                        <textarea data-id="{{$customer->id}}" class="description-cus">{{ $customer->description }}</textarea>
+                        <textarea data-id="{{$customer->id}}" class="description-cus textarea-custom">{{ $customer->description }}</textarea>
                     </td>
 {{--                    <td class="text-center {{in_array(9,$user_filter_grid) ? '':'display-none'}}">{{$customer->expired_text}}</td>--}}
 {{--                    <td class="text-center {{in_array(10,$user_filter_grid) ? '':'display-none'}}">{{@$customer->time_move}}</td>--}}

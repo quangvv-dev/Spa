@@ -13,7 +13,7 @@
         @if(@count($docs))
             @foreach($docs as $k => $s)
                 <tr>
-                    <th scope="row">{{$k+1}}</th>
+                    <td class="text-center">{{$k+1}}</td>
                     <td class="text-center">
                         <img class="thumbnail" width="70" height="70" src="{{$s->thumbnail}}" alt="" style="margin-bottom: 0px">
                     </td>

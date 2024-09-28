@@ -1,4 +1,4 @@
-<div class="modal fade" id="modalTask" role="dialog">
+<div class="modal fade modal-custom" id="modalTask" role="dialog">
     <div class="modal-dialog modal-lg">
         <!-- Modal content-->
         <div class="modal-content">
@@ -55,7 +55,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="modalUpdateTask" role="dialog">
+<div class="modal fade modal-custom" id="modalUpdateTask" role="dialog">
     <div class="modal-dialog modal-lg">
         <!-- Modal content-->
         <div class="modal-content">

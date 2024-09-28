@@ -177,91 +177,9 @@
                             @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::ADMIN)
                                 <div class="dropdown_action action"><a href="{{route('settings.phanbo')}}">Phân chia hàng loạt</a></div>
                             @endif
-
-
                         </div>
                     </div>
-
                 </div>
-
-
-
-
-                {{--<div class="card-header search-box searchbox-sticky">--}}
-                    {{--<input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm" tabindex="1"--}}
-                           {{--type="text" id="search">--}}
-                    {{--<div class="col-md-2 col-xs-12">--}}
-                        {{--<select name="telesales_id" id="telesales_id" class="form-control telesales select2">--}}
-                            {{--<option value="">Người phụ trách</option>--}}
-                            {{--@foreach($telesales as $k => $l)--}}
-                                    {{--@foreach($l as $kl => $vl)--}}
-                                        {{--<option--}}
-                                            {{--{{@$customer->telesales_id == $vl?'selected':''}} value="{{ $vl }}">{{ $kl }}</option>--}}
-                                    {{--@endforeach--}}
-                            {{--@endforeach--}}
-                        {{--</select>--}}
-                    {{--</div>--}}
-                    {{--<div class="col-md-2 col-xs-12">--}}
-                        {{--<select name="group" class="form-control group select2">--}}
-                            {{--<option value="">Nhóm dịch vụ</option>--}}
-                            {{--@foreach($categories as $item)--}}
-                                {{--<option value="{{$item->id}}">{{ $item->name}}</option>--}}
-                            {{--@endforeach--}}
-                        {{--</select>--}}
-                    {{--</div>--}}
-                    {{--<div class="col-md-2 col-xs-12">--}}
-                        {{--<select name="call_back" class="form-control call_back select2">--}}
-                            {{--<option value="">Tất cả công việc</option>--}}
-                            {{--<option value="{{\App\Constants\StatusCode::GOI_LAI}}">GỌI LẠI</option>--}}
-                        {{--</select>--}}
-                    {{--</div>--}}
-                    {{--<div class="col-xs-12" style="max-width: 170px">--}}
-                        {{--@if(empty($checkRole))--}}
-                            {{--<select name="branch_id" class="form-control branch_id">--}}
-                                {{--<option value="">Tất cả chi nhánh</option>--}}
-                                {{--@foreach($branchs as $k=> $item)--}}
-                                    {{--<option {{$k==1?'selected':''}} value="{{$k}}">{{ $item}}</option>--}}
-                                {{--@endforeach--}}
-                            {{--</select>--}}
-                        {{--@endif--}}
-                    {{--</div>--}}
-                    {{--<div class="col relative">--}}
-                        {{--<a {{$roleGlobal->permission('customer.import')?:"style=display:none"}}--}}
-                            {{--class="btn tooltip-nav" href="#" data-toggle="modal" data-target="#myModal">--}}
-                            {{--<i class="fas fa-cloud-upload-alt"></i>--}}
-                            {{--<span class="tooltiptext">Nhập khách hàng (excel)</span>--}}
-                        {{--</a>--}}
-                        {{--<a {{$roleGlobal->permission('customer.export')?:"style=display:none"}}--}}
-                           {{--class="btn tooltip-nav" href="#" data-toggle="modal" data-target="#myModalExport">--}}
-                            {{--<i class="fas fa-cloud-download-alt"></i>--}}
-                            {{--<span class="tooltiptext">Tải khách hàng (excel)</span>--}}
-                        {{--</a>--}}
-                        {{--<a class="btn tooltip-nav dropdown-custom1">--}}
-                            {{--@include('components.user_filter_grid')--}}
-                        {{--</a>--}}
-                        {{--@if($roleGlobal->permission('customers.add'))--}}
-                            {{--<a class="right btn btn-primary btn-flat"--}}
-                               {{--href="{{ route('customers.create') }}">Tạo mới</a>--}}
-                        {{--@endif--}}
-                    {{--</div>--}}
-                    {{--<div class="heading-elements">--}}
-                        {{--<ul class="list-inline mb-0">--}}
-                            {{--<li><a style="display: none" href="#" class="angleDoubleUp">--}}
-                                    {{--<i class="fa fa-angle-double-up"></i></a></li>--}}
-                            {{--<li><a href="#" class="angleDoubleDown"><i class="fa fa-angle-double-down"></i></a></li>--}}
-                        {{--</ul>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-
-
-
-
-
-
-
-
-
-
                 <div id="registration-form" style="margin-top: 5px;">
                     @include('customers.ajax')
                 </div>
@@ -288,7 +206,6 @@
 @section('_script')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script type="text/javascript">
-
         $("#search").focus();
         $(function () {
             $(document).on('click', '.view_modal', function (e) {
@@ -347,7 +264,7 @@
                 <div class="row mt10" style="color:black;"> <div class="col-md-5">Giá trị:</div> <div class="col-md-7 word-break" style="color:orange;">` + data.order_revenue + ` VND</div> </div>
                 </div>
                         <div class="form-group required {{ $errors->has('enable') ? 'has-error' : '' }}">
-                            {!! Form::textArea('messages', null, array('class' => 'form-control message', 'rows'=> 3, 'required' => 'required')) !!}
+                            {!! Form::textArea('messages', null, array('class' => 'form-control message textarea-custom', 'rows'=> 3, 'required' => 'required')) !!}
                         <span class="help-block">{{ $errors->first('enable', ':message') }}</span>
                         </div>
                     </div>
@@ -449,7 +366,7 @@
                 }).done(function (data) {
 
                     let html = `<div class="col-md-12" >
-                    <textarea name="messages" class="form-control message" rows="2" data-id="` + data.id + `">` + data.messages + `</textarea>
+                    <textarea name="messages" class="form-control message textarea-custom" rows="2" data-id="` + data.id + `">` + data.messages + `</textarea>
                     </div>
                     <div class="col-md-12" style="margin-bottom: 30px;">
                         <button style="float: right; margin-top: 5px;" type="submit"

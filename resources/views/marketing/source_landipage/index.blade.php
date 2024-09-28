@@ -49,12 +49,12 @@
         <!-- // card-actions section end -->
 
         <!-- // Modal Landi-->
-        <div class="modal fade text-left" id="modalLandipage" tabindex="-1" role="dialog"
+        <div class="modal fade modal-custom text-left" id="modalLandipage" tabindex="-1" role="dialog"
              style="display: none;" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document" style="max-width: 90%;">
                 <div class="modal-content">
                     <div class="modal-header bg-main">
-                        <h3 class="modal-title"> SINH MÃ NHÚNG SOURCE</h3>
+                        <h3 class="modal-title-custom linear-text fs-24"> SINH MÃ NHÚNG SOURCE</h3>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -90,7 +90,7 @@
 @endsection
 @section('_script')
     <script>
-        
+
         $(document).on('click','.searchData',function () {
 
         })
@@ -169,7 +169,7 @@
             //         console.log('error', err)
             //     })
         })
-        
+
         $(document).on('click','.settingSource',function () {
             $('.form_html').val($(this).data('url'));
             $('#modalLandipage').modal('show');

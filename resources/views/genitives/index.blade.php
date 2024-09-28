@@ -39,7 +39,7 @@
                                     <td class="text-center"><input type="text" class="name txt-dotted" value="{{$item->name}}">
                                     </td>
                                     <td class="text-center">
-                                        <textarea rows="2" type="text" class="description txt-dotted">{{$item->description}}</textarea>
+                                        <textarea rows="2" type="text" class="description txt-dotted textarea-custom">{{$item->description}}</textarea>
                                     </td>
                                     <td class="text-center">{{$item->updated_at}}</td>
                                     <td class="text-center">

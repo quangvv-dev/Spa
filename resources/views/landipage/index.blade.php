@@ -201,11 +201,11 @@
 
 
 <!-- modal -->
-{{--<div class="modal fade" id="customer-book" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">--}}
+{{--<div class="modal fade modal-custom" id="customer-book" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">--}}
 {{--<div class="modal-dialog modal-layout">--}}
 {{--<!--Modal content-->--}}
 {{--<div class="modal-content modal-container">--}}
-{{--<h3 class="home-modal-title" data-key="model-1">Viện Thẩm Mỹ Royal xứng đáng là lựa chọn hoàn hảo nhất giúp--}}
+{{--<h3 class="home-modal-title-custom linear-text fs-24" data-key="model-1">Viện Thẩm Mỹ Royal xứng đáng là lựa chọn hoàn hảo nhất giúp--}}
 {{--nét đẹp Việt được thăng--}}
 {{--hoa.</h3>--}}
 {{--<input id="province-popup" type="hidden" class="modal-input" name="province" placeholder="Khu vực"/>--}}
@@ -239,7 +239,7 @@
     {{--</button>--}}
 {{--</div>--}}
 <!-- modal register -->
-<div class="modal fade" id="register" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade modal-custom" id="register" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-layout modal-register">
         <!--Modal content-->
         <div class="modal-content modal-container">

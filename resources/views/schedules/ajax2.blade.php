@@ -156,7 +156,7 @@
                     })
                 </script>
 
-                <div class="modal fade" id="" role="dialog">
+                <div class="modal fade modal-custom" id="" role="dialog">
                     <div class="modal-dialog modal-md">
                         <!-- Modal content-->
                         <div class="modal-content">

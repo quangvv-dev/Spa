@@ -1,4 +1,4 @@
-<div class="modal fade draggable" id="myModal" role="dialog">
+<div class="modal fade modal-custom draggable" id="myModal" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">

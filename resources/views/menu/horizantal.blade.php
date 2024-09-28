@@ -447,7 +447,7 @@
                 <img src="{{asset('layout/images/Notii.png')}}" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="dropdown-menu">
                     <a class="dropdown-item" href="#">
-                        <div class="fs-24 font-sopher text-white">Thông báo</div>
+                        <div class="fs-24 linear-text text-white">Thông báo</div>
                         <div class="">
                             <img src="{{asset('layout/images/Checks.png')}}" alt="">
                             <span class="color-info">Đánh dấu là đã đọc</span>

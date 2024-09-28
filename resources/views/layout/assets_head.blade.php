@@ -58,4 +58,5 @@
     <link href="{{ asset('assets/css/toggle-switch-custom.css') }}" rel="stylesheet"/>
     <link rel="stylesheet" href="{{asset('css/jquery.toast.min.css') }}">
     <link rel="stylesheet" href="{{asset('layout/css/custom.css')}}">
+    <link rel="stylesheet" href="{{asset('layout/css/master-lite.css')}}">
 </head>
