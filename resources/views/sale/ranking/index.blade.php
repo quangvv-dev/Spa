@@ -107,6 +107,14 @@
         body{
             color: white;
         }
+        .rank .right {
+            width: 192px;
+            position: relative;
+            background-position-x: -96px;
+            height: 224px !important;
+            background-position-y: bottom !important;
+            background-repeat: no-repeat !important;
+        }
         /* .rank .top1 .header1 */
     </style>
         <!-- card actions section start -->
