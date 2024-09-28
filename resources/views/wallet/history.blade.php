@@ -6,7 +6,7 @@
 </div>
 
 <div class="col">
-    <table class="table card-table table-vcenter text-nowrap table-primary">
+    <table class="table card-table table-vcenter text-nowrap table-primary table-bordered">
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white text-center">STT</th>

@@ -46,7 +46,7 @@
         <div id="fix-scroll" class="row padding mb10 header-dard border-bot shadow row">
             {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'col-md-12', 'id'=> 'gridForm','role'=>'form')) !!}
             <div class="row">
-                <div class="col-md-3"><h3 class="card-title bold">XẾP HẠNG TELESALE</h3></div>
+                <div class="col-md-3"><h3 class="card-title linear-text fs-24 bold">XẾP HẠNG TELESALE</h3></div>
             </div>
             <div class="row mt-3">
                 <div class="col-md-2">

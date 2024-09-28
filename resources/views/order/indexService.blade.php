@@ -8,7 +8,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             {{--<div class="card-header">--}}
-            {{--<h3 class="card-title">{{$title}}</h3>--}}
+            {{--<h3 class="card-title linear-text fs-24">{{$title}}</h3>--}}
             {{--</div>--}}
             @if (isset($order))
                 {!! Form::model($order, array('url' => url('orders/'.$order->id. '/edit'), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
@@ -84,7 +84,7 @@
 
 
                 <div class="table-responsive">
-                    <table class="table table-vcenter text-nowrap">
+                    <table class="table table-vcenter table-bordered text-nowrap">
                         <thead class="bg-primary">
                         <tr style="white-space: nowrap">
                             <th class="custom-th text-center" width="350px">Dịch vụ</th>

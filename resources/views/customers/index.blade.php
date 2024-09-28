@@ -1118,7 +1118,7 @@
             $(document).on('click', '.phone-customer', function (e) {
                 let ext = "{{\Illuminate\Support\Facades\Auth::user()->caller_number??0}}";
                 if(ext == 0){
-                    alertify.warning('Tài khoản chưa có mã tổng đài !',5);
+                    alertify.warning('Tài khoản chưa có mã tổng đài !',10000);
                     return false;
                 }
                 $.ajax({

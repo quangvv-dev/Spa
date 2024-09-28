@@ -54,7 +54,7 @@
     <div class="row">
         @if(isset($payment))
             <div class="col-xs-12">
-                <table class="table mt0">
+                <table class="table mt0 table-bordered">
                     <tbody>
                     <tr>
                         <td colspan="2" class="text-center"><h3>{{@$order->branch->lat??'PHÒNG KHÁM THẨM MỸ THEPYO'}}</h3><br></td>

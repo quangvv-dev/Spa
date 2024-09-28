@@ -12,7 +12,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Thông báo của bạn</h3>
+                <h3 class="card-title linear-text fs-24">Thông báo của bạn</h3>
             </div>
             <div id="registration-form">
                 @include('notifications.ajax')

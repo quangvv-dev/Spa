@@ -30,7 +30,7 @@
                 {{--                </div>--}}
             </div>
             <div class="col-md-6 col-xs-12">
-                <table class="table card-table table-vcenter text-nowrap table-primary">
+                <table class="table card-table table-vcenter table-bordered text-nowrap table-primary">
                     <thead class="bg-primary text-white">
                     <tr>
                         <th class="text-white text-center">ID</th>

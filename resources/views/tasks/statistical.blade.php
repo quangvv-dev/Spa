@@ -33,7 +33,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Theo dõi công việc nhân viên</h3>
+                <h3 class="card-title linear-text fs-24">Theo dõi công việc nhân viên</h3>
 
             </div>
             {!! Form::open(array('url' => url()->current(), 'method' => 'get', 'id'=> 'gridForm','role'=>'form')) !!}

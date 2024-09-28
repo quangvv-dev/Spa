@@ -62,7 +62,7 @@
                         <div class="card-body p-6">
                             <img src="{{!empty(setting('logo_website')) ? setting('logo_website'):'/assets/images/brand/logo.png'}}" class="h-6" alt="">
 
-                            <div class="card-title text-center">Đăng nhập vào hệ thống</div>
+                            <div class="card-title linear-text fs-24 text-center">Đăng nhập vào hệ thống</div>
                             <div class="form-group {{ $errors->has('phone') ? ' has-error' : '' }}">
                                 <label class="form-label">Số điện thoại</label>
                                 <input type="text" class="form-control" name="phone" value="{{ old('phone') }}" placeholder="Số điện thoại">

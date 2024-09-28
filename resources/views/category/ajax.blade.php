@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table card-table table-vcenter text-nowrap table-primary">
+    <table class="table card-table table-bordered table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white">STT</th>
@@ -14,7 +14,7 @@
         @if(@count($docs))
             @foreach($docs as $k => $s)
                 <tr>
-                    <th scope="row">{{$k}}</th>
+                    <th class="text-center">{{$k}}</th>
                     <td class="text-center">
                         <img src="{{$s->image?:'/assets/images/brand/logoNew.png'}}" class="rounded-circle" height="60" width="60" />
                     </td>

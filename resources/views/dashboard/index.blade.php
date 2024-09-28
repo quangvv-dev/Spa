@@ -74,11 +74,11 @@
         <div class="card">
             <div class="card-status bg-success br-tr-3 br-tl-3"></div>
             <div class="card-header">
-                <h3 class="card-title">Sales Report</h3>
+                <h3 class="card-title linear-text fs-24">Sales Report</h3>
             </div>
             <div id="chart-tasks" class="chart-tasks"></div>
             <div class="table-responsive border-top">
-                <table class="table card-table table-striped table-vcenter">
+                <table class="table card-table table-bordered table-striped table-vcenter">
                     <thead>
                     <tr>
                         <th>Id</th>
@@ -163,7 +163,7 @@
                 <div class="card">
                     <div class="card-status bg-yellow br-tr-3 br-tl-3"></div>
                     <div class="card-header">
-                        <h3 class="card-title">Sales Status</h3>
+                        <h3 class="card-title linear-text fs-24">Sales Status</h3>
                     </div>
                     <div class="card-body">
                         <div id="chart-donut" class="chart-donut"></div>
@@ -175,7 +175,7 @@
                 <div class="card">
                     <div class="card-status bg-indigo br-tr-3 br-tl-3"></div>
                     <div class="card-header">
-                        <h3 class="card-title">Profit Status</h3>
+                        <h3 class="card-title linear-text fs-24">Profit Status</h3>
                     </div>
                     <div class="card-body">
                         <div id="chart-pie" class="chart-pie"></div>
@@ -190,7 +190,7 @@
             <div class="card">
                 <div class="card-status bg-primary br-tr-3 br-tl-3"></div>
                 <div class="card-header">
-                    <h4 class="card-title">Recent Sales Details</h4>
+                    <h4 class="card-title linear-text fs-24">Recent Sales Details</h4>
                     <div class="card-toolbar">
                         <ul>
                             <li>
@@ -255,9 +255,9 @@
         <div class="card">
             <div class="card-status bg-azure br-tr-3 br-tl-3"></div>
             <div class="card-header">
-                <h2 class="card-title">Activity Details</h2>
+                <h2 class="card-title linear-text fs-24">Activity Details</h2>
             </div>
-            <table class="table card-table">
+            <table class="table card-table table-bordered">
                 <tr>
                     <td>Wordpress Template</td>
                     <td class="text-right">
@@ -303,10 +303,10 @@
         <div class="card">
             <div class="card-status bg-pink br-tr-3 br-tl-3"></div>
             <div class="card-header">
-                <h2 class="card-title">Activity Details</h2>
+                <h2 class="card-title linear-text fs-24">Activity Details</h2>
             </div>
             <div class="table-responsive">
-                <table class="table table-hover table-outline table-vcenter text-nowrap card-table">
+                <table class="table table-hover table-bordered table-striped table-outline table-vcenter text-nowrap card-table">
                     <thead>
                     <tr>
                         <th class="text-center w-1"><i class="icon-people"></i></th>

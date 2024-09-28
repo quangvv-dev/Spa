@@ -10,7 +10,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Hiệu quả công việc</h3>
+            <h3 class="card-title linear-text fs-24">Hiệu quả công việc</h3>
             <div class="col-md-10">
                 <ul class="col-md-9 no-padd mt5 tr right">
                     {{--<li class="display pl5"><a data-time="TODAY" class="choose_time">Hôm nay</a></li>--}}

@@ -122,7 +122,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title col-lg-3">Thống kê hoa hồng</h3>
+            <h3 class="card-title linear-text fs-24 col-lg-3">Thống kê hoa hồng</h3>
             <div class="col-md-9">
                 {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'row', 'id'=> 'gridForm','role'=>'form')) !!}
                 <div class="col-md-4">

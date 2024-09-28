@@ -78,7 +78,7 @@
 
 <div class="table-responsive group-comment-table" style="padding: 5px">
 
-    <table class="table card-table table-vcenter text-nowrap table-primary">
+    <table class="table card-table table-bordered table-vcenter text-nowrap table-primary">
         @if(count($docs))
             @foreach($docs as $k => $item)
                 <div class="col-md-12 content_msg padding">

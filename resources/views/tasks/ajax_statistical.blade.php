@@ -11,7 +11,7 @@
 </div>
 <div class="table-responsive">
     <div class="content__table">
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered table-bordered">
             <thead class="bg-primary text-white">
             <tr>
                 <th class="text-white">STT</th>

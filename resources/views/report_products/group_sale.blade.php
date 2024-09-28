@@ -33,7 +33,7 @@
         <div id="fix-scroll" class="row padding mb10 header-card border-bot shadow">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title bold">Doanh số nhóm</h3>
+                    <h3 class="card-title linear-text fs-24 bold">Doanh số nhóm</h3>
                 </div>
 
                 <div class="card-header row">

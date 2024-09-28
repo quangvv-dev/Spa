@@ -14,7 +14,7 @@
                 <div class="col-lg-12 col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">{{ $title }}</h3>
+                            <h3 class="card-title linear-text fs-24">{{ $title }}</h3>
                         </div>
                         {!! Form::textArea('note', null, array('class' => 'form-control autocomplete-textarea','rows'=>5)) !!}
                         <div class="row">

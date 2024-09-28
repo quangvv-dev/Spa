@@ -81,7 +81,7 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table card-table table-vcenter text-nowrap table-primary">
+                    <table class="table card-table table-vcenter table-bordered text-nowrap table-primary">
                         <thead class="bg-primary">
                         <tr style="white-space: nowrap">
                             <th class="custom-th text-center" width="350px">Sản phẩm</th>

@@ -3,7 +3,7 @@
     <div class="row col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Thông tin quản trị viên</h3></br>
+                <h3 class="card-title linear-text fs-24">Thông tin quản trị viên</h3></br>
             </div>
 
             @if (isset($doc))

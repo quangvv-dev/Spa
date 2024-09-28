@@ -3,12 +3,12 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{$title}}</h3>
+                <h3 class="card-title linear-text fs-24">{{$title}}</h3>
             </div>
             {!! Form::open(array('url' => route('customers.storeGroup'), 'method' => 'post', 'files'=> true, 'id'=>'fvalidate','autocomplete'=>'off')) !!}
             <div class="col">
                 <div class="table-responsive">
-                    <table class="table card-table table-vcenter text-nowrap table-primary">
+                    <table class="table card-table table-bordered table-vcenter text-nowrap table-primary">
                         <thead style="width: 100%" class="bg-primary text-white">
                         <tr>
                             <th class="text-white text-center">Tên KH</th>

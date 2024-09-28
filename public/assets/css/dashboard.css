@@ -3430,7 +3430,7 @@ input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="butto
 }
 
 .table-primary td {
-    color: #000 !important;
+    /*color: #000 !important;*/
 }
 
 .table-warning thead th, .table-warning thead th {
@@ -5970,7 +5970,7 @@ div.dataTables_wrapper div.dataTables_filter input {
     padding: 1.5rem 1.5rem;
     margin-bottom: 0;
     background-color: rgba(0, 0, 0, 0.03);
-    border-bottom: 1px solid #e7effc;
+    /*border-bottom: 1px solid #e7effc;*/
 }
 
 .card-header:first-child {

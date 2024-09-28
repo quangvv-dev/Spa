@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table card-table table-vcenter text-nowrap table-primary">
+    <table class="table card-table table-bordered table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white text-center">Hệ thống gửi</th>

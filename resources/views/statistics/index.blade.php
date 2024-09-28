@@ -13,7 +13,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="col-md-4">
-                    <h3 class="card-title bold">THỐNG KÊ DOANH THU</h3>
+                    <h3 class="card-title linear-text fs-24 bold">THỐNG KÊ DOANH THU</h3>
                 </div>
                 <div class="col-md-8">
                     {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'row', 'id'=> 'gridForm','role'=>'form')) !!}

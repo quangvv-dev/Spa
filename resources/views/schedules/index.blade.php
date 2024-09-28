@@ -1,7 +1,7 @@
 <div class="col-md-12 col-lg-12">
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Danh sách lịch hẹn</h3></br>
+            <h3 class="card-title linear-text fs-24">Danh sách lịch hẹn</h3></br>
             <div class="col">
 {{--                @if(\Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::ADMIN--}}
 {{--                    ||\Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::WAITER)--}}

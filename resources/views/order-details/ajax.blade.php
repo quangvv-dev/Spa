@@ -1,5 +1,5 @@
 <div class="table-responsive tableFixHead" id="parent">
-    <table class="table card-table table-vcenter text-nowrap table-primary" id="fixTable">
+    <table class="table card-table table-vcenter table-bordered text-nowrap table-primary" id="fixTable">
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white text-center">Thao tác</th>

@@ -17,7 +17,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Quản lý người dùng</h3>
+                <h3 class="card-title linear-text fs-24">Quản lý người dùng</h3>
                 <div class="col">
                     <a class="right btn btn-primary btn-flat" href="{{ route('users.create') }}"><i
                             class="fa fa-plus-circle"></i> Tạo mới</a>

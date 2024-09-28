@@ -331,7 +331,7 @@
                 </div>
                 <div class="modal-body" style="height: 55vh;overflow: auto;">
                     <div class="table-responsive">
-                        <table class="table card-table table-vcenter text-nowrap table-primary">
+                        <table class="table card-table table-bordered table-vcenter text-nowrap table-primary">
                             <tr>
                                 <td class="text-center">STT</td>
                                 <td class="text-center">Số điện thoại</td>

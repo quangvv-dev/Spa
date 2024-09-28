@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table card-table table-vcenter text-nowrap table-primary">
+    <table class="table card-table table-bordered table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white">STT</th>
@@ -17,8 +17,8 @@
         @if(@count($docs))
             @foreach($docs as $k => $s)
                 <tr>
-                    <th scope="row">{{$k+1}}</th>
-                    <th scope="row">
+                    <th class="text-center">{{$k+1}}</th>
+                    <th class="text-center">
                         <img src="{{App\Helpers\Functions::getImageModels($s,'services','images')}}" class="rounded-circle" height="60" width="60" />
                     </th>
                     <td class="text-center">{{@$s->name}}</td>

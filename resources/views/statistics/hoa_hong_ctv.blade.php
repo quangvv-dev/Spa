@@ -327,7 +327,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive">
-                        <table class="table card-table table-vcenter text-nowrap table-primary">
+                        <table class="table card-table table-bordered table-vcenter text-nowrap table-primary">
                             <tr>
                                 <td class="text-center">Họ tên</td>
                                 <td class="text-center">SĐT</td>

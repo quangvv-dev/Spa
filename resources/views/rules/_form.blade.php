@@ -264,7 +264,7 @@
 
             <form id="rule_form" action="{{url('rules')}}" method="POST" class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Rule</h3>
+                    <h3 class="card-title linear-text fs-24">Rule</h3>
                 </div>
                 <div class="card-body">
                     @csrf
