@@ -110,7 +110,7 @@
         .rank .right {
             width: 192px;
             position: relative;
-            background-position-x: -96px;
+            background-position-x: -96px !important;
             height: 224px !important;
             background-position-y: bottom !important;
             background-repeat: no-repeat !important;
