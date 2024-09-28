@@ -15,72 +15,299 @@
     <link rel="stylesheet" href="{{asset('/assets/plugins/simple-lightbox/simple-lightbox.min.css')}}"/>
 
     <style>
-        #snoAlertBox1 {
-            position: absolute;
-            z-index: 1400;
-            top: 2%;
-            right: 4%;
-            margin: 0px auto;
-            text-align: center;
-            display: none;
-        }
-
-        #snoAlertBox2 {
-            position: absolute;
-            z-index: 1400;
-            top: 2%;
-            right: 4%;
-            margin: 0px auto;
-            text-align: center;
-            display: none;
-        }
-
-        th.text-white.text-center {
-            font-size: 12px;
-        }
-
-        td.text-center {
-            font-size: 13px;
-        }
-
-        .margin-left-10 {
-            margin-left: 10px;
-        }
-
-        .container {
-            max-width: 90%;
-        }
-
-        a#edit-history-order {
-            color: #007bff !important;
-            font-weight: 600 !important;
-        }
-
-        * {
-            font-size: 14px;
-        }
-
-        .avatar {
-            border-radius: 50%;
-        }
-
-        .tabs-menu1 ul li :hover {
-            color: #3b8fec;
-            border-bottom: 3px solid #3b8fec;
-        }
-
-        .card i {
-            color: #3b8fec;
-        }
-        ul#textcomplete-dropdown-1{
-            z-index: 9999 !important;
-        }
-        .content-custom{
-            max-width: 98%;
-        }
-        /*.page-header{*/
-            /*margin: 0.5rem 0 1.5rem;*/
+        /*#snoAlertBox1 {*/
+            /*position: absolute;*/
+            /*z-index: 1400;*/
+            /*top: 2%;*/
+            /*right: 4%;*/
+            /*margin: 0px auto;*/
+            /*text-align: center;*/
+            /*display: none;*/
         /*}*/
+
+        /*#snoAlertBox2 {*/
+            /*position: absolute;*/
+            /*z-index: 1400;*/
+            /*top: 2%;*/
+            /*right: 4%;*/
+            /*margin: 0px auto;*/
+            /*text-align: center;*/
+            /*display: none;*/
+        /*}*/
+
+        /*th.text-white.text-center {*/
+            /*font-size: 12px;*/
+        /*}*/
+
+        /*td.text-center {*/
+            /*font-size: 13px;*/
+        /*}*/
+
+        /*.margin-left-10 {*/
+            /*margin-left: 10px;*/
+        /*}*/
+
+        /*.container {*/
+            /*max-width: 90%;*/
+        /*}*/
+
+        /*a#edit-history-order {*/
+            /*color: #007bff !important;*/
+            /*font-weight: 600 !important;*/
+        /*}*/
+
+        /** {*/
+            /*font-size: 14px;*/
+        /*}*/
+
+        /*.avatar {*/
+            /*border-radius: 50%;*/
+        /*}*/
+
+        /*.tabs-menu1 ul li :hover {*/
+            /*color: #3b8fec;*/
+            /*border-bottom: 3px solid #3b8fec;*/
+        /*}*/
+
+        /*.card i {*/
+            /*color: #3b8fec;*/
+        /*}*/
+        /*ul#textcomplete-dropdown-1{*/
+            /*z-index: 9999 !important;*/
+        /*}*/
+        /*.content-custom{*/
+            /*max-width: 98%;*/
+        /*}*/
+        /*!*.page-header{*!*/
+            /*!*margin: 0.5rem 0 1.5rem;*!*/
+        /*!*}*!*/
+
+        body {
+            font-family: svn-small;
+        }
+        .banner__top {
+            background: url("../layout/images/background.png") no-repeat;
+            background-size: 100% 100%;
+        }
+        .banner__top .left {
+            padding-top: 44px;
+            padding-left: 24px;
+        }
+        .banner__top .left .dot{
+            font-size: 33px;
+            padding-bottom: 20px;
+        }
+        .banner__top .right {
+            padding-top: 35px;
+            padding-right: 16px;
+        }
+        .banner__info {
+            display: flex;
+            align-items: center;
+            background: var(--bg-main);
+            padding: 6.5px 8px;
+            border-radius: 8px;
+        }
+        .banner__background {
+            background: radial-gradient(120.26% 166.07% at -4.23% -32.74%, #1A2749 0%, #253763 36.39%, #121B34 75.39%, #0C1124 100%)
+            /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */
+        ;
+            border-radius: 0 0 16px 16px;
+        }
+
+        .banner__menu {
+            margin-left: 136px;
+            height: 52px;
+        }
+
+        .banner__menu__item {
+            background-position-x: 0px;
+            padding-left: 27.5px;
+            background-repeat: no-repeat;
+            cursor: pointer;
+
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            margin-top: 13px;
+            font-family: svn-small;
+            background-position-y: -3px;
+            color: #fff;
+        }
+
+        .banner__menu__item.active{
+            color: var(--color-primary);
+            border-bottom: 2px solid;
+
+        }
+        .banner__menu__item:hover{
+            color: var(--color-primary);
+        }
+
+
+
+
+        .communicate {
+            background-image: url("../layout/images/communicate.png");
+        }
+
+        .communicate.active {
+            background-image: url("../layout/images/communicate_active.png");
+        }
+
+        .appointment {
+            background-image: url("../layout/images/Calendar.png");
+        }
+
+        .appointment.active {
+            background-image: url("../layout/images/Calendar_active.png");
+        }
+
+        .order {
+            background-image: url("../layout/images/order.png");
+        }
+
+        .order.active {
+            background-image: url("../layout/images/order_active.png");
+        }
+
+        .calendar {
+            background-image: url("../layout/images/CalendarDots.png");
+        }
+
+        .calendar.active {
+            background-image: url("../layout/images/CalendarDots.png");
+        }
+
+        .wallet {
+            background-image: url("../layout/images/Dollar.png");
+        }
+
+        .wallet.active {
+            background-image: url("../layout/images/Dollar.png");
+        }
+
+        .gift {
+            background-image: url("../layout/images/Gift.png");
+        }
+
+        .gift.active {
+            background-image: url("../layout/images/Gift.png");
+        }
+
+        .discout {
+            background-image: url("../layout/images/Discount.png");
+        }
+
+        .discout.active {
+            background-image: url("../layout/images/Discount.png");
+
+        }
+
+        .hotline {
+            background-image: url("../layout/images/Hotline.png");
+        }
+
+        .hotline.active {
+            background-image: url("../layout/images/Hotline_active.png");
+        }
+
+        .albums {
+            background-image: url("../layout/images/Album.png");
+        }
+
+        .albums.active {
+            background-image: url("../layout/images/Album.png");
+        }
+
+        .contract {
+            background-image: url("../layout/images/Contract.png");
+        }
+
+        .contract.active {
+            background-image: url("../layout/images/Contract.png");
+        }
+
+        .content__left .box {
+            border: 1px solid #2E2E2E;
+            background: var(--bg-main);
+            border-radius: 16px;
+            margin-top: 8px;
+        }
+        .content__left .box span{
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .content__left .box .item{
+            margin-bottom: 12px;
+            border-bottom: 1px solid #2e2e2e;
+            padding-bottom: 12px;
+        }
+
+        .content__left .box .box__button{
+            background: radial-gradient(120.26% 166.07% at -4.23% -32.74%, #1A2749 0%, #253763 36.39%, #121B34 75.39%, #0C1124 100%) padding-box, linear-gradient(130.35deg, #FAF9F7 -2.76%, #2AABE2 53.97%) border-box;
+            color: #fff;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            padding: 0 30px;
+        }
+
+        .content__right {
+            width: 100%;
+            /* height: 679px; */
+            border-radius: 16px;
+            border: 1px solid #2E2E2E;
+            position: relative;
+        }
+
+        .content__right .content__right__header{
+            font-size: 24px;
+            font-weight: 700;
+            padding: 24px 24px 16px 24px;
+            border-bottom:1px solid #2e2e2e;
+        }
+        .content__right .content__right__body{
+            height: 490px;
+            overflow-y: auto;
+        }
+        .content__right .content__right__body .item{
+            padding: 24px;
+            border-bottom:1px solid #2e2e2e;
+        }
+        .content__right .content__right__body .item .time{
+            border-left: 1px solid;
+            padding-left: 8px;
+            line-height: 1;
+        }
+        .content__right .content__right__body .item.high-light{
+            background-color: #1b1b1b;
+        }
+        .content__right .content__right__footer {
+            position: absolute;
+            border: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .content__right .content__right__footer input {
+            background: #2e2e2e;
+            padding: 24px 16px;
+            font-size: 16px;
+            border-radius: 9px;
+            outline: none;
+            border: none;
+            color: #fff;
+            width: 100%;
+        }
+        .content__right .content__right__footer .send {
+            position: absolute;
+            right: 56px;
+            bottom: 48px;
+        }
+        .content__right .content__right__footer .send img:first-child{
+            margin-right: 16px;
+        }
     </style>
     @php
         $roleGlobal = auth()->user()?:[];
@@ -88,51 +315,171 @@
 @endsection
 @section('content')
     <div class="col-md-12 col-lg-12" style="font-size: 0.8rem">
-        <div class="card">
-            <div class="card-header">
-                <div class="col-md-3 no-padd font16"><a class="fl mr10 pic">
-                        <img class="avatar" src="{{$customer->avatar?:'/default/noavatar.png'}}"></a>
-                    <span class="bold uppercase ">  &nbsp;{{ $customer->full_name }}  </span>
-                    <div class="display" id="toolbox" style="width: 28px; height: 20px">
-                        <a title="Sửa tài khoản" href="{{ route('customers.edit', $customer->id) }}">
-                            <i class="fas fa-pencil-alt"></i></a>
-                        <a id="btn_del_account" rel="tooltip"
-                           data-placement="bottom"
-                           data-original-title="Xóa" class="ml5">
-                            <i class="gf-icon-hover icon-remove mr5"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3 position" rel="tooltip">
-                    <div class="no-padd tc mg0">
-                        <h1 style="font-size:24px;color: #f36a26;" class="bold mg0">{{number_format($customer->wallet)}}
-                            VNĐ</h1>
-                        <p>Số dư ví</p></div>
-                </div>
-                <div class="col-md-1 position" rel="tooltip"></div>
-
-                <div class="col-md-2 no-padd bor-l pl20 mg0 pt10 position hoverlastactive" rel="tooltip"
-                     data-original-title="Click thay đổi người phụ trách" data-placement="bottom">
-                    <div class="show_change_am" style="cursor:pointer">
-                        <div class="avatar">
-                            <img class="avatar"
-                                 src="{{!empty($customer->telesale->avatar)?$customer->telesale->avatar:'/default/noavatar.png'}}">
-                        </div>
-                        <div class="info-avatar"><p class="account_manager_name"><a
-                                    class="gfname">{{ @$customer->telesale->full_name }}</a>
-                            </p>
-                            <p class="gray1 font12">Người phụ trách</p></div>
-                    </div>
-                </div>
-                <div class="col-md-1 no-padd tc bor-l mg0"></div>
-                <div class="col-md-2 no-padd tc bor-l mg0"><h1 style="font-size:24px;color: #f36a26"
-                                                               class="bold mg0">{{number_format($customer->orders->sum('gross_revenue'))}}
-                        VNĐ</h1>
-                    <p>Giá trị</p></div>
+        <div class="d-flex justify-content-between mt-16" style="height: 33px;">
+            <div class="d-flex align-items-center gap-4 pointer">
+                <img src="{{asset('layout/images/Back.png')}}" alt=""> <span>Quay lại</span>
             </div>
-            <div style="height:5px" class="color-picker-bg-41"></div>
-            <div class="col-md-12 no-padd">
-                <div class="col-md-2 no-padd" style="float: left; display: block">
+            <div class="">
+                <a href="{{ route('customers.edit', $customer->id) }}">
+                    <button class="btn btn-gradient btn-icon line-height-1" type="button">
+                        <img src="{{asset('layout/layout/images/Edit.png')}}" alt="">
+                        <span>Chỉnh sửa</span>
+                    </button>
+                </a>
+            </div>
+        </div>
+
+
+        <div class="banner mt-16">
+            <div class="banner__top" style="height: 116px;">
+                <div class="d-flex justify-content-between">
+                    <div class="left d-flex align-items-center gap-8">
+                        <div class="d-flex align-items-center gap-16">
+                            <img src="{{$customer->avatar?:'/default/noavatar.png'}}" width="85" height="85" alt="" style="border-radius: 50%;">
+                            <span class="color-white font-sopher fs-24">{{ $customer->full_name }}</span>
+                        </div>
+
+                        <span class="color-white dot">.</span>
+                        <div class="fs-16 color-info">
+                            <img src="{{asset('layout/images/ChatTeardropDots_active.png')}}" alt="" style="padding-right: 4px;">
+                            <span>{{ @$customer->status->name }}</span>
+                        </div>
+                        <span class="color-white dot">.</span>
+                        <div class="color-white banner__info">
+                            <img src="{{asset('layout/images/Scan.png')}}" alt="" style="padding-right: 6px;">
+                            <span class="fs-14">{{$customer->account_code}}</span>
+                        </div>
+                        <span class="color-white dot">.</span>
+                        <div class="color-white banner__info">
+                            <img src="{{asset('layout/images/Call.png')}}" alt="" style="padding-right: 6px;">
+                            <span class="fs-14">{{auth()->user()->permission('phone.open') ? $customer->phone : str_limit($customer->phone, 7, 'xxx')}}</span>
+                        </div>
+                    </div>
+                    <div class="right">
+                        {{--<img src="{{asset('layout/images/QR.png')}}" alt="" width="65" height="65">--}}
+                        <div id="qrcodeTable" style="width: 65px;height: 65px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="banner__background">
+                <div class="banner__menu d-flex align-items-center gap-16 fs-16" style="">
+                    <ul class="nav panel-tabs gap-16">
+                        <li class=""><a href="#tab5" class="banner__menu__item communicate active" data-toggle="tab">Trao đổi</a>
+                        </li>
+                        <li><a href="#tab7" class="banner__menu__item appointment" id="click_tab_7" data-id="{{$customer->id}}"
+                               data-toggle="tab">Lịch hẹn</a></li>
+                        <li>
+                            <a href="#tab6" class="banner__menu__item order" id="click_tab_6" data-id="{{$customer->id}}"
+                               data-toggle="tab">Đơn hàng</a></li>
+                        <li>
+                            <a href="#tab8" class="banner__menu__item calendar" id="click_tab_8" data-id="{{$customer->id}}"
+                               data-toggle="tab">Lịch CSKH</a></li>
+                        @if(empty($permissions) || !in_array('package.customer',$permissions))
+                            <li>
+                                <a href="#tab10" class="banner__menu__item wallet" id="click_tab_10" data-id="{{$customer->id}}"
+                                   data-toggle="tab">Ví tiền</a></li>
+                        @endif
+                        {{--                                            <li><a href="#tab9" id="click_tab_9" data-phone="{{$customer->phone}}"--}}
+                        {{--                                                   data-toggle="tab">Tin nhắn</a></li>--}}
+                        <li>
+                            <a href="#tabGift" class="banner__menu__item gift" id="click_tab_gift" data-id="{{$customer->id}}"
+                               data-toggle="tab">Quà Tặng</a></li>
+                        <li>
+                            <a href="#tab11" class="banner__menu__item discout" id="click_tab_11" data-phone="{{$customer->phone}}"
+                               data-toggle="tab">Khuyến mại</a></li>
+                        <li>
+                            <a href="#tab12" class="banner__menu__item hotline" id="click_tab_12" data-phone="{{$customer->phone}}"
+                               data-toggle="tab">Tổng đài</a></li>
+                        <li>
+                            <a href="#tab13" class="banner__menu__item albums" id="click_tab_13" data-id="{{$customer->id}}"
+                               data-toggle="tab">ALBUMS</a></li>
+                        <li>
+                            <a href="#tab14" class="banner__menu__item contract" id="click_tab_14" data-id="{{$customer->id}}"
+                               data-toggle="tab">Hợp đồng</a></li>
+                        <li>
+                            <input type="hidden" class="chat-page_id" value="{{@$customer->page_id}}">
+                            <input type="hidden" class="chat-sender_id" value="{{@$customer->FB_ID}}">
+                            <input type="hidden" class="chat-token" value="{{@$customer->fanpage->access_token}}">
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+        <div class="">
+            {{--<div class="card-header">--}}
+                {{--<div class="col-md-3 no-padd font16"><a class="fl mr10 pic">--}}
+                        {{--<img class="avatar" src="{{$customer->avatar?:'/default/noavatar.png'}}"></a>--}}
+                    {{--<span class="bold uppercase ">  &nbsp;{{ $customer->full_name }}  </span>--}}
+                    {{--<div class="display" id="toolbox" style="width: 28px; height: 20px">--}}
+                        {{--<a title="Sửa tài khoản" href="{{ route('customers.edit', $customer->id) }}">--}}
+                            {{--<i class="fas fa-pencil-alt"></i></a>--}}
+                        {{--<a id="btn_del_account" rel="tooltip"--}}
+                           {{--data-placement="bottom"--}}
+                           {{--data-original-title="Xóa" class="ml5">--}}
+                            {{--<i class="gf-icon-hover icon-remove mr5"></i>--}}
+                        {{--</a>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+                {{--<div class="col-md-3 position" rel="tooltip">--}}
+                    {{--<div class="no-padd tc mg0">--}}
+                        {{--<h1 style="font-size:24px;color: #f36a26;" class="bold mg0">{{number_format($customer->wallet)}}--}}
+                            {{--VNĐ</h1>--}}
+                        {{--<p>Số dư ví</p></div>--}}
+                {{--</div>--}}
+                {{--<div class="col-md-1 position" rel="tooltip"></div>--}}
+
+                {{--<div class="col-md-2 no-padd bor-l pl20 mg0 pt10 position hoverlastactive" rel="tooltip"--}}
+                     {{--data-original-title="Click thay đổi người phụ trách" data-placement="bottom">--}}
+                    {{--<div class="show_change_am" style="cursor:pointer">--}}
+                        {{--<div class="avatar">--}}
+                            {{--<img class="avatar"--}}
+                                 {{--src="{{!empty($customer->telesale->avatar)?$customer->telesale->avatar:'/default/noavatar.png'}}">--}}
+                        {{--</div>--}}
+                        {{--<div class="info-avatar"><p class="account_manager_name"><a--}}
+                                    {{--class="gfname">{{ @$customer->telesale->full_name }}</a>--}}
+                            {{--</p>--}}
+                            {{--<p class="gray1 font12">Người phụ trách</p></div>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+                {{--<div class="col-md-1 no-padd tc bor-l mg0"></div>--}}
+                {{--<div class="col-md-2 no-padd tc bor-l mg0"><h1 style="font-size:24px;color: #f36a26"--}}
+                                                               {{--class="bold mg0">{{number_format($customer->orders->sum('gross_revenue'))}}--}}
+                        {{--VNĐ</h1>--}}
+                    {{--<p>Giá trị</p></div>--}}
+            {{--</div>--}}
+            {{--<div style="height:5px" class="color-picker-bg-41"></div>--}}
+            <div class="d-flex gap-8" style="margin-top: 8px;">
+                <div class="content__left w-232">
+
+                    <div class="d-flex align-items-center w-232 p-16" style="gap: 21px;background-image: url({{asset('layout/images/bg_wallet.png')}});height: 61px;border-radius: 16px;">
+                        <span class="color-main">Số dư ví</span>
+                        <span class="fs-28">{{number_format($customer->wallet)}}</span>
+                    </div>
+                    <div class="box p-16">
+                        <div class="d-flex align-items-start gap-4">
+                            <img src="{{!empty($customer->telesale->avatar)?$customer->telesale->avatar:'/default/noavatar.png'}}" width="36" height="36" alt="" style="border-radius: 50%;">
+                            <div class="" style="margin-top: -5px;">
+                                <span class="fs-16">{{ @$customer->telesale->full_name }}</span>
+                                <div class="fs-12 color-dark">The Pyo Hà Nội</div>
+                                <div class="d-flex align-items-center gap-8">
+                                    <img src="{{asset('layout/images/Hotline_active.png')}}" width="12" height="12" alt="">
+                                    <span class="fs-12 color-info">Người phụ trách</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box__button mt-16">
+                            <img src="{{asset('layout/images/Iocn.png')}}" alt="">
+                            <span>DT: {{number_format($customer->orders->sum('gross_revenue'))}}</span>
+                        </div>
+                    </div>
+
                     <div class="full2 mt10" id="info_bar">
                         <div class="border padding infor-list-ct ml2">
                             <div class="row">
@@ -196,17 +543,17 @@
                     <div class="border padding mt10 ml2">
                         <div class="infor-top-ct">
                             <h3 class="uppercase mb10 font12 bold mg0" style="margin-bottom: 10px!important;">Thông tin khách hàng</h3>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Mã KH:</p>
-                                <p class="word-wrap bold text-info"> &nbsp;{{$customer->account_code}}</p>
-                            </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Tên KH:</p>
-                                <p class="word-wrap bold text-info"> &nbsp;{{ $customer->full_name }} </p>
-                            </div>
-                            <div class="mb10 clearfix"><p class="bold pr5 fl">Điện thoại:</p>
-                                <p class="word-wrap bold text-info"><a class="" data-account-id="4629"
-                                                        data-type="crm" data-issensitive="true">
-                                        &nbsp;{{auth()->user()->permission('phone.open') ? $customer->phone : str_limit($customer->phone, 7, 'xxx')}} </a></p>
-                            </div>
+                            {{--<div class="mb10 clearfix "><p class="bold pr5 fl">Mã KH:</p>--}}
+                                {{--<p class="word-wrap bold text-info"> &nbsp;{{$customer->account_code}}</p>--}}
+                            {{--</div>--}}
+                            {{--<div class="mb10 clearfix "><p class="bold pr5 fl">Tên KH:</p>--}}
+                                {{--<p class="word-wrap bold text-info"> &nbsp;{{ $customer->full_name }} </p>--}}
+                            {{--</div>--}}
+                            {{--<div class="mb10 clearfix"><p class="bold pr5 fl">Điện thoại:</p>--}}
+                                {{--<p class="word-wrap bold text-info"><a class="" data-account-id="4629"--}}
+                                                        {{--data-type="crm" data-issensitive="true">--}}
+                                        {{--&nbsp;{{auth()->user()->permission('phone.open') ? $customer->phone : str_limit($customer->phone, 7, 'xxx')}} </a></p>--}}
+                            {{--</div>--}}
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Chi nhánh:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->branch->name }}</p>
                             </div>
@@ -257,7 +604,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-10 no-padd" style="float: left;">
+                <div class="content__right">
                     <div class="col-md-12 no-padd spanfull2 padding" style="float: left;">
                         <div class="">
                             <div class="panel panel-primary">
@@ -266,42 +613,6 @@
                                         @include('customers._include.container_arrow')
                                     </div>
                                 @endif
-                                <div class="tab-menu-heading">
-                                    <div class="tabs-menu1 ">
-                                        <!-- Tabs -->
-                                        <ul class="nav panel-tabs">
-                                            <li class=""><a href="#tab5" class="active" data-toggle="tab">Trao đổi</a>
-                                            </li>
-                                            <li><a href="#tab7" id="click_tab_7" data-id="{{$customer->id}}"
-                                                   data-toggle="tab">Lịch hẹn</a></li>
-                                            <li><a href="#tab6" id="click_tab_6" data-id="{{$customer->id}}"
-                                                   data-toggle="tab">Đơn hàng</a></li>
-                                            <li><a href="#tab8" id="click_tab_8" data-id="{{$customer->id}}"
-                                                   data-toggle="tab">Lịch CSKH</a></li>
-                                            @if(empty($permissions) || !in_array('package.customer',$permissions))
-                                                <li><a href="#tab10" id="click_tab_10" data-id="{{$customer->id}}"
-                                                       data-toggle="tab">Ví tiền</a></li>
-                                            @endif
-{{--                                            <li><a href="#tab9" id="click_tab_9" data-phone="{{$customer->phone}}"--}}
-{{--                                                   data-toggle="tab">Tin nhắn</a></li>--}}
-                                            <li><a href="#tabGift" id="click_tab_gift" data-id="{{$customer->id}}"
-                                                   data-toggle="tab">Quà Tặng</a></li>
-                                            <li><a href="#tab11" id="click_tab_11" data-phone="{{$customer->phone}}"
-                                                   data-toggle="tab">Khuyến mại</a></li>
-                                            <li><a href="#tab12" id="click_tab_12" data-phone="{{$customer->phone}}"
-                                                   data-toggle="tab">Tổng đài</a></li>
-                                            <li><a href="#tab13" id="click_tab_13" data-id="{{$customer->id}}"
-                                                   data-toggle="tab">ALBUMS</a></li>
-                                            <li><a href="#tab14" id="click_tab_14" data-id="{{$customer->id}}"
-                                                   data-toggle="tab">Hợp đồng</a></li>
-                                            <li>
-                                                <input type="hidden" class="chat-page_id" value="{{@$customer->page_id}}">
-                                                <input type="hidden" class="chat-sender_id" value="{{@$customer->FB_ID}}">
-                                                <input type="hidden" class="chat-token" value="{{@$customer->fanpage->access_token}}">
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
                                 <div class="panel-body tabs-menu-body">
                                     <div class="tab-content" style="font-size: 15px;">
                                         <div class="tab-pane active " id="tab5">
@@ -1074,8 +1385,8 @@
         $(document).ready(function (){
             jQuery('#qrcodeTable').qrcode({
                 text	: "{{$customer->account_code}}",
-                height:50,
-                width:50
+                height:65,
+                width:65
             });
         });
     </script>

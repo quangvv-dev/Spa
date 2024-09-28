@@ -1,15 +1,15 @@
 :root {
     --color-gradient: linear-gradient(274.34deg, rgba(96, 195, 219, 0) -1.01%, #60C3DB 30.51%, rgba(96, 195, 219, 0) 91.69%);
     --color-gradient2: linear-gradient(130.35deg, #FAF9F7 -2.76%, #2AABE2 53.97%);
-    --color-primary: #3BDBFF;
-    --color-info: #00AEFF;
-    --color-dark: #999999;
-    --color-warning: #FFC544;
-    --color-orange: #FF6B00;
-    --color-green: #3FD599;
-    --color-danger: #FF0060;
-    --color-yellow: #FDDE55;
-    --bg-main: #131313;
+    --color-primary: #3BDBFF !important;
+    --color-info: #00AEFF !important;
+    --color-dark: #999999 !important;
+    --color-warning: #FFC544 !important;
+    --color-orange: #FF6B00 !important;
+    --color-green: #3FD599 !important;
+    --color-danger: #FF0060 !important;
+    --color-yellow: #FDDE55 !important;
+    --bg-main: #131313 !important;
 }
 @font-face {
     font-family: svn-lage;
@@ -358,11 +358,14 @@ audio::-webkit-media-controls-play-button:hover {
 }
 
 body {
-    background: rgba(19, 19, 19, 1);
+    background: rgba(19, 19, 19, 1) !important;
+    color: #fff !important;
 }
 .container {
-    max-width: 100%;
+    max-width: 100% !important;
     padding: 0 64px;
+    padding-left: 64px !important;
+    padding-right: 64px !important;
 }
 .header {
     height: 80px;
@@ -557,7 +560,7 @@ body {
 }
 
 .btn-primary {
-    border: 1px;
+    border: none !important;
     background: linear-gradient(130.35deg, #FAF9F7 -2.76%, #2AABE2 53.97%);
 }
 
@@ -568,8 +571,8 @@ body {
 
 .btn-gradient {
     background: linear-gradient(var(--bg-main), var(--bg-main)) padding-box, linear-gradient(128.23deg, #FAF9F7 9.05%, #579DE2 51.94%, #2185A5 94.82%) border-box;
-    color: #fff;
-    border: 1px solid transparent;
+    color: #fff !important;
+    border: 1px solid transparent !important;
 }
 
 .btn-gradient1 {
@@ -790,4 +793,88 @@ body {
 
 .action:last-child {
     background: none;
+}
+
+.ren-navbar.header .sub-item {
+    width: 198px;
+    border-radius: 16px;
+    background: linear-gradient(var(--bg-main), var(--bg-main)) padding-box, linear-gradient(128.23deg, #FAF9F7 9.05%, #579DE2 51.94%, #2185A5 94.82%) border-box;
+    border: 1px solid transparent;
+}
+
+.ren-navbar.header .sub-item:before {
+    content: none;
+}
+
+.ren-navbar.header .sub-item .sub-with-sub a {
+    color: #fff;
+    font-size: 16px;
+}
+
+.ren-navbar.header .sub-item .sub-with-sub:hover a {
+    color: var(--color-primary);
+}
+.ren-navbar .sub-item .sub-with-sub::after {
+    font-size: 16px;
+    color: #fff;
+}
+.ren-navbar .sub-item ul a:hover, .ren-navbar .sub-item ul a:focus {
+    color: var(--color-primary);
+    background-color: unset;
+}
+.ren-navbar.header .sub-item .sub-with-sub ul{
+    background: linear-gradient(var(--bg-main), var(--bg-main)) padding-box, linear-gradient(128.23deg, #FAF9F7 9.05%, #579DE2 51.94%, #2185A5 94.82%) border-box;
+    border-radius: 16px;
+    border: 1px solid transparent;
+}
+.ren-navbar.header .sub-item .sub-with-sub ul li a{
+    color: #fff !important;
+}
+.ren-navbar.header .sub-item .sub-with-sub ul li:hover a{
+    color: var(--color-primary) !important;
+}
+.ren-navbar .sub-item > ul li a{
+    font-size: 16px;
+    color: #fff;
+}
+.navbar-nav .sub-item .dropdown-menu__header,
+.navbar-nav .sub-item .dropdown-menu__header:hover {
+    font-family: sopher;
+    background: -webkit-linear-gradient(107.54deg, #FFFFFF 4.13%, #999999 48.62%, #FFFFFF 93.12%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+
+    text-shadow: -10px -10px 20px 0px #00AEFF inset;
+    padding: 12px 24px;
+    font-size: 24px;
+}
+.dropdown-menu__border {
+    padding: 4px 24px 4px 24px;
+;
+}
+.dropdown-menu__border div {
+    height: 1px;
+    background: #686777;
+}
+#reportrange {
+    background: #131313;
+    border: 1px solid #686777;
+    color: #fff;
+    outline: none;
+    border-radius: 8px;
+}
+select {
+    background-color: #131313 !important;
+    border: 1px solid #686777 !important;
+    color: #fff !important;
+    outline: none;
+    border-radius: 8px !important;
+    padding-top: 5px;
+}
+.input-custom {
+    background-color: #131313 !important;
+    border: 1px solid #686777 !important;
+    color: #fff !important;
+    outline: none;
+    border-radius: 8px !important;
 }

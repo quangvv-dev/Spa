@@ -20,7 +20,7 @@
                     <a class="{{ Request::is('schedules*')||Request::is('schedules*') ? 'active' : '' }}"
                        href="{!! url('schedules') !!}">
                         <div class="gradient-btn">
-                            <img src="{{'layout/images/Calendar1.png'}}" alt="">
+                            <img src="{{asset('layout/images/Calendar1.png')}}" alt="">
                             <span class="fs-18 show-text">Lịch hẹn</span>
                         </div>
                     </a>
@@ -32,7 +32,7 @@
                     <a class="{{ Request::is('customers*')||Request::is('customers*') ? 'active' : '' }}"
                        href="{!! route('customers.index') !!}">
                         <div class="gradient-btn">
-                            <img src="{{'layout/images/Customer.png'}}" alt="">
+                            <img src="{{asset('layout/images/Customer.png')}}" alt="">
                             <span class="fs-18 show-text">Khách hàng</span>
                         </div>
                     </a>
@@ -42,9 +42,9 @@
                 <a class="{{ Request::is('marketing/fanpage*')||Request::is('posts*')||Request::is('customer-post*')||Request::is('rules*') ? 'active' : '' }}"
                    href="#">
                     <div class="gradient-btn">
-                        <img src="{{'layout/images/Marketing.png'}}" alt="">
+                        <img src="{{asset('layout/images/Marketing.png')}}" alt="">
                         <span class="fs-18 show-text">Marketing</span>
-                        <img class="down" src="{{'layout/images/Down.png'}}" alt="">
+                        <img class="down" src="{{asset('layout/images/Down.png')}}" alt="">
                     </div>
                 </a>
                 <div class="sub-item">
@@ -56,7 +56,12 @@
                         {{--                        @if($roleGlobal->permission('marketing.fanpage_post'))--}}
                         {{--                            <li><a href="{{route('marketing.fanpage-post.index')}}">Fanpage Post</a></li>--}}
                         {{--                        @endif--}}
-
+                        <li>
+                            <div class="dropdown-item dropdown-menu__header">Marketing</div>
+                            <div class="dropdown-menu__border">
+                                <div></div>
+                            </div>
+                        </li>
                         @if($roleGlobal->permission('marketing.dashboard'))
                             <li class="sub-with-sub">
                                 <a href="#">Xếp hạng</a>
@@ -116,13 +121,19 @@
                 <a class="{{ Request::is('category*')||Request::is('orders-payment')||Request::is('list-orders*')||Request::is('combos*')||Request::is('services*')||Request::is('products*')||Request::is('category-product*') ? 'active' : '' }}"
                    href="#">
                     <div class="gradient-btn">
-                        <img src="{{'layout/images/Sell.png'}}" alt="">
+                        <img src="{{asset('layout/images/Sell.png')}}" alt="">
                         <span class="fs-18 show-text text-white">Bán hàng</span>
-                        <img class="down" src="{{'layout/images/Down.png'}}" alt="">
+                        <img class="down" src="{{asset('layout/images/Down.png')}}" alt="">
                     </div>
                 </a>
                 <div class="sub-item">
                     <ul>
+                        <li>
+                            <div class="dropdown-item dropdown-menu__header">Bán hàng</div>
+                            <div class="dropdown-menu__border">
+                                <div></div>
+                            </div>
+                        </li>
                         <li class="sub-with-sub">
                             <a href="#">Quản lý nhóm</a>
                             <ul>
@@ -185,7 +196,7 @@
                 <a class="{{ Request::is('tasks') ? 'active' : '' }}"
                    href="{{url('tasks-employee')}}">
                     <div class="gradient-btn">
-                        <img src="{{'layout/images/CS1.png'}}" alt="">
+                        <img src="{{asset('layout/images/CS1.png')}}" alt="">
                         <span class="fs-18 show-text text-white">CSKH</span>
                     </div>
                 </a>
@@ -203,13 +214,19 @@
                 <a class="{{ Request::is('statistics*')||Request::is('report*')||Request::is('history-sms') ? 'active' : '' }}"
                    href="#">
                     <div class="gradient-btn">
-                        <img src="{{'layout/images/Report.png'}}" alt="">
+                        <img src="{{asset('layout/images/Report.png')}}" alt="">
                         <span class="fs-18 show-text text-white">Thống kê</span>
-                        <img class="down" src="{{'layout/images/Down.png'}}" alt="">
+                        <img class="down" src="{{asset('layout/images/Down.png')}}" alt="">
                     </div>
                 </a>
                 <div class="sub-item">
                     <ul>
+                        <li>
+                            <div class="dropdown-item dropdown-menu__header">Thống kê</div>
+                            <div class="dropdown-menu__border">
+                                <div></div>
+                            </div>
+                        </li>
                         <li class="sub-with-sub">
                             <a href="#">Doanh số & Doanh thu</a>
                             <ul>
@@ -301,13 +318,19 @@
             <li class="nav-item">
                 <a class="{{ Request::is('depots/product') ? 'active' : '' }}" href="#">
                     <div class="gradient-btn">
-                        <img src="{{'layout/images/Storage.png'}}" alt="">
+                        <img src="{{asset('layout/images/Storage.png')}}" alt="">
                         <span class="fs-18 show-text text-white">Kho vận</span>
                         <img class="down" src="{{'layout/images/Down.png'}}" alt="">
                     </div>
                 </a>
                 <div class="sub-item">
                     <ul>
+                        <li>
+                            <div class="dropdown-item dropdown-menu__header">Kho vận</div>
+                            <div class="dropdown-menu__border">
+                                <div></div>
+                            </div>
+                        </li>
                         <li><a href="{{url('depots/product')}}">Sản phẩm kho</a></li>
                         <li><a href="{{url('depots/history')}}">Lich sử nhập, xuất kho</a></li>
                         <li><a href="{{url('depots/statistical')}}">Báo cáo tồn</a></li>
@@ -320,13 +343,19 @@
                     <a class="{{ Request::is('danh-muc-thu-chi*')||Request::is('thu-chi*') ? 'active' : '' }}"
                        href="#">
                         <div class="gradient-btn">
-                            <img src="{{'layout/images/Money2.png'}}" alt="">
+                            <img src="{{asset('layout/images/Money2.png')}}" alt="">
                             <span class="fs-18 show-text text-white">Duyệt chi</span>
-                            <img class="down" src="{{'layout/images/Down.png'}}" alt="">
+                            <img class="down" src="{{asset('layout/images/Down.png')}}" alt="">
                         </div>
                     </a>
                     <div class="sub-item">
                         <ul>
+                            <li>
+                                <div class="dropdown-item dropdown-menu__header">Duyệt chi</div>
+                                <div class="dropdown-menu__border">
+                                    <div></div>
+                                </div>
+                            </li>
                             @if($roleGlobal->permission('danh-muc-thu-chi.index'))
                                 <li><a href="{{url('danh-muc-thu-chi')}}">Danh mục duyệt chi</a></li>
                                 <li><a href="{{url('ly-do-thu-chi')}}">Lý do duyệt chi</a></li>
@@ -343,13 +372,19 @@
                 <a class="{{ Request::is('settings*')||Request::is('settings*') ? 'active' : '' }}"
                    href="#">
                     <div class="gradient-btn">
-                        <img src="{{'layout/images/Employee.png'}}" alt="">
+                        <img src="{{asset('layout/images/Employee.png')}}" alt="">
                         <span class="fs-18 show-text text-white">Nhân sự</span>
-                        <img class="down" src="{{'layout/images/Down.png'}}" alt="">
+                        <img class="down" src="{{asset('layout/images/Down.png')}}" alt="">
                     </div>
                 </a>
                 <div class="sub-item">
                     <ul>
+                        <li>
+                            <div class="dropdown-item dropdown-menu__header">Nhân sự</div>
+                            <div class="dropdown-menu__border">
+                                <div></div>
+                            </div>
+                        </li>
                         @if($roleGlobal->permission('time-status.index'))
                             <li><a href="{{url('settings/time-status')}}">Cài đặt thời gian</a></li>
                         @endif
