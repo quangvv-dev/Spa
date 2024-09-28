@@ -57,44 +57,13 @@
             </li>
         </ul>
     </div>
-    {{--/*--}}
-    {{--<div class="display btn-group" id="btn_tool_group" style="display: none;">--}}
-        {{--<button type="button" class="btn btn-default position dropdown-toggle" data-toggle="dropdown"--}}
-                {{--aria-haspopup="true" aria-expanded="false"> Thao tác <span class="caret"></span></button>--}}
-        {{--<ul class="dropdown-menu">--}}
-            {{--//<li class="dropdown_action" id="send_email"><a>Gửi Email</a></li>--}}
-            {{--//<li class="dropdown_action" id="send_sms"><a>Gửi SMS</a></li>--}}
-            {{--//<li class="dropdown_action" id="mark_as_potential"><a>Tạo cơ hội</a></li>--}}
-            {{--//<li class="dropdown_action" id="show_popup_task"><a>Tạo công việc</a></li>--}}
-            {{--<li class="dropdown_action" id="show_group_type_account"><a>Nhóm khách hàng</a></li>--}}
-            {{--@if(auth()->user()->permission('customer.changeSale'))--}}
-                {{--<li class="dropdown_action" id="show_manager_account"><a>Chuyển người phụ trách</a></li>--}}
-            {{--@endif--}}
-            {{--@if(auth()->user()->permission('customer.changeCskh'))--}}
-                {{--<li class="dropdown_action" data-toggle="modal" data-target="#show-cskh-account"><a>Chuyển CSKH</a></li>--}}
-            {{--@endif--}}
-            {{--<li class="dropdown_action"><a id="change_relations">Trạng thái khách hàng 11111</a></li>--}}
-            {{--@if(auth()->user()->permission('customer.changeBranch'))--}}
-                {{--<li class="dropdown_action" data-toggle="modal" data-target="#show-branch-account"><a>Chuyển chi nhánh</a></li>--}}
-            {{--@endif--}}
-            {{--@if(auth()->user()->permission('customers.delete'))--}}
-                {{--<li class="dropdown_action" id="remove_selected_account"><a>Xóa nhiều</a></li>--}}
-            {{--@endif--}}
-            {{--<li class="dropdown_action" id="restore_account"><a>Khôi phục</a></li>--}}
-            {{--<li class="dropdown_action" id="permanently_delete_account"><a>Destroy (Huỷ data)</a></li>--}}
-            {{--//<li class="dropdown_action" data-toggle="modal" data-target="#show-modal-phanbo"><a>Phân bổ data</a></li>--}}
-            {{--@if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::ADMIN)--}}
-            {{--<li class="dropdown_action"><a href="{{route('settings.phanbo')}}">Phân chia hàng loạt</a></li>--}}
-            {{--@endif--}}
-        {{--</ul>--}}
-    {{--</div>--}}
-    {{--*/--}}
-    <div style="margin-left: 10px">
-        <button data-name="" class="btn btn-default status btn white account_relation position"
-                style="height: 40px;">
-            TẤT CẢ
-            <span class="not-number-account white all_count">{{$statuses->sum('customers_count')}}</span>
-        </button>
+    <div class="d-flex gap-24 menu">
+        <div class="squares-four pointer account_relation status active">
+            <img src="{{asset('layout/images/SquaresFour_active.png')}}" alt="">
+            <span>Tất cả</span>
+            {{--            ({{$statuses->sum('customers_count')}})--}}
+            <div class="active-border"></div>
+        </div>
     </div>
     <div style="margin-left: 10px">
         <button class="btn btn-default" style="height: 40px;font-weight: 600;">
@@ -103,14 +72,20 @@
             </a>
         </button>
     </div>
-    <div class="scrollmenu col-md-7">
+
+    <div class="scrollmenu col-md-7 d-flex gap-24 menu">
         @php
             $customers_count = 0;
         @endphp
         @foreach(@$statuses as $k => $item)
-            <button class="status btn white account_relation position btn-new" data-name="{{$item->id}}"
-                    style="background: {{$item->color ?:''}}">{{ $item->name }}<span
-                    class="not-number-account white noti-reletion">{{ @$item->customers_count }}</span></button>
+
+            <btn class="smiley pointer account_relation status" data-name="{{$item->id}}">
+                <img src="{{asset('layout/images/Smiley.png')}}" alt="">
+                <span style="color: {{$item->color ?:''}}">{{ $item->name }} ({{ @$item->customers_count }})</span>
+            </btn>
+{{--            <button class="status btn white account_relation position btn-new" data-name="{{$item->id}}"--}}
+{{--                    style="background: {{$item->color ?:''}}">{{ $item->name }}<span--}}
+{{--                    class="not-number-account white noti-reletion">{{ @$item->customers_count }}</span></button>--}}
             @php
             $customers_count += $item->customers_count;
             @endphp

@@ -66,58 +66,12 @@
 
 
                 <div class="">
-
-                    <div class="d-flex justify-content-between customer">
-                        <div class="customer__left d-flex justify-content-between align-items-baseline gap-16">
-                            <span class="linear-text fs-32 fw-700">Khách hàng</span>
-                            <span class="linear-text fs-16">1,200 khách hàng</span>
-                        </div>
-                        <div class="customer__right d-flex justify-content-between align-items-center gap-12">
-                            <a {{$roleGlobal->permission('customer.import')?:"style=display:none"}}
-                               class="btn tooltip-nav p-0" href="#" data-toggle="modal" data-target="#myModal">
-                                <img src="{{asset('layout/images/Notii_up.png')}}" alt="" class="pointer">
-                                <span class="tooltiptext">Nhập khách hàng (excel)</span>
-                            </a>
-
-                            <a {{$roleGlobal->permission('customer.export')?:"style=display:none"}}
-                               class="btn tooltip-nav p-0" href="#" data-toggle="modal" data-target="#myModalExport">
-                                <img src="{{asset('layout/images/Notii_down.png')}}" alt="" class="pointer">
-                                <span class="tooltiptext">Tải khách hàng (excel)</span>
-                            </a>
-
-
-                            <a href="{{ route('customers.create') }}">
-                                <button class="btn btn-primary btn-lg" type="button">Tạo mới</button>
-                            </a>
-                        </div>
-                    </div>
-                    {{--<div class="d-flex gap-24 menu">--}}
-                        {{--<div class="squares-four pointer active">--}}
-                            {{--<img src="{{asset('layout/images/SquaresFour_active.png')}}" alt="">--}}
-                            {{--<span>Tất cả</span>--}}
-                            {{--<div class="active-border"></div>--}}
-                        {{--</div>--}}
-                        {{--<div class="smiley pointer">--}}
-                            {{--<img src="{{asset('layout/images/Smiley.png')}}" alt="">--}}
-                            {{--<span>Mới (4)</span>--}}
-                        {{--</div>--}}
-                        {{--<div class="phone-slash pointer">--}}
-                            {{--<img src="{{asset('layout/images/PhoneSlash.png')}}" alt="">--}}
-                            {{--<span>Chưa kết nối (4)</span>--}}
-                        {{--</div>--}}
-                        {{--<div class="chat-teardrop-dots pointer">--}}
-                            {{--<img src="{{asset('layout/images/ChatTeardropDots.png')}}" alt="">--}}
-                            {{--<span>Đang suy nghĩ (4)</span>--}}
-                        {{--</div>--}}
-                        {{--<div class="hand pointer">--}}
-                            {{--<img src="{{asset('layout/images/Hand.png')}}" alt="">--}}
-                            {{--<span>Hẹn gọi lại (4)</span>--}}
-                        {{--</div>--}}
-                        {{--<div class="basket pointer">--}}
-                            {{--<img src="{{asset('layout/images/Basket.png')}}" alt="">--}}
-                            {{--<span>Không mua (4)</span>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
+{{--                    <div class="d-flex justify-content-between customer">--}}
+{{--                        <div class="customer__left d-flex justify-content-between align-items-baseline gap-16">--}}
+{{--                            <span class="linear-text fs-32 fw-700">Khách hàng</span>--}}
+{{--                            <span class="linear-text fs-16">1,200 khách hàng</span>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
                     <div class="search d-flex justify-content-between mt-16">
                         <div class="search__left d-flex align-items-center gap-8">
                             <div class="search__input d-flex align-items-center gap-8">
@@ -172,6 +126,23 @@
                                     <img src="{{asset('layout/images/icon-double-up.png')}}" alt="">
                                 </a>
                             </div>
+                        </div>
+                        <div class="customer__right d-flex justify-content-between align-items-center gap-12">
+                            <a {{$roleGlobal->permission('customer.import')?:"style=display:none"}}
+                               class="btn tooltip-nav p-0" href="#" data-toggle="modal" data-target="#myModal">
+                                <img src="{{asset('layout/images/Notii_up.png')}}" alt="" class="pointer">
+                                <span class="tooltiptext">Nhập khách hàng (excel)</span>
+                            </a>
+
+                            <a {{$roleGlobal->permission('customer.export')?:"style=display:none"}}
+                               class="btn tooltip-nav p-0" href="#" data-toggle="modal" data-target="#myModalExport">
+                                <img src="{{asset('layout/images/Notii_down.png')}}" alt="" class="pointer">
+                                <span class="tooltiptext">Tải khách hàng (excel)</span>
+                            </a>
+
+                            <a href="{{ route('customers.create') }}">
+                                <button class="btn btn-primary btn-lg" type="button">Tạo mới</button>
+                            </a>
                         </div>
                     </div>
                     <div class="more-menu" style="margin-top: 8px;">
@@ -291,7 +262,7 @@
 
 
 
-                <div id="registration-form" style="margin-top: 16px;">
+                <div id="registration-form" style="margin-top: 5px;">
                     @include('customers.ajax')
                 </div>
                 @include('customers.modal')

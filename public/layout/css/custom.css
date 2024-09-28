@@ -319,10 +319,10 @@
 }
 .suppoter .item.active .full-name{
     line-height: 19.8px;
-    white-space: nowrap; 
-    width: 90%; 
+    white-space: nowrap;
+    width: 90%;
     overflow: hidden;
-    text-overflow: ellipsis; 
+    text-overflow: ellipsis;
 }
 .suppoter-modal .list-bs .item.active {
     position: relative;
@@ -352,7 +352,7 @@ audio::-webkit-media-controls-play-button {
     background-color: #B1D4E0;
     border-radius: 50%;
 }
-  
+
 audio::-webkit-media-controls-play-button:hover {
     background-color: rgba(177,212,224, .7);
 }
@@ -368,7 +368,7 @@ body {
     padding-right: 64px !important;
 }
 .header {
-    height: 80px;
+    height: 60px;
     display: flex;
     justify-content: space-between;
     align-items: center;

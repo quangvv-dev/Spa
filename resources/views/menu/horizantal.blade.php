@@ -17,7 +17,7 @@
 
             @if($roleGlobal->permission('schedules.list'))
                 <li class="nav-item">
-                    <a class="{{ Request::is('schedules*')||Request::is('schedules*') ? 'active' : '' }}"
+                    <a class="{{ Request::is('schedules*')? 'active' : '' }}"
                        href="{!! url('schedules') !!}">
                         <div class="gradient-btn">
                             <img src="{{asset('layout/images/Calendar1.png')}}" alt="">
@@ -29,7 +29,7 @@
 
             @if($roleGlobal->permission('customers.list'))
                 <li class="nav-item">
-                    <a class="{{ Request::is('customers*')||Request::is('customers*') ? 'active' : '' }}"
+                    <a class="{{ Request::is('customers*') ? 'active' : '' }}"
                        href="{!! route('customers.index') !!}">
                         <div class="gradient-btn">
                             <img src="{{asset('layout/images/Customer.png')}}" alt="">
@@ -39,7 +39,7 @@
                 </li>
             @endif
             <li class="nav-item with-sub">
-                <a class="{{ Request::is('marketing/fanpage*')||Request::is('posts*')||Request::is('customer-post*')||Request::is('rules*') ? 'active' : '' }}"
+                <a class="{{ Request::is('marketing/dashboard')||Request::is('marketing/source-landipage')||Request::is('landipages*')||Request::is('posts*')||Request::is('customer-post*')||Request::is('rules*') ? 'active' : '' }}"
                    href="#">
                     <div class="gradient-btn">
                         <img src="{{asset('layout/images/Marketing.png')}}" alt="">
@@ -118,7 +118,9 @@
                 </div>
             </li>
             <li class="nav-item with-sub">
-                <a class="{{ Request::is('category*')||Request::is('orders-payment')||Request::is('list-orders*')||Request::is('combos*')||Request::is('services*')||Request::is('products*')||Request::is('category-product*') ? 'active' : '' }}"
+                <a class="{{ Request::is('category*')||Request::is('tips')||Request::is('orders-payment')||Request::is('list-orders*')
+                ||Request::is('combos*')||Request::is('services*')||Request::is('products*')||Request::is('trademark*')
+                ||Request::is('category-product*') ||Request::is('orders-payment*')||Request::is('payment-wallet*') ? 'active' : '' }}"
                    href="#">
                     <div class="gradient-btn">
                         <img src="{{asset('layout/images/Sell.png')}}" alt="">
