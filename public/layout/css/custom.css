@@ -444,7 +444,7 @@ label{
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
-th, td, span, button, p, a, option {
+a, th, td, span, button, p, h1, h2, h3, h4, h5 option {
     font-family: 'Sopher' !important; /* Sử dụng 'sans-serif' như một font fallback */
 }
 .textarea-custom {
@@ -911,4 +911,34 @@ select {
     color: #fff !important;
     outline: none;
     border-radius: 8px !important;
+}
+.daterangepicker {
+    background-color: #131313 !important;
+}
+.daterangepicker .cancelBtn {
+    color: #999999 !important;
+}
+.daterangepicker .calendar-table {
+    background-color: #131313 !important;
+    border: none !important;
+}
+.daterangepicker thead > tr th {
+    background: #3BDBFF !important;
+    color: #fff !important;
+    border-radius: unset !important;
+}
+.daterangepicker tr td {
+    border-radius: unset !important;
+}
+.daterangepicker .calendar-table .next span, .daterangepicker .calendar-table .prev span {
+    border: solid white !important;
+    border-width: 0 2px 2px 0 !important;
+}
+
+.page-link {
+    background-color: #36354A !important;
+    color: #fff;
+}
+.page-item.active .page-link {
+    background-color: #3b8fec !important;
 }

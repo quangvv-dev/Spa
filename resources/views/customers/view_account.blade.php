@@ -664,6 +664,64 @@
                                                     </div>
                                                     <!-- table-responsive -->
                                                 </div>
+
+
+
+
+                                                {{--<div class="content__right">--}}
+                                                    {{--<div class="content__right__header font-sopher">--}}
+                                                        {{--Trao đổi--}}
+                                                    {{--</div>--}}
+                                                    {{--<div class="content__right__body">--}}
+                                                        {{--<div class="item">--}}
+                                                            {{--<div class="d-flex align-items-center gap-8">--}}
+                                                                {{--<img src="images/Ava.png" width="40" height="40" alt="">--}}
+                                                                {{--<div>--}}
+                                                                    {{--<div class="fs-16">Lương Bảo Ngọc</div>--}}
+                                                                {{--</div>--}}
+                                                                {{--<div class="color-dark time font-svn-small">09:16 09/12/2023</div>--}}
+                                                            {{--</div>--}}
+                                                            {{--<div class="mt-8 fs-16" style="padding-left: 48px;">--}}
+                                                                {{--đắt quá c k làm, c làm cũng đc, rẻ thì c làm chứ đắt quá c cũng trả cần thiết đắt quá c k làm--}}
+                                                            {{--</div>--}}
+                                                        {{--</div>--}}
+                                                        {{--<div class="item high-light">--}}
+                                                            {{--<div class="d-flex align-items-center gap-8">--}}
+                                                                {{--<img src="images/Ava.png" width="40" height="40" alt="">--}}
+                                                                {{--<div>--}}
+                                                                    {{--<div class="fs-16">Trang Hoàng</div>--}}
+                                                                    {{--<div class="fs-12 color-dark font-svn-small">Leader Telesale Dr Tiến</div>--}}
+                                                                {{--</div>--}}
+                                                                {{--<div class="color-dark font-svn-small time">09:16 09/12/2023</div>--}}
+                                                            {{--</div>--}}
+                                                            {{--<div class="mt-8 fs-16" style="padding-left: 48px;">--}}
+                                                                {{--đắt quá c k làm đắt quá c k làm, c làm cũng đc, rẻ thì c làm chứ đắt quá c cũng trả cần thiết--}}
+                                                            {{--</div>--}}
+                                                        {{--</div>--}}
+                                                        {{--<div class="item">--}}
+                                                            {{--<div class="d-flex align-items-center gap-8">--}}
+                                                                {{--<img src="images/Ava.png" width="40" height="40" alt="">--}}
+                                                                {{--<div>--}}
+                                                                    {{--<div class="fs-16">Trang Hoàng</div>--}}
+                                                                    {{--<div class="fs-12 color-dark font-svn-small">Leader Telesale Dr Tiến</div>--}}
+                                                                {{--</div>--}}
+                                                                {{--<div class="color-dark font-svn-small time">09:16 09/12/2023</div>--}}
+                                                            {{--</div>--}}
+                                                            {{--<div class="mt-8 fs-16" style="padding-left: 48px;">--}}
+                                                                {{--đắt quá c k làm đắt quá c k làm, c làm cũng đc, rẻ thì c làm chứ đắt quá c cũng trả cần thiết--}}
+                                                            {{--</div>--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                    {{--<div class="content__right__footer p-24">--}}
+                                                        {{--<input type="text" placeholder="Nhập tin nhắn.....">--}}
+                                                        {{--<div class="send">--}}
+                                                            {{--<img src="images/Image_3.png" class="pointer" alt="">--}}
+                                                            {{--<img src="images/Send.png" class="pointer" alt="">--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                {{--</div>--}}
+
+
                                             </div>
                                         </div>
                                         <div class="tab-pane " id="tab6">

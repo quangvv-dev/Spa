@@ -104,7 +104,7 @@
             </div>
         </div>
     </div>
-
+ btn btn-primary saveFilter
 
 <div class="card-body table-responsive">
     <div class="row">

@@ -28,9 +28,7 @@
     </div>
     <div class="row">
         <div class="col item">
-            <label>
-                <button type="button" class="btn btn-primary saveFilter">Lưu lại</button>
-            </label>
+            <button type="button" class="btn btn-primary saveFilter">Lưu lại</button>
         </div>
     </div>
     <script>
