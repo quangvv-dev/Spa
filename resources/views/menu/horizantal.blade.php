@@ -526,7 +526,7 @@
                 </a>
 
 
-                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                <div class="dropdown-customize dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                     <a class="dropdown-item" href="{{ url('users/'.Auth::user()->id . '/edit') }}"><i
                                 class="dropdown-icon mdi mdi-face-profile"></i> Cài đặt tài khoản</a>
                     @if($roleGlobal->permission('users.list'))

@@ -13,10 +13,9 @@
         @if(@count($docs))
             @foreach($docs as $k => $s)
                 <tr>
-                    <th class="text-center">{{$k+1}}</th>
+                    <td class="text-center">{{$k+1}}</td>
                     <td class="text-center">
                         <input type="text" class="name txt-dotted" value="{{$s->name}}">
-                    </td>
                     </td>
                     <td class="text-center">
                         <a class="btn save-cate" data-id="{{$s->id}}"><i

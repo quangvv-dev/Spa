@@ -82,7 +82,7 @@
         .row-cards{
             min-width: 0;
             word-wrap: break-word;
-            background-color: #fff;
+            background-color: #131313;
             background-clip: border-box;
             box-shadow: 0 0 0 1px rgb(61 119 180 / 12%), 0 8px 16px 0 rgb(91 139 199 / 24%);
         }

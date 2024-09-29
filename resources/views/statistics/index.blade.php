@@ -3,13 +3,34 @@
     <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
     <style>
-        .title {
-            text-align: left;
+        .daterange-custom {
+            background: #131313;
+            border: 1px solid #686777;
+            color: #fff;
+            padding: 13.5px 16px;
+            outline: none;
+            border-radius: 8px;
+        }
+        #myChart1,#myChart2,#myChart3 {
+            height: 250px;
+            width: 250px;
+        }
+        .thong-ke__item {
+            background: radial-gradient(150.73% 226.72% at -38.48% 56.41%, #253763 0%, #1A2749 23%, #121B34 50%, #0D1328 75%, #0C1124 100%);
+            width: 33.3%;
+            height: 230px;
+            border-radius: 16px;
+        }
+        .thong-ke__item .number{
+            background: linear-gradient(172.37deg, #FBF0D0 4.96%, #FFFAF4 45.9%, #CC9F5F 74.55%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 28px;
         }
     </style>
 @endsection
 @section('content')
-    <div class="col-md-12 col-lg-12" style="margin-top: 3%;">
+    <div class="col-md-12 col-lg-12" style="margin-top: 1%;">
         <div class="card">
             <div class="card-header">
                 <div class="col-md-4">

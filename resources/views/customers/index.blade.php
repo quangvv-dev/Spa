@@ -141,7 +141,7 @@
                             </a>
 
                             <a href="{{ route('customers.create') }}">
-                                <button class="btn btn-primary btn-lg" type="button">Tạo mới</button>
+                                <button class="btn btn-primary btn-lg btn-100" type="button">Tạo mới</button>
                             </a>
                         </div>
                     </div>

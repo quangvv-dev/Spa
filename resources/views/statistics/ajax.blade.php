@@ -8,177 +8,181 @@
         font-weight: 600;
         margin-top: 10px;
     }
+    body {
+        fo
+    }
 </style>
 
+<div class="mt-16 d-flex justify-content-between gap-16">
+    <div style="height: 178px;width: 50%;;background: url('{{asset('layout/images/BG_tong_dai.png')}}') no-repeat; background-size: 100% 178px;">
+        <div class="d-flex justify-content-center align-items-center" style="height: calc(100% - 77px);">
+            <div class="text-center">
+                <div class="fs-18 linear-text">Khách hàng mới</div>
+                <div class="linear-text fs-32">{{@number_format($data['customers'])}}</div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center align-items-center"
+             style="height: 77px;background: url('{{asset('layout/images/test.png')}}') no-repeat; background-size: 100% 76px;background-size: 99.8% 76px;background-position-x: 1px;">
+            <div class="d-flex justify-content-between p-5-c" style="width: 815px;height: 19px;margin-top: 15px">
+                <div class="d-flex gap-16">
+                    <span class="color-dark fs-16">Số điện thoại</span>
+                    <span class="fs-18">{{@number_format($data['customers'])}}</span>
+                </div>
+                <div class="" style="border: 1px solid #005A7F;"></div>
+                <div class="d-flex gap-16">
+                    <span class="color-dark fs-16">Lịch hẹn</span>
+                    <span class="fs-18">{{@number_format($schedules['all_schedules'])}}</span>
+                </div>
+                <div class="" style="border: 1px solid #005A7F;"></div>
+                <div class="d-flex gap-16">
+                    <span class="color-dark fs-16">SL khách đến</span>
+                    <span class="fs-18">{{@number_format($schedules['become'])}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="height: 178px;width: 50%;background: url('{{asset('layout/images/BG_tong_dai.png')}}') no-repeat; background-size: 100% 178px;">
+        <div class="d-flex justify-content-center align-items-center" style="height: calc(100% - 77px);">
+            <div class="text-center">
+                <div class="fs-18 linear-text">Tổng số đơn hàng</div>
+                <div class="linear-text fs-32">{{@number_format($data['orders'] + $wallets['orders'])}}</div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center align-items-center"
+             style="height: 77px;background: url('{{asset('layout/images/test.png')}}') no-repeat; background-size: 100% 76px;background-size: 99.8% 76px;background-position-x: 1px;flex-direction: column;">
+            <div class="d-flex justify-content-around" style="width: 815px;height: 19px;">
+                <div class="d-flex gap-16 justify-content-center" style="width: 50%;">
+                    <span class="color-dark fs-16">Đơn buổi lẻ</span>
+                    <span class="fs-18">{{@number_format($data['order_single'])}}</span>
+                </div>
+                <div class="" style="border: 1px solid #005A7F;"></div>
+                <div class="d-flex gap-16 justify-content-center" style="width: 50%;">
+                    <span class="color-dark fs-16">Đơn liệu trình</span>
+                    <span class="fs-18">{{@number_format($data['order_multiple'])}}</span>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between mt-8" style="width: 815px;height: 19px;">
+                <div class="d-flex justify-content-around" style="width: 50%;">
+                    <div class="d-flex gap-16">
+                        <span class="color-dark fs-16">Sản phẩm</span>
+                        <span class="fs-18">{{@number_format($products['orders'])}}</span>
+                    </div>
+                    <div class="" style="border: 1px solid #005A7F;"></div>
+                    <div class="d-flex gap-16">
+                        <span class="color-dark fs-16">Dịch vụ</span>
+                        <span class="fs-18">{{@number_format($services['orders'])}}</span>
+                    </div>
+                </div>
+                <div class="" style="border: 1px solid #005A7F;"></div>
+
+                <div class="d-flex justify-content-around" style="width: 50%;">
+                    <div class="d-flex gap-16">
+                        <span class="color-dark fs-16">Combo</span>
+                        <span class="fs-18">{{@number_format($data['orders'] - $products['orders'] -$services['orders'])}}</span>
+                    </div>
+                    <div class="" style="border: 1px solid #005A7F;"></div>
+                    <div class="d-flex gap-16">
+                        <span class="color-dark fs-16">Nạp ví</span>
+                        <span class="fs-18">{{@number_format($wallets['orders'])}}</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-24 d-flex justify-content-between gap-16">
+    <div class="thong-ke__item">
+        <div class="top d-flex justify-content-center align-items-center mt-16">
+            <div class="text-center">
+                <div class="linear-text" style="font-size: 17px;">Tổng doanh số</div>
+                <div class="number">{{@number_format($data['all_total'] + $wallets['revenue'])}}</div>
+            </div>
+            <div class="color-red" style="color: #FF0000;">
+                <img src="images/TrendDown.png" alt=""> 12%
+            </div>
+        </div>
+        <div class="p-16">
+            <div class="d-flex justify-content-between">
+                <span class="fs-16">Sản phẩm</span>
+                <div class="fs-16">{{@number_format($products['all_total'])}}</div>
+            </div>
+            <div class="d-flex justify-content-between mt-12">
+                <span class="fs-16">Dịch vụ</span>
+                <div class="fs-16">{{@number_format($services['all_total'])}}</div></div>
+            <div class="d-flex justify-content-between mt-12">
+                <span class="fs-16">Sản phẩm & dịch vụ</span>
+                <div class="fs-16">{{@number_format($services['combo_total'])}}</div>
+            </div>
+            <div class="d-flex justify-content-between mt-12">
+                <span class="fs-16">Nạp ví</span>
+                <div class="fs-16">{{@number_format($wallets['revenue'])}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="thong-ke__item">
+        <div class="top d-flex justify-content-center align-items-center mt-16">
+            <div class="text-center">
+                <div class="linear-text" style="font-size: 17px;">Thực thu</div>
+                <div class="number">{{@number_format($data['payment'] + $wallets['payment'] - $wallets['used'])}}</div>
+            </div>
+            <div class="color-red" style="color: #FF0000;">
+                <img src="images/TrendDown.png" alt=""> 12%
+            </div>
+        </div>
+        <div class="p-16">
+            <div class="d-flex justify-content-between">
+                <span class="fs-16">Doanh thu</span>
+                <div class="fs-16">{{@number_format($data['payment'] - $wallets['used'] - $data['is_debt'])}}</div>
+            </div>
+            <div class="d-flex justify-content-between mt-12">
+                <span class="fs-16">Thu nợ</span>
+                <div class="fs-16">{{number_format($data['is_debt'])}}</div>
+            </div>
+            <div class="d-flex justify-content-between mt-12">
+                <span class="fs-16">Nạp ví</span>
+                <div class="fs-16">{{@number_format($wallets['payment'])}}</div>
+            </div>
+            <div class="d-flex justify-content-between mt-12">
+                <div class="fs-16">Còn nợ</div>
+                <div class="fs-16">{{@number_format($data['all_total']-$data['gross_revenue'])}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="thong-ke__item">
+        <div class="top d-flex justify-content-center align-items-center mt-16">
+            <div class="text-center">
+                <div class="linear-text" style="font-size: 17px;">Nguồn tiền từ đơn hàng</div>
+                <div class="number">{{@number_format($data['payment'])}}</div>
+            </div>
+            <div class="color-red" style="color: #FF0000;">
+                <img src="images/TrendDown.png" alt=""> 12%
+            </div>
+        </div>
+        <div class="p-16">
+            <div class="d-flex justify-content-between">
+                <span class="fs-16">Tiền mặt</span>
+                <div class="fs-16">{{@number_format($list_payment['money'])}}</div>
+            </div>
+            <div class="d-flex justify-content-between mt-12">
+                <span class="fs-16">Chuyển khoản</span>
+                <div class="fs-16">{{@number_format($list_payment['CK'])}}</div>
+            </div>
+            <div class="d-flex justify-content-between mt-12">
+                <span class="fs-16">Thẻ</span>
+                <div class="fs-16">{{@number_format($list_payment['card'])}}</div>
+            </div>
+            <div class="d-flex justify-content-between mt-12">
+                <span class="fs-16">Tiêu từ ví</span>
+                <div class="fs-16">{{@number_format($wallets['used'])}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="h4 text-center">TOÀN HỆ THỐNG</div>
-<div class="row row-cards">
-    <div class="col-md-6 col-xs-12">
-        <div class="card  overflow-hidden bg-gradient-indigo text-white">
-            <div class="card-body text-center">
-                <div class="h5">Khách hàng mới</div>
-                <div class="h3 font-weight-bold mb-4 font-30"><span
-                        class="">{{@number_format($data['customers'])}}</span></div>
-                <div class="row">
-                    <div class="col-md-6 col-xs-12">
-                        &nbsp
-                    </div>
-                    <div class="col-md-6 col-xs-12">
-                        &nbsp
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4 col-xs-12">
-                        SĐT: {{@number_format($data['customers'])}}
-                    </div>
-                    <div class="col-md-4 col-xs-12">
-                        Lịch hẹn: {{@number_format($schedules['all_schedules'])}}
-                    </div>
-                    <div class="col-md-4 col-xs-12">
-                        SL khách đến: {{@number_format($schedules['become'])}}
-                        {{--Tương tác: {{@number_format($data['groupComment'])}}--}}
-                    </div>
-                </div>
-                <div class="progress progress-sm">
-                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-6 col-xs-12">
-        <div class="card overflow-hidden bg-gradient-indigo text-white">
-            <div class="card-body text-center">
-                <div class="h5">Tổng số đơn hàng</div>
-                <div class="h3 font-weight-bold mb-4 font-30"><span
-                        class="">{{@number_format($data['orders'] + $wallets['orders'])}}</span>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-xs-12">
-                        Đơn buổi lẻ: {{@number_format($data['order_single'])}}
-                    </div>
-                    <div class="col-md-6 col-xs-12">
-                        Đơn liệu trình: {{@number_format($data['order_multiple'])}}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3 col-xs-12">
-                        Sản phẩm: {{@number_format($products['orders'])}}
-                    </div>
-                    <div class="col-md-3 col-xs-12">
-                        Dịch vụ: {{@number_format($services['orders'])}}
-                    </div>
-                    <div class="col-md-3 col-xs-12">
-                        Combo: {{@number_format($data['orders'] - $products['orders'] -$services['orders'])}}
-                    </div>
-                    <div class="col-md-3 col-xs-12">
-                        Nạp ví: {{@number_format($wallets['orders'])}}
-                    </div>
-                </div>
-                <div class="progress progress-sm">
-                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row row-cards">
-    <div class="col-md-4 col-xs-12">
-        <div class="card  overflow-hidden bg-gradient-gray text-white">
-            <div class="card-body text-center">
-                <div class="h5">Tổng doanh số</div>
-                <div class="h3 font-weight-bold mb-4 font-30">
-                    <span class="">{{@number_format($data['all_total'] + $wallets['revenue'])}}</span>
-                </div>
-                <div class="col-12 row">
-                    <div class="title col-5">Sản phẩm:</div>
-                    <div class="col-7">{{@number_format($products['all_total'])}}</div>
-                </div>
-                <div class="col-12 row">
-                    <div class="title col-5">Dịch vụ:</div>
-                    <div class="col-7">{{@number_format($services['all_total'])}}</div>
-                </div>
-                <div class="col-12 row">
-                    <div class="title col-5">S.phẩm và Dịch vụ:</div>
-                    <div class="col-7">{{@number_format($services['combo_total'])}}</div>
-                </div>
-                <div class="col-12 row">
-                    <div class="title col-5">Nạp ví:</div>
-                    <div class="col-7">{{@number_format($wallets['revenue'])}}</div>
-                </div>
-                <div class="progress progress-sm">
-                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4 col-xs-12">
-        <div class="card overflow-hidden">
-            <div class="card-body text-center bg-gradient-gray text-white">
-                <div class="h5">Thực thu</div>
-                <div class="h3 font-weight-bold mb-4 font-30">
-                    {{@number_format($data['payment'] + $wallets['payment'] - $wallets['used'])}}</div>
-                <div class="row">
-                    <div class="col-12 row">
-                        <div class="title col-5">Doanh thu:</div>
-                        <div class="col-7">{{@number_format($data['payment'] - $wallets['used'] - $data['is_debt'])}}</div>
-                    </div>
-                    <div class="col-12 row">
-                        <div class="title col-5">Thu nợ:</div>
-                        <div
-                            class="col-7">{{number_format($data['is_debt'])}}</div>
-                    </div>
-                    <div class="col-12 row">
-                        <div class="title col-5">Nạp ví:</div>
-                        <div class="col-7">{{@number_format($wallets['payment'])}}</div>
-                    </div>
-                    <div class="col-12 row">
-                        <div class="title col-5">Còn nợ:</div>
-                        <div class="col-7">{{@number_format($data['all_total']-$data['gross_revenue'])}}</div>
-                    </div>
-                </div>
-                <div class="progress progress-sm">
-                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4 col-xs-12">
-        <div class="card  overflow-hidden">
-            <div class="card-body text-center bg-gradient-gray text-white">
-                <div class="h5">Nguồn tiền từ đơn hàng</div>
-                <div
-                    class="h3 font-weight-bold mb-4 font-30">{{@number_format($data['payment'])}}</div>
-                {{--+ $wallets['payment']--}}
-                <div class="row">
-                    <div class="col-12 row">
-                        <div class="title col-5">Tiền mặt:</div>
-                        <div class="col-7">{{@number_format($list_payment['money'])}}</div>
-                    </div>
-                    <div class="col-12 row">
-                        <div class="title col-5">Thẻ:</div>
-                        <div class="col-7">{{@number_format($list_payment['card'])}}</div>
-                    </div>
-                    <div class="col-12 row">
-                        <div class="title col-5">Chuyển khoản:</div>
-                        <div class="col-7">{{@number_format($list_payment['CK'])}}</div>
-                    </div>
-                    <div class="col-12 row">
-                        <div class="title col-5">Tiêu từ ví:</div>
-                        <div class="col-7">{{@number_format($wallets['used'])}}</div>
-                    </div>
-                </div>
-                <div class="progress progress-sm">
-                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-{{--<div class="h4 text-center">Ví tiền</div>--}}
 
 <div class="row row-cards">
 </div>

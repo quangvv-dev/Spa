@@ -21,7 +21,7 @@
                         <tbody>
                         @forelse($time_status as $key => $item)
                             <tr>
-                                <th class="text-center">{{$key+1}}</th>
+                                <td class="text-center">{{$key+1}}</td>
                                 <td class="text-center">{{@$item->status->name}}</td>
                                 <td class="text-center">
                                     {{--{{$item->expired_time}}--}}

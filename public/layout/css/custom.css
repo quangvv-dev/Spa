@@ -457,6 +457,9 @@ a, th, td, span, button, p, h1, h2, h3, h4, h5 option {
     border: none;
 }
 /*end quang css*/
+.p-5-c {
+    padding: 5px !important;
+}
 .table thead th {
     background-color: #36354A;
 }

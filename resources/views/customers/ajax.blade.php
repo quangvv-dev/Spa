@@ -142,7 +142,7 @@
                             <button class="btn btn-default cancel_other_time">Đóng</button>
                         </div>
                     </div>
-                    <ul class="dropdown-menu pull-right tr">
+                    <ul class="dropdown-customize dropdown-menu pull-right tr" style="left: -100px !important;">
                         <li class="created_at_item bor-bot tc"><a data-time="TODAY" class="btn_choose_time">Hôm
                                 nay</a>
                         </li>
