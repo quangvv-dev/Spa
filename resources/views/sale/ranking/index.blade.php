@@ -115,6 +115,9 @@
             background-position-y: bottom !important;
             background-repeat: no-repeat !important;
         }
+        .color-rank{
+            color: #EEAC00;
+        }
         /* .rank .top1 .header1 */
     </style>
         <!-- card actions section start -->
@@ -144,7 +147,7 @@
                 </div>
             </form>
             <div class="card-content collapse show">
-                <div class="card-body" id="registration-form">
+                <div id="registration-form">
                     @include('sale.ranking.ajax')
                 </div>
             </div>
@@ -155,7 +158,4 @@
     <script src="{{asset('js/dateranger-config.js')}}"></script>
 @endsection
 @section('_script')
-    <script>
-
-    </script>
 @endsection

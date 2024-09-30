@@ -171,13 +171,16 @@ class SalesController extends Controller
             ->where('active', StatusCode::ON)
             ->when(!empty($members), function ($q) use ($members) {
                 $q->whereIn('id', $members);
-            })->get()
+            })->select('id', 'full_name','avatar')
+            ->get()
             ->map(function ($item) use ($params) {
                 $params['telesales'] = $item->id;
-                $detail = PaymentHistory::search($params, 'price');//đã thu trong kỳ
-                $item->gross_revenue = $detail->whereHas('order', function ($qr) use ($params) {
-                    $qr->where('is_upsale', OrderConstant::NON_UPSALE);
-                })->sum('price');
+                $detail = PaymentHistory::search($params, 'price')
+                    ->whereHas('order', function ($qr) use ($params) {
+                        $qr->where('is_upsale', OrderConstant::NON_UPSALE);
+                    });//đã thu trong kỳ
+                $item->gross_revenue = $detail->sum('price');
+                $item->orders = $detail->groupBy('order_id')->count();
                 return $item;
             })->sortByDesc('gross_revenue')->toArray();
 

@@ -33,7 +33,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">ALBUMS</h3></br>
+                <h3 class="card-title linear-text">ALBUMS</h3></br>
             </div>
 
             <div id="registration-form">

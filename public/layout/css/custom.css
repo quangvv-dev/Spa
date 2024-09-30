@@ -587,6 +587,10 @@ a, th, td, span, button, p, h1, h2, h3, h4, h5 option {
     height: 48px;
 }
 
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background: #131313 !important;
+}
+
 .btn {
     border-radius: 8px;
     min-width: unset;
