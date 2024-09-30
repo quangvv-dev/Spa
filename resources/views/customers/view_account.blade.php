@@ -268,13 +268,18 @@
             border-bottom:1px solid #2e2e2e;
         }
         .content__right .content__right__body{
-            height: 490px;
+            height: 625px;
             overflow-y: auto;
         }
         .content__right .content__right__body .item{
             padding: 24px;
             border-bottom:1px solid #2e2e2e;
+            position: relative;
         }
+        .last-item {
+            margin-bottom: 117px;
+        }
+
         .content__right .content__right__body .item .time{
             border-left: 1px solid;
             padding-left: 8px;
@@ -307,6 +312,34 @@
         }
         .content__right .content__right__footer .send img:first-child{
             margin-right: 16px;
+        }
+        .chat-tag-icon {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 4px;
+        }
+        .ant-avatar {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+            font-variant: tabular-nums;
+            line-height: 1.5715;
+            list-style: none;
+            font-feature-settings: "tnum", "tnum";
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            color: #fff;
+            white-space: nowrap;
+            text-align: center;
+            vertical-align: middle;
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            border-radius: 50%;
+            background-color: rgb(150, 217, 201);
         }
     </style>
     @php
@@ -604,209 +637,296 @@
                         </div>
                     </div>
                 </div>
-                <div class="content__right">
-                    <div class="col-md-12 no-padd spanfull2 padding" style="float: left;">
-                        <div class="">
-                            <div class="panel panel-primary">
-                                @if(count($customer->historyStatus))
-                                    <div class="tab-menu-heading" style="padding: 3px">
-                                        @include('customers._include.container_arrow')
-                                    </div>
-                                @endif
-                                <div class="panel-body tabs-menu-body">
-                                    <div class="tab-content" style="font-size: 15px;">
-                                        <div class="tab-pane active " id="tab5">
-                                            <div class="col-md-12 col-lg-12">
-                                                <div class="card">
-                                                    <div class="card-header">
-                                                        <h3 class="card-title linear-text fs-24">{{$title}}</h3>
-                                                        <div class="col" style="float: right">
-                                                        </div>
-                                                    </div>
-                                                    {!! Form::open(array('url' => url('group_comments/'.request()->segment(count(request()->segments())) ), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
-                                                    <div class="col-md-12 form-group required">
-                                                        {!! Form::textArea('messages', null, array('class' => 'form-control', 'rows' => 3)) !!}
-                                                    </div>
-                                                    <br>
-                                                    <div class="col-xs-12 col-md-12">
-                                                        <div class="form-group required">
-                                                            <div class="fileupload fileupload-new"
-                                                                 data-provides="fileupload">
-                                                                <div
-                                                                    class="fileupload-preview fileupload-exists thumbnail"
-                                                                    style="max-width: 150px">
 
-                                                                </div>
-                                                                <div>
-                                                                    <button type="button"
-                                                                            class="btn btn-default btn-file">
-                                                                        <span class="fileupload-new"><i
-                                                                                class="fa fa-paper-clip"></i> Chọn ảnh</span>
-                                                                        <span class="fileupload-exists"><i
-                                                                                class="fa fa-undo"></i> Thay đổi</span>
-                                                                        <input type="file" name="image_contact"
-                                                                               accept="image/*"
-                                                                               class="btn-default upload"/>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <button style="float: right" type="submit"
-                                                                class="btn btn-success">Gửi
-                                                        </button>
-                                                    </div>
-                                                    {{ Form::close() }}
-
-                                                    <div id="registration-form">
-                                                        @include('group_comment.ajax')
-                                                    </div>
-                                                    <!-- table-responsive -->
-                                                </div>
-
-
-
-
-                                                {{--<div class="content__right">--}}
-                                                    {{--<div class="content__right__header font-sopher">--}}
-                                                        {{--Trao đổi--}}
+                 {{---------- Trao đổi--------}}
+                <div class="no-padd spanfull2 padding" style="width: calc(100% - 232px)">
+                    <div class="">
+                        <div class="panel panel-primary">
+                            @if(count($customer->historyStatus))
+                                <div class="tab-menu-heading" style="padding: 3px">
+                                    @include('customers._include.container_arrow')
+                                </div>
+                            @endif
+                            <div class="panel-body tabs-menu-body">
+                                <div class="tab-content" style="font-size: 15px;">
+                                    <div class="tab-pane active " id="tab5">
+                                        <div class="col-md-12 col-lg-12">
+                                            {{--<div class="card">--}}
+                                                {{--<div class="card-header">--}}
+                                                    {{--<h3 class="card-title linear-text fs-24">{{$title}}</h3>--}}
+                                                    {{--<div class="col" style="float: right">--}}
                                                     {{--</div>--}}
-                                                    {{--<div class="content__right__body">--}}
-                                                        {{--<div class="item">--}}
-                                                            {{--<div class="d-flex align-items-center gap-8">--}}
-                                                                {{--<img src="images/Ava.png" width="40" height="40" alt="">--}}
-                                                                {{--<div>--}}
-                                                                    {{--<div class="fs-16">Lương Bảo Ngọc</div>--}}
-                                                                {{--</div>--}}
-                                                                {{--<div class="color-dark time font-svn-small">09:16 09/12/2023</div>--}}
+                                                {{--</div>--}}
+                                                {{--{!! Form::open(array('url' => url('group_comments/'.request()->segment(count(request()->segments())) ), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}--}}
+                                                {{--<div class="col-md-12 form-group required">--}}
+                                                    {{--{!! Form::textArea('messages', null, array('class' => 'form-control', 'rows' => 3)) !!}--}}
+                                                {{--</div>--}}
+                                                {{--<br>--}}
+                                                {{--<div class="col-xs-12 col-md-12">--}}
+                                                    {{--<div class="form-group required">--}}
+                                                        {{--<div class="fileupload fileupload-new"--}}
+                                                             {{--data-provides="fileupload">--}}
+                                                            {{--<div--}}
+                                                                    {{--class="fileupload-preview fileupload-exists thumbnail"--}}
+                                                                    {{--style="max-width: 150px">--}}
+
                                                             {{--</div>--}}
-                                                            {{--<div class="mt-8 fs-16" style="padding-left: 48px;">--}}
-                                                                {{--đắt quá c k làm, c làm cũng đc, rẻ thì c làm chứ đắt quá c cũng trả cần thiết đắt quá c k làm--}}
+                                                            {{--<div>--}}
+                                                                {{--<button type="button"--}}
+                                                                        {{--class="btn btn-default btn-file">--}}
+                                                                        {{--<span class="fileupload-new"><i--}}
+                                                                                    {{--class="fa fa-paper-clip"></i> Chọn ảnh</span>--}}
+                                                                    {{--<span class="fileupload-exists"><i--}}
+                                                                                {{--class="fa fa-undo"></i> Thay đổi</span>--}}
+                                                                    {{--<input type="file" name="image_contact"--}}
+                                                                           {{--accept="image/*"--}}
+                                                                           {{--class="btn-default upload"/>--}}
+                                                                {{--</button>--}}
                                                             {{--</div>--}}
-                                                        {{--</div>--}}
-                                                        {{--<div class="item high-light">--}}
-                                                            {{--<div class="d-flex align-items-center gap-8">--}}
-                                                                {{--<img src="images/Ava.png" width="40" height="40" alt="">--}}
-                                                                {{--<div>--}}
-                                                                    {{--<div class="fs-16">Trang Hoàng</div>--}}
-                                                                    {{--<div class="fs-12 color-dark font-svn-small">Leader Telesale Dr Tiến</div>--}}
-                                                                {{--</div>--}}
-                                                                {{--<div class="color-dark font-svn-small time">09:16 09/12/2023</div>--}}
-                                                            {{--</div>--}}
-                                                            {{--<div class="mt-8 fs-16" style="padding-left: 48px;">--}}
-                                                                {{--đắt quá c k làm đắt quá c k làm, c làm cũng đc, rẻ thì c làm chứ đắt quá c cũng trả cần thiết--}}
-                                                            {{--</div>--}}
-                                                        {{--</div>--}}
-                                                        {{--<div class="item">--}}
-                                                            {{--<div class="d-flex align-items-center gap-8">--}}
-                                                                {{--<img src="images/Ava.png" width="40" height="40" alt="">--}}
-                                                                {{--<div>--}}
-                                                                    {{--<div class="fs-16">Trang Hoàng</div>--}}
-                                                                    {{--<div class="fs-12 color-dark font-svn-small">Leader Telesale Dr Tiến</div>--}}
-                                                                {{--</div>--}}
-                                                                {{--<div class="color-dark font-svn-small time">09:16 09/12/2023</div>--}}
-                                                            {{--</div>--}}
-                                                            {{--<div class="mt-8 fs-16" style="padding-left: 48px;">--}}
-                                                                {{--đắt quá c k làm đắt quá c k làm, c làm cũng đc, rẻ thì c làm chứ đắt quá c cũng trả cần thiết--}}
-                                                            {{--</div>--}}
-                                                        {{--</div>--}}
-                                                    {{--</div>--}}
-                                                    {{--<div class="content__right__footer p-24">--}}
-                                                        {{--<input type="text" placeholder="Nhập tin nhắn.....">--}}
-                                                        {{--<div class="send">--}}
-                                                            {{--<img src="images/Image_3.png" class="pointer" alt="">--}}
-                                                            {{--<img src="images/Send.png" class="pointer" alt="">--}}
                                                         {{--</div>--}}
                                                     {{--</div>--}}
                                                 {{--</div>--}}
+                                                {{--<div class="col-md-12">--}}
+                                                    {{--<button style="float: right" type="submit"--}}
+                                                            {{--class="btn btn-success">Gửi--}}
+                                                    {{--</button>--}}
+                                                {{--</div>--}}
+                                                {{--{{ Form::close() }}--}}
+
+                                                {{--<div id="registration-form">--}}
+                                                    {{--@include('group_comment.ajax')--}}
+                                                {{--</div>--}}
+                                                {{--<!-- table-responsive -->--}}
+                                            {{--</div>--}}
 
 
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane " id="tab6">
-                                            <div class="card-header row">
-                                                <div class="col-md-8" style="display: flex">
-                                                    <div class="button">
-                                                        <a href="javascript:void(0)" data-value=""
-                                                           class="type-order btn btn-warning">Tất cả</a>
-                                                        <a href="javascript:void(0)" data-value="1"
-                                                           class="type-order btn btn-success">Dịch vụ</a>
-                                                        <a href="javascript:void(0)" data-value="2"
-                                                           class="type-order btn btn-danger">Sản phẩm</a>
-                                                        <a href="javascript:void(0)" data-value="3"
-                                                           class="type-order btn btn-info">S.phẩm & D.vụ</a>
+                                            <div class="content__right">
+                                                <div class="content__right__header font-sopher">
+                                                    Trao đổi
+                                                </div>
+                                                <div class="content__right__body" id="registration-form">
+                                                    @include('group_comment.ajax')
+                                                    {{--<div class="item">--}}
+                                                        {{--<div class="d-flex align-items-center gap-8">--}}
+                                                            {{--<img src="{{asset('layout/images/Ava.png')}}" width="40" height="40" alt="">--}}
+                                                            {{--<div>--}}
+                                                                {{--<div class="fs-16">Lương Bảo Ngọc</div>--}}
+                                                            {{--</div>--}}
+                                                            {{--<div class="color-dark time font-svn-small">09:16--}}
+                                                                {{--09/12/2023--}}
+                                                            {{--</div>--}}
+                                                        {{--</div>--}}
+                                                        {{--<div class="mt-8 fs-16" style="padding-left: 48px;">--}}
+                                                            {{--đắt quá c k làm, c làm cũng đc, rẻ thì c làm chứ đắt quá c--}}
+                                                            {{--cũng trả cần thiết đắt quá c k làm--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                    {{--<div class="item high-light">--}}
+                                                        {{--<div class="d-flex align-items-center gap-8">--}}
+                                                            {{--<img src="{{asset('layout/images/Ava.png')}}" width="40" height="40" alt="">--}}
+                                                            {{--<div>--}}
+                                                                {{--<div class="fs-16">Trang Hoàng</div>--}}
+                                                                {{--<div class="fs-12 color-dark font-svn-small">Leader--}}
+                                                                    {{--Telesale Dr Tiến--}}
+                                                                {{--</div>--}}
+                                                            {{--</div>--}}
+                                                            {{--<div class="color-dark font-svn-small time">09:16--}}
+                                                                {{--09/12/2023--}}
+                                                            {{--</div>--}}
+                                                        {{--</div>--}}
+                                                        {{--<div class="mt-8 fs-16" style="padding-left: 48px;">--}}
+                                                            {{--đắt quá c k làm đắt quá c k làm, c làm cũng đc, rẻ thì c làm--}}
+                                                            {{--chứ đắt quá c cũng trả cần thiết--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                    {{--<div class="item">--}}
+                                                        {{--<div class="d-flex align-items-center gap-8">--}}
+                                                            {{--<img src="{{asset('layout/images/Ava.png')}}" width="40" height="40" alt="">--}}
+                                                            {{--<div>--}}
+                                                                {{--<div class="fs-16">Trang Hoàng</div>--}}
+                                                                {{--<div class="fs-12 color-dark font-svn-small">Leader--}}
+                                                                    {{--Telesale Dr Tiến--}}
+                                                                {{--</div>--}}
+                                                            {{--</div>--}}
+                                                            {{--<div class="color-dark font-svn-small time">09:16--}}
+                                                                {{--09/12/2023--}}
+                                                            {{--</div>--}}
+                                                        {{--</div>--}}
+                                                        {{--<div class="mt-8 fs-16" style="padding-left: 48px;">--}}
+                                                            {{--đắt quá c k làm đắt quá c k làm, c làm cũng đc, rẻ thì c làm--}}
+                                                            {{--chứ đắt quá c cũng trả cần thiết--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                    {{--<div class="item">--}}
+                                                        {{--<div class="d-flex align-items-center gap-8">--}}
+                                                            {{--<img src="{{asset('layout/images/Ava.png')}}" width="40" height="40" alt="">--}}
+                                                            {{--<div>--}}
+                                                                {{--<div class="fs-16">Lương Bảo Ngọc</div>--}}
+                                                            {{--</div>--}}
+                                                            {{--<div class="color-dark time font-svn-small">09:16--}}
+                                                                {{--09/12/2023--}}
+                                                            {{--</div>--}}
+                                                        {{--</div>--}}
+                                                        {{--<div class="mt-8 fs-16" style="padding-left: 48px;">--}}
+                                                            {{--đắt quá c k làm, c làm cũng đc, rẻ thì c làm chứ đắt quá c--}}
+                                                            {{--cũng trả cần thiết đắt quá c k làm--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                    {{--<div class="item high-light">--}}
+                                                        {{--<div class="d-flex align-items-center gap-8">--}}
+                                                            {{--<img src="{{asset('layout/images/Ava.png')}}" width="40" height="40" alt="">--}}
+                                                            {{--<div>--}}
+                                                                {{--<div class="fs-16">Trang Hoàng</div>--}}
+                                                                {{--<div class="fs-12 color-dark font-svn-small">Leader--}}
+                                                                    {{--Telesale Dr Tiến--}}
+                                                                {{--</div>--}}
+                                                            {{--</div>--}}
+                                                            {{--<div class="color-dark font-svn-small time">09:16--}}
+                                                                {{--09/12/2023--}}
+                                                            {{--</div>--}}
+                                                        {{--</div>--}}
+                                                        {{--<div class="mt-8 fs-16" style="padding-left: 48px;">--}}
+                                                            {{--đắt quá c k làm đắt quá c k làm, c làm cũng đc, rẻ thì c làm--}}
+                                                            {{--chứ đắt quá c cũng trả cần thiết--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                    {{--<div class="item">--}}
+                                                        {{--<div class="d-flex align-items-center gap-8">--}}
+                                                            {{--<img src="{{asset('layout/images/Ava.png')}}" width="40" height="40" alt="">--}}
+                                                            {{--<div>--}}
+                                                                {{--<div class="fs-16">Trang Hoàng</div>--}}
+                                                                {{--<div class="fs-12 color-dark font-svn-small">Leader--}}
+                                                                    {{--Telesale Dr Tiến--}}
+                                                                {{--</div>--}}
+                                                            {{--</div>--}}
+                                                            {{--<div class="color-dark font-svn-small time">09:16--}}
+                                                                {{--09/12/2023--}}
+                                                            {{--</div>--}}
+                                                        {{--</div>--}}
+                                                        {{--<div class="mt-8 fs-16" style="padding-left: 48px;">--}}
+                                                            {{--đắt quá c k làm đắt quá c k làm, c làm cũng đc, rẻ thì c làm--}}
+                                                            {{--chứ đắt quá c cũng trả cần thiết--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                </div>
+                                                <div class="content__right__footer p-24">
+                                                    {!! Form::open(array('url' => url('group_comments/'.request()->segment(count(request()->segments())) ), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
+                                                    <input type="text" name="messages" placeholder="Nhập tin nhắn.....">
+                                                    <img id="blah" src="#" class="d-none" width="42" height="42" style="position: absolute; top: 38px; right: 115px;object-fit: cover;"/>
+
+                                                    <div class="send">
+                                                        <input type="file" style="display: none;" id="imgInp" name="image_contact" class="file">
+                                                        <img src="{{asset('layout/images/Image_3.png')}}" class="pointer upload-file" alt="">
+                                                        <img src="{{asset('layout/images/Send.png')}}" class="pointer" alt="" type="submit">
                                                     </div>
-                                                    <input type="hidden" id="order_value">
-                                                    <div class="select" style="margin-left: 4px">
-                                                        {!! Form::select('the_rest', $the_rest, null, array('class' => 'form-control','id'=>'the_rest','placeholder'=>'Tất cả đơn')) !!}
-                                                    </div>
+                                                    {{ Form::close() }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    <div class="tab-pane " id="tab6">
+                                        <div class="card-header row">
+                                            <div class="col-md-8" style="display: flex">
+                                                <div class="button">
+                                                    <a href="javascript:void(0)" data-value=""
+                                                       class="type-order btn btn-warning">Tất cả</a>
+                                                    <a href="javascript:void(0)" data-value="1"
+                                                       class="type-order btn btn-success">Dịch vụ</a>
+                                                    <a href="javascript:void(0)" data-value="2"
+                                                       class="type-order btn btn-danger">Sản phẩm</a>
+                                                    <a href="javascript:void(0)" data-value="3"
+                                                       class="type-order btn btn-info">S.phẩm & D.vụ</a>
                                                 </div>
-                                                <div class="col relative">
-                                                    @if($roleGlobal->permission('order.add'))
-                                                        <a class="right btn btn-primary text-white"
-                                                           data-toggle="modal"
-                                                           data-target="#roleTypeModal">Tạo mới</a>
-                                                    @endif
+                                                <input type="hidden" id="order_value">
+                                                <div class="select" style="margin-left: 4px">
+                                                    {!! Form::select('the_rest', $the_rest, null, array('class' => 'form-control','id'=>'the_rest','placeholder'=>'Tất cả đơn')) !!}
                                                 </div>
-                                                @include('order.role_type_modal')
 
                                             </div>
-                                            <div id="order_customer">
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane" id="tab7">
-                                            @include('schedules.index')
-                                        </div>
-                                        <div class="tab-pane" id="tab8">
-                                            <div class="card-header row">
-                                                <div class="col">
-                                                    {{--@if($roleGlobal->permission('tasks.index'))--}}
-                                                        <a class="right btn btn-primary text-white"
-                                                           data-toggle="modal"
-                                                           data-target="#modalTask" id="createTask">Tạo mới</a>
-                                                    {{--@endif--}}
-                                                </div>
-                                            </div>
-                                            <div class="col index-task"></div>
-                                            @include('tasks.modal')
-                                        </div>
-                                        {{--    Modal thêm --}}
-                                        @include('schedules.modal')
-                                        {{--    END Modal thêm --}}
-                                        <div class="tab-pane " id="tab10">
-                                            @if(count($wallet))
-                                                @include('wallet.history')
-                                            @endif
-                                        </div>
-                                        <div class="tab-pane" id="tab9">
-                                            <div id="content_tab9">
-                                                @if(count($history))
-                                                    @include('sms.history')
+                                            <div class="col relative">
+                                                @if($roleGlobal->permission('order.add'))
+                                                    <a class="right btn btn-primary text-white"
+                                                       data-toggle="modal"
+                                                       data-target="#roleTypeModal">Tạo mới</a>
                                                 @endif
                                             </div>
-                                        @include('customers.modal-sendSMS')
+                                            @include('order.role_type_modal')
+
                                         </div>
-                                        <div class="tab-pane " id="tab11">
-                                            @if(count($customer_post))
-                                                @include('post.history')
+                                        <div id="order_customer">
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="tab7">
+                                        @include('schedules.index')
+                                    </div>
+                                    <div class="tab-pane" id="tab8">
+                                        <div class="card-header row">
+                                            <div class="col">
+                                                {{--@if($roleGlobal->permission('tasks.index'))--}}
+                                                <a class="right btn btn-primary text-white"
+                                                   data-toggle="modal"
+                                                   data-target="#modalTask" id="createTask">Tạo mới</a>
+                                                {{--@endif--}}
+                                            </div>
+                                        </div>
+                                        <div class="col index-task"></div>
+                                        @include('tasks.modal')
+                                    </div>
+                                    {{--    Modal thêm --}}
+                                    @include('schedules.modal')
+                                    {{--    END Modal thêm --}}
+                                    <div class="tab-pane " id="tab10">
+                                        @if(count($wallet))
+                                            @include('wallet.history')
+                                        @endif
+                                    </div>
+                                    <div class="tab-pane" id="tab9">
+                                        <div id="content_tab9">
+                                            @if(count($history))
+                                                @include('sms.history')
                                             @endif
                                         </div>
-                                        <div class="tab-pane " id="tab12">
-                                            @include('call_center.customer')
-                                        </div>
-                                        <div class="tab-pane" id="tab13">
-                                            @include('albums.index')
-                                        </div>
-                                        <div class="tab-pane" id="tabGift">
-                                            @include('gifts.ajax')
-                                        </div>
-                                        <div class="tab-pane" id="tab14">
-                                            @include('customers._include.contact')
-                                        </div>
-
+                                        @include('customers.modal-sendSMS')
                                     </div>
+                                    <div class="tab-pane " id="tab11">
+                                        @if(count($customer_post))
+                                            @include('post.history')
+                                        @endif
+                                    </div>
+                                    <div class="tab-pane " id="tab12">
+                                        @include('call_center.customer')
+                                    </div>
+                                    <div class="tab-pane" id="tab13">
+                                        @include('albums.index')
+                                    </div>
+                                    <div class="tab-pane" id="tabGift">
+                                        @include('gifts.ajax')
+                                    </div>
+                                    <div class="tab-pane" id="tab14">
+                                        @include('customers._include.contact')
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -1447,6 +1567,19 @@
                 width:65
             });
         });
+    </script>
+    <script>
+        $(document).on("click", ".upload-file", function () {
+            $(".file").click();
+        });
+
+        imgInp.onchange = evt => {
+            const [file] = imgInp.files
+            if (file) {
+                blah.src = URL.createObjectURL(file);
+                $("#blah").removeClass("d-none");
+            }
+        }
     </script>
     {{--@include('message_fb.js_chat_app')--}}
 @endsection
