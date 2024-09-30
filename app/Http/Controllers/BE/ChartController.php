@@ -30,6 +30,10 @@ class ChartController extends Controller
 
         $input = $request->all();
         $result = [];
+        $branchs = [];
+        $all_totals = [];
+        $gross_revenues = [];
+        $payments = [];
         foreach ($branch as $item) {
             $input['branch_id'] = $item->id;
             $payment = PaymentHistory::search($input, 'price');
@@ -52,20 +56,32 @@ class ChartController extends Controller
                 'revenue' => $wallet->sum('order_price'),
                 'used' => $data['payment'] - $list_payment['money'] - $list_payment['card'] - $list_payment['CK'],
             ];
-            $result[] = [
-                'branch' => $item->name,
-                'all_total' => $data['all_total'] + $wallets['revenue'],
-                'gross_revenue' => $data['gross_revenue'],
-                'payment' => $data['payment'] + $wallets['revenue'] - $wallets['used'],
-            ];
-            usort($result, function ($a, $b) {
-                return $b['payment'] <=> $a['payment'];
-            });
+            $branchs[] = $item->name;
+            $all_totals[] = $data['all_total'] + $wallets['revenue'];
+            $gross_revenues[] = $data['gross_revenue'];
+            $payments[] = $data['payment'] + $wallets['revenue'] - $wallets['used'];
+//            $result[] = [
+//                'branch' => $item->name,
+//                'all_total' => $data['all_total'] + $wallets['revenue'],
+//                'gross_revenue' => $data['gross_revenue'],
+//                'payment' => $data['payment'] + $wallets['revenue'] - $wallets['used'],
+//            ];
+//            usort($result, function ($a, $b) {
+//                return $b['payment'] <=> $a['payment'];
+//            });
         }
+        $branchs = array_map(function($item) {
+            return "'$item'";
+        }, $branchs);
+
+        $branchs = implode(',', $branchs);
+        $all_totals = count($all_totals)? implode(", ", $all_totals) : 0;
+        $gross_revenues = count($gross_revenues)? implode(", ", $gross_revenues): 0;
+        $payments = count($payments)? implode(", ", $payments) : 0;
         if ($request->ajax()) {
-            return view('chart_revenue.ajax', compact('result'));
+            return view('chart_revenue.ajax', compact('branchs', 'all_totals', 'gross_revenues', 'payments'));
         }
 
-        return view('chart_revenue.index', compact('title', 'result'));
+        return view('chart_revenue.index', compact('title', 'branchs', 'all_totals', 'gross_revenues', 'payments'));
     }
 }

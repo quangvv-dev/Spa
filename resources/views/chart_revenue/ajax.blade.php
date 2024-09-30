@@ -1,56 +1,86 @@
-<div class="row row-cards">
-    <div class="col-md-12">
-        <div id="barchart" style="overflow-x: scroll;overflow-y: hidden;margin-left: 15px"></div>
+<div class="container mt-24">
+    <div class="mt-24">
+        <canvas id="myChart"></canvas>
+        <input type="hidden" id="branch" value="{{$branchs}}">
     </div>
 </div>
 
-<script type="text/javascript" src="{{asset('js/loader.js')}}"></script>
-{{--Barchart--}}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    google.charts.load('current', {callback: drawBasic, packages: ['corechart']});
-    var heights = {{count($result)*70}}
-    function drawBasic() {
-        var data = google.visualization.arrayToDataTable([
-                @if(count($result))
-            ['Năm', 'Doanh số', {role: 'annotation'}, 'Doanh thu', {role: 'annotation'}, 'Đã thu trong kỳ', {role: 'annotation'}],
-                @foreach($result as $k =>$item1)
-            ['{{$item1['branch']}}',{{$item1['all_total']}}, '{{number_format($item1['all_total'])}}',{{$item1['gross_revenue']}}, '{{number_format($item1['gross_revenue'])}}',{{$item1['payment']}} , '{{number_format($item1['payment'])}}'],
-                @endforeach
-                @else
-            ['Năm', 0, '#fffff', '0%'],
-            @endif
-
-        ]);
-
-        var options = {
-            title: 'THỐNG KÊ NGUỒN THU TOÀN HỆ THỐNG (VNĐ)',
-            height: heights,
-            width: '100%',
-            titleFontSize: 13,
-            chartArea: {
-                height: '100%',
-                left: 150,
-                top: 70,
-            },
-            vAxis: {
-                textStyle: {
-                    bold: true,
+    let arr = $('#branch').val();
+    let newArr = arr.replace(/&#039;/g,'"');
+    console.log(newArr)
+    const ctx = document.getElementById('myChart');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["CN - Quận 10","CN - Tân Bình"],
+            datasets: [
+                {
+                    label: 'Doanh số',
+                    data: [{{$all_totals}}],
+                    backgroundColor: '#C4F2FF',
+                    // borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
+                    barThickness: 30 // Height of the bars
                 },
-            },
-            annotations: {
-                highContrast: false,
-                textStyle: {
-                    color: '#000000',
-                    fontSize: 11,
-                    bold: true
+                {
+                    label: 'Doanh thu',
+                    data: [{{$gross_revenues}}],
+                    backgroundColor: '#3BDBFF',
+                    // borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    barThickness: 30 // Height of the bars
+                },
+                {
+                    label: 'Đã thu trong kỳ',
+                    data: [{{$payments}}],
+                    backgroundColor: '#00AEFF',
+                    // borderColor: 'rgba(255, 206, 86, 1)',
+                    borderWidth: 1,
+                    barThickness: 30 // Height of the bars
+                }
+            ]
+        },
+
+        options: {
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: 'white' // Thay đổi màu của label ở đây
+                    }
                 }
             },
-        };
-
-        var chart = new google.visualization.BarChart(document.getElementById('barchart'));
-        chart.draw(data, options);
-    };
-    // column chart
+            scales: {
+                x: {
+                    ticks: {
+                        color: 'white' // Thay đổi màu của label trục x
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: 'white' // Thay đổi màu của label trục x
+                    }
+                }
+            },
+            layout: {
+                padding: {
+                    top: 0,   // Adjust top margin
+                    bottom: 100 // Adjust bottom margin
+                }
+            },
+            elements: {
+                bar: {
+                    borderWidth: 2,
+                }
+            },
+            barPercentage: 0.9, // Giảm độ rộng của thanh để gần nhau hơn
+            categoryPercentage: 0.9, // Tăng khoảng cách giữa các thanh
+            // indexAxis: 'y',
+        }
+    });
 </script>
 {{--end barchart--}}
 
