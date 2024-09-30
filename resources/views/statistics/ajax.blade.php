@@ -188,20 +188,6 @@
     </div>
 </div>
 
-{{--<div class="h4 text-center">TOÀN HỆ THỐNG</div>--}}
-
-{{--<div class="d-flex justify-content-around mt-24">--}}
-{{--    <div class="">--}}
-{{--        <canvas id="myChart1"></canvas>--}}
-{{--    </div>--}}
-{{--    <div class="">--}}
-{{--        <canvas id="myChart2"></canvas>--}}
-{{--    </div>--}}
-{{--    <div class="">--}}
-{{--        <canvas id="myChart3"></canvas>--}}
-{{--    </div>--}}
-{{--</div>--}}
-
 <div class="d-none col-xs-none d-md-block">
     <div class="h4 text-center">BIỂU ĐỒ</div>
 
@@ -255,9 +241,9 @@
         ]);
 
         var options = {
-            title: 'DOANH THU THEO NGUỒN',
+            title: 'NGUỒN DOANH THU',
             width: '500',
-            pieHole: 0.4,
+            pieHole: 0.5,
             height: 300,
             // hAxis: {
             //     width: 200
@@ -299,7 +285,7 @@
             title: 'TOP 5 SẢN PHẨM BÁN CHẠY NHẤT',
             width: 500,
             height: 300,
-            pieHole: 0.4,
+            pieHole: 0.5,
             colors: ['#3BDBFF', '#005A7F', '#00AEFF', '#00688B','#87CEEB','#87CEFF','#7EC0EE','#6CA6CD'],
             backgroundColor: 'transparent',
             titleTextStyle: {
@@ -332,10 +318,10 @@
         ]);
 
         var options = {
-            title: 'DOANH THU THEO LOẠI ĐƠN',
+            title: 'DOANH THU THEO ĐƠN',
             width: 500,
             height: 300,
-            pieHole: 0.4,
+            pieHole: 0.5,
             colors: ['#3BDBFF', '#005A7F', '#00AEFF', '#00688B','#87CEEB','#87CEFF','#7EC0EE','#6CA6CD'],
             backgroundColor: 'transparent',
             titleTextStyle: {
@@ -368,12 +354,17 @@
             @endforeach
             @endif
         ]);
+        data.sort([{ column: 1, desc: true }]);
+
+        // Select only the top 10 values
+        var topValues = new google.visualization.DataView(data);
+        topValues.setColumns([0, 1], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
         var options = {
-            title: 'DOANH SỐ 5 NHÀ CUNG CẤP BÁN CHẠY NHẤT',
+            title: 'DOANH SỐ TOP 5 NHÀ CUNG CẤP',
             width: 500,
             height: 300,
-            pieHole: 0.4,
+            pieHole: 0.5,
             colors: ['#3BDBFF', '#005A7F', '#00AEFF', '#00688B','#87CEEB','#87CEFF','#7EC0EE','#6CA6CD'],
             backgroundColor: 'transparent',
             titleTextStyle: {
@@ -406,12 +397,13 @@
             @endforeach
             @endif
         ]);
-
+        var topValues = new google.visualization.DataView(data);
+        topValues.setColumns([0, 1], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
         var options = {
             title: 'DOANH THU THEO GIỚI TÍNH',
             width: 500,
             height: 300,
-            pieHole: 0.4,
+            pieHole: 0.5,
             colors: ['#3BDBFF', '#005A7F', '#00AEFF', '#00688B','#87CEEB','#87CEFF','#7EC0EE','#6CA6CD'],
             backgroundColor: 'transparent',
             titleTextStyle: {
@@ -441,12 +433,13 @@
             ['Khách hàng mới', {{$revenue['revenueNew']}}],
             ['Khách hàng cũ', {{$revenue['revenueOld']}}],
         ]);
-
+        var topValues = new google.visualization.DataView(data);
+        topValues.setColumns([0, 1], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
         var options = {
             title: 'THỰC THU THEO LOẠI KHÁCH HÀNG',
             width: 500,
             height: 300,
-            pieHole: 0.4,
+            pieHole: 0.5,
             colors: ['#3BDBFF', '#005A7F', '#00AEFF', '#00688B','#87CEEB','#87CEFF','#7EC0EE','#6CA6CD'],
             backgroundColor: 'transparent',
             titleTextStyle: {
