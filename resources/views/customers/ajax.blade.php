@@ -60,7 +60,8 @@
     <div class="d-flex gap-24 menu">
         <div class="squares-four pointer account_relation status active">
             <img src="{{asset('layout/images/SquaresFour_active.png')}}" alt="">
-            <span class="text-white">Tất cả  ({{$statuses->sum('customers_count')}})</span>
+            <span class="text-white" style="white-space: nowrap">Tất cả</span>
+{{--            <span class="text-white fs-12">({{$statuses->sum('customers_count')}})</span>--}}
             <div class="active-border"></div>
         </div>
     </div>
@@ -123,11 +124,8 @@
                     {{--class="far fa-clock" style="font-size:22px"></i>--}}
 
                     <img src="{{asset('layout/images/Time_active.png')}}" alt="" class="dropdown-toggle pointer" role="button" data-toggle="dropdown">
-
-
-                    </a>
                     <span class="tooltiptext">Thời gian tạo KH</span>
-                    <div class="add-drop add-d-right other_time_panel"
+                    <div class="dropdown-customize add-drop add-d-right other_time_panel"
                          style="left: auto; right: 0px; display: none;"><s class="gf-icon-neotop"></s>
                         <div class="padding tl"><p>Ngày bắt đầu</p>
                             <input type="text" class="form-control filter_start_date" id="datepicker"

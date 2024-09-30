@@ -133,7 +133,7 @@ class StatisticController extends Controller
         $wallet = WalletHistory::search($input, 'order_price,payment_type,price');
         $payment_wallet = PaymentWallet::search($input, 'price');
         //Status Revuenue
-        $statusRevenues = $this->orderDetail->revenueWithSource($input);
+        $statusRevenues = $this->orderDetail->revenueWithSource($input);;
         //END
         $category_product = $this->orderDetail->revenueWithService($input)->take(5);
 

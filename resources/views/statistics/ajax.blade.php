@@ -8,9 +8,12 @@
         font-weight: 600;
         margin-top: 10px;
     }
-    body {
-        fo
-    }
+    /*#piechart-1{*/
+    /*    width: 100%;*/
+    /*    height: 500px; !* Increase the height for larger chart *!*/
+    /*    max-width: 500px;*/
+    /*    margin: 0 auto;*/
+    /*}*/
 </style>
 
 <div class="mt-16 d-flex justify-content-between gap-16">
@@ -42,7 +45,8 @@
         </div>
     </div>
 
-    <div style="height: 178px;width: 50%;background: url('{{asset('layout/images/BG_tong_dai.png')}}') no-repeat; background-size: 100% 178px;">
+    <div
+        style="height: 178px;width: 50%;background: url('{{asset('layout/images/BG_tong_dai.png')}}') no-repeat; background-size: 100% 178px;">
         <div class="d-flex justify-content-center align-items-center" style="height: calc(100% - 77px);">
             <div class="text-center">
                 <div class="fs-18 linear-text">Tổng số đơn hàng</div>
@@ -79,7 +83,8 @@
                 <div class="d-flex justify-content-around" style="width: 50%;">
                     <div class="d-flex gap-16">
                         <span class="color-dark fs-16">Combo</span>
-                        <span class="fs-18">{{@number_format($data['orders'] - $products['orders'] -$services['orders'])}}</span>
+                        <span
+                            class="fs-18">{{@number_format($data['orders'] - $products['orders'] -$services['orders'])}}</span>
                     </div>
                     <div class="" style="border: 1px solid #005A7F;"></div>
                     <div class="d-flex gap-16">
@@ -111,7 +116,8 @@
             </div>
             <div class="d-flex justify-content-between mt-12">
                 <span class="fs-16">Dịch vụ</span>
-                <div class="fs-16">{{@number_format($services['all_total'])}}</div></div>
+                <div class="fs-16">{{@number_format($services['all_total'])}}</div>
+            </div>
             <div class="d-flex justify-content-between mt-12">
                 <span class="fs-16">Sản phẩm & dịch vụ</span>
                 <div class="fs-16">{{@number_format($services['combo_total'])}}</div>
@@ -182,34 +188,43 @@
     </div>
 </div>
 
-<div class="h4 text-center">TOÀN HỆ THỐNG</div>
+{{--<div class="h4 text-center">TOÀN HỆ THỐNG</div>--}}
 
-<div class="row row-cards">
-</div>
+{{--<div class="d-flex justify-content-around mt-24">--}}
+{{--    <div class="">--}}
+{{--        <canvas id="myChart1"></canvas>--}}
+{{--    </div>--}}
+{{--    <div class="">--}}
+{{--        <canvas id="myChart2"></canvas>--}}
+{{--    </div>--}}
+{{--    <div class="">--}}
+{{--        <canvas id="myChart3"></canvas>--}}
+{{--    </div>--}}
+{{--</div>--}}
 
 <div class="d-none col-xs-none d-md-block">
     <div class="h4 text-center">BIỂU ĐỒ</div>
 
     <div class="row row-cards">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div id="piechart-1" style="margin-left: 15px"></div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div id="piechart-3" style="margin-left: 15px"></div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div id="piechart-4" style="margin-left: 15px"></div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div id="piechart-5" style="margin-left: 15px"></div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div id="piechart-6" style="margin-left: 15px"></div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div id="piechart-7" style="margin-left: 15px"></div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div id="piechart-8" style="margin-left: 15px"></div>
         </div>
     </div>
@@ -241,10 +256,22 @@
 
         var options = {
             title: 'DOANH THU THEO NGUỒN',
-            width: 500,
+            width: '500',
+            pieHole: 0.4,
             height: 300,
-            hAxis: {
-                width: 200
+            // hAxis: {
+            //     width: 200
+            // },
+            colors: ['#3BDBFF', '#005A7F', '#00AEFF', '#00688B','#87CEEB','#87CEFF','#7EC0EE','#6CA6CD'],
+            backgroundColor: 'transparent',
+            titleTextStyle: {
+                color: '#fff', // Set title text color
+                fontSize: 13 // Set title font size
+            },
+            legend: {
+                textStyle: {
+                    color: '#fff' // Set legend text color
+                }
             }
         };
 
@@ -272,6 +299,18 @@
             title: 'TOP 5 SẢN PHẨM BÁN CHẠY NHẤT',
             width: 500,
             height: 300,
+            pieHole: 0.4,
+            colors: ['#3BDBFF', '#005A7F', '#00AEFF', '#00688B','#87CEEB','#87CEFF','#7EC0EE','#6CA6CD'],
+            backgroundColor: 'transparent',
+            titleTextStyle: {
+                color: '#fff', // Set title text color
+                fontSize: 13 // Set title font size
+            },
+            legend: {
+                textStyle: {
+                    color: '#fff' // Set legend text color
+                }
+            }
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart-3'));
@@ -296,6 +335,18 @@
             title: 'DOANH THU THEO LOẠI ĐƠN',
             width: 500,
             height: 300,
+            pieHole: 0.4,
+            colors: ['#3BDBFF', '#005A7F', '#00AEFF', '#00688B','#87CEEB','#87CEFF','#7EC0EE','#6CA6CD'],
+            backgroundColor: 'transparent',
+            titleTextStyle: {
+                color: '#fff', // Set title text color
+                fontSize: 13 // Set title font size
+            },
+            legend: {
+                textStyle: {
+                    color: '#fff' // Set legend text color
+                }
+            }
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart-4'));
@@ -311,8 +362,8 @@
 
         var data = google.visualization.arrayToDataTable([
             ['Task', 'Hours per Day'],
-            @if(count($trademark))
-            @foreach($trademark as $item)
+                @if(count($trademark))
+                @foreach($trademark as $item)
             ['{{$item->name}}', {{$item->price}}],
             @endforeach
             @endif
@@ -322,6 +373,18 @@
             title: 'DOANH SỐ 5 NHÀ CUNG CẤP BÁN CHẠY NHẤT',
             width: 500,
             height: 300,
+            pieHole: 0.4,
+            colors: ['#3BDBFF', '#005A7F', '#00AEFF', '#00688B','#87CEEB','#87CEFF','#7EC0EE','#6CA6CD'],
+            backgroundColor: 'transparent',
+            titleTextStyle: {
+                color: '#fff', // Set title text color
+                fontSize: 13 // Set title font size
+            },
+            legend: {
+                textStyle: {
+                    color: '#fff' // Set legend text color
+                }
+            }
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart-5'));
@@ -348,6 +411,18 @@
             title: 'DOANH THU THEO GIỚI TÍNH',
             width: 500,
             height: 300,
+            pieHole: 0.4,
+            colors: ['#3BDBFF', '#005A7F', '#00AEFF', '#00688B','#87CEEB','#87CEFF','#7EC0EE','#6CA6CD'],
+            backgroundColor: 'transparent',
+            titleTextStyle: {
+                color: '#fff', // Set title text color
+                fontSize: 13 // Set title font size
+            },
+            legend: {
+                textStyle: {
+                    color: '#fff' // Set legend text color
+                }
+            }
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart-6'));
@@ -371,6 +446,18 @@
             title: 'THỰC THU THEO LOẠI KHÁCH HÀNG',
             width: 500,
             height: 300,
+            pieHole: 0.4,
+            colors: ['#3BDBFF', '#005A7F', '#00AEFF', '#00688B','#87CEEB','#87CEFF','#7EC0EE','#6CA6CD'],
+            backgroundColor: 'transparent',
+            titleTextStyle: {
+                color: '#fff', // Set title text color
+                fontSize: 13 // Set title font size
+            },
+            legend: {
+                textStyle: {
+                    color: '#fff' // Set legend text color
+                }
+            }
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart-7'));
@@ -383,9 +470,9 @@
 
     function drawBasic() {
         var data = google.visualization.arrayToDataTable([
-            ['Ngày','Doanh số','Doanh thu'],
+            ['Ngày', 'Doanh số', 'Doanh thu'],
                 @foreach($data['revenue_month'] as $k =>$item)
-            ['{{substr($item->payment_date, -2)}}',{{$item->order_month + $item->wallet_month}},{{$item->payment_revenue + $item->payment_wallet_month}}],
+            ['{{substr($item->payment_date, -2)}}', {{$item->order_month + $item->wallet_month}}, {{$item->payment_revenue + $item->payment_wallet_month}}],
             @endforeach
         ]);
         var options = {
