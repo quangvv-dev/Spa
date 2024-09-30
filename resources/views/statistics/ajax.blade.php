@@ -8,12 +8,14 @@
         font-weight: 600;
         margin-top: 10px;
     }
-    /*#piechart-1{*/
-    /*    width: 100%;*/
-    /*    height: 500px; !* Increase the height for larger chart *!*/
-    /*    max-width: 500px;*/
-    /*    margin: 0 auto;*/
-    /*}*/
+    #column text {
+        fill: #fff; /* Đổi màu văn bản trong legend thành màu xanh */
+        font-weight: bold; /* Đặt đậm cho văn bản trong legend */
+    }
+    #column2 text {
+        fill: #fff; /* Đổi màu văn bản trong legend thành màu xanh */
+        font-weight: bold; /* Đặt đậm cho văn bản trong legend */
+    }
 </style>
 
 <div class="mt-16 d-flex justify-content-between gap-16">
@@ -474,8 +476,19 @@
             height: 500,
             hAxis: {title: 'Các ngày trong (tuần || tháng)'},
             seriesType: 'bars',
-            series: {1: {type: 'line'}},
+            // series: {1: {type: 'line'}},
             bar: {groupWidth: '75%'},
+            titleTextStyle: {
+                color: '#fff', // Set title text color
+                fontSize: 16 // Set title font size
+            },
+            legend: {
+                textStyle: {
+                    color: '#fff' // Set legend text color
+                }
+            },
+            colors: ['#3BDBFF', '#005A7F', '#00AEFF', '#00688B','#87CEEB','#87CEFF','#7EC0EE','#6CA6CD'],
+            backgroundColor: 'transparent',
             isStacked: true,
         };
 
@@ -501,6 +514,17 @@
             seriesType: 'bars',
             // series: {1: {type: 'line'}},
             bar: {groupWidth: '75%'},
+            titleTextStyle: {
+                color: '#fff', // Set title text color
+                fontSize: 16 // Set title font size
+            },
+            legend: {
+                textStyle: {
+                    color: '#fff' // Set legend text color
+                }
+            },
+            colors: ['#3BDBFF', '#005A7F', '#00AEFF', '#00688B','#87CEEB','#87CEFF','#7EC0EE','#6CA6CD'],
+            backgroundColor: 'transparent',
             isStacked: true,
         };
 
