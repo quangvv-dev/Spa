@@ -467,7 +467,7 @@ margin-right: 0 !important;
 .list-note {
     background: #1B1B1B;
     border-radius: 8px;
-    max-height: 400px;
+    max-height: 315px;
     overflow: auto;
 }
 .note__item:first-child {
@@ -475,8 +475,8 @@ margin-right: 0 !important;
 }
 .note__item {
     border-bottom: 1px solid #2E2E2E;
-    padding-bottom: 16px;
-    margin-top: 16px;
+    padding-bottom: 3px;
+    padding-top: 3px;
 }
 .textarea-custom {
     /*background-color: #131313 !important;*/

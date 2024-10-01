@@ -208,7 +208,7 @@
     </div>
 @endsection
 @section('_script')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script type="text/javascript" src="{{asset('js/crypto.min.js')}}"></script>
     <script type="text/javascript">
         $("#search").focus();
         $(function () {
@@ -236,13 +236,12 @@
                     html = `
                     <div class="detail__info">
                     <div class="d-flex align-items-center gap-24">
-                        <span>` + data.customer.full_name + `-` + data.customer.account_code + `-`+category+`</span>
-                        <img src="{{asset('')}}" alt="">
+                        <span>` + data.customer.full_name + ` - ` + data.customer.account_code + ` - `+category+`</span>
                     </div>
                     <div class="d-flex align-items-center gap-4">
-                        <img src="images/Ava1.png" alt="">
-                        <span class="text-white">` + (data.customer.telesale ? data.customer.telesale.full_name : "") + ` -</span>
-                        <span style="color: var(--bg-main);">` + (data.customer.cskh ? data.customer.cskh.full_name : "") + `</span>
+                        <img src="{{asset('layout/images/Ava1.png')}}" alt="">
+                        <span class="text-white svn-medium">Sale: ` + (data.customer.telesale ? data.customer.telesale.full_name : "") + ` ---</span>
+                        <span class="svn-medium" style="color: var(--bg-main);">CSKH: ` + (data.customer.cskh ? data.customer.cskh.full_name : "") + `</span>
                     </div>
                 </div>
                 <div class="row mt-12 no-mrl">
@@ -252,27 +251,27 @@
                 <div class="row mt-12 no-mrl">
                     <div class="col-5 p-0">Nguồn khách hàng</div>
                     <div class="col-7 p-0 d-flex align-items-center gap-8">
-                        <img src="images/Facebook.png" alt="">
+                        <img src="{{asset('layout/images/Facebook.png')}}" alt="">
                         <span class="fs-18">` + (data.customer.source_customer ? data.customer.source_customer.name : "") + `</span>
                     </div>
                 </div>
                 <div class="row mt-12 no-mrl">
                     <div class="col-5 p-0">Liên hệ lần cuối</div>
                     <div class="col-7 p-0 d-flex align-items-center gap-8">
-                        <img src="images/Calendar.png" alt="">
+                        <img src="{{asset('layout/images/Calendar.png')}}" alt="">
                         <span class="fs-18">` + (data.last_contact ? data.last_contact : "") + `</span>
                     </div>
                 </div>
                 <div class="row mt-12 no-mrl">
                     <div class="col-5 p-0">Giá trị</div>
                     <div class="col-7 p-0 d-flex align-items-center gap-8 color-green">
-                        <img src="images/Dollar_active.png" alt="">
+                    <img src="{{asset('layout/images/Dollar_active.png')}}" alt="">
                         <span class="fs-18">` + data.order_revenue + ` VND</span>
                     </div>
                 </div>
                 <div class="row mt-12 no-mrl">
                     <span style="color: var(--color-dark);">Ghi chú</span>
-                    <textarea name="messages" placeholder="Nhập ghi chú ..." class="message textarea-custom color-white w-100 mt-8 fs-16" style="height: 100px;"></textarea>
+                    <textarea name="messages" placeholder="Nhập ghi chú ..." class="message textarea-custom color-white w-100 mt-8 fs-16" style="height: 70px;"></textarea>
                 </div>
                 <div class="list-note mt-16 p-12-16 chat-ajax">
                     @include('message_zalo.index')
@@ -287,10 +286,10 @@
                 let html1 = '';
                     data.group_comments.forEach(function (item) {
                         html1 += `<div class="note__item"><div class="d-flex align-items-center gap-8">
-                            <img src="`+item.avatar +`" width="36" height="36" alt="">
-                            <div class="fs-16">` + (item.full_name ?? "") + `</div>
-                            <div class="fs-14 color-dark">|</div>
-                            <div class="fs-14 color-dark">` + item.created_at + `</div>
+                            <img src="`+(item.avatar ?? "{{asset('layout/images/Ava1.png')}}")+`" width="36" height="36" alt="" style="border-radius: 50%">
+                            <div class="fs-14">` + (item.full_name ?? "") + `</div>
+                            <div class="fs-12 color-dark">|</div>
+                            <div class="fs-12 color-dark">` + item.created_at + `</div>
                         </div>
                         <div class="mt-1">` + item.messages + `</div> </div>`;
                         {{--html1 += `<div class="col comment-fast" style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;">--}}
