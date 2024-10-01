@@ -246,7 +246,7 @@
                 </div>
                 <div class="row mt-12 no-mrl">
                     <span style="color: var(--color-dark);">Trạng thái</span>
-                    <select name="status_id" class="form-control status-result select2" data-id="` + data.customer.id + `>`+option+`</select>
+                    <select name="status_id" class="form-control status-result select2" data-id="` + data.customer.id + `">`+option+`</select>
                 </div>
                 <div class="row mt-12 no-mrl">
                     <div class="col-5 p-0">Nguồn khách hàng</div>
