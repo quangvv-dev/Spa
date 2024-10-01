@@ -134,7 +134,7 @@
                 <div class="col-xs-12 col-md-12">
                     <div class="form-group required {{ $errors->has('note') ? 'has-error' : '' }}">
                         {!! Form::label('note', 'Gia cảnh nhân sự', array('class' => '')) !!}
-                        {!! Form::textArea('note', @$user->personal->note, array('class' => 'form-control','rows'=>3)) !!}
+                        {!! Form::textArea('note', @$user->personal->note, array('class' => 'form-control textarea-custom','rows'=>3)) !!}
                         <span class="help-block">{{ $errors->first('pause_time', ':message') }}</span>
                     </div>
                 </div>
