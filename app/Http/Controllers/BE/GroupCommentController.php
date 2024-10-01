@@ -62,7 +62,7 @@ class GroupCommentController extends Controller
         $orderRevenue = number_format($customer->orders->sum('gross_revenue'));
         $groupComments = DB::table('group_comments')->join('users as u', 'u.id', '=', 'group_comments.user_id')
             ->where('group_comments.customer_id', $id)
-            ->select('u.full_name','group_comments.id','group_comments.created_at','group_comments.messages','group_comments.image','group_comments.user_id')
+            ->select('u.full_name','u.avatar','group_comments.id','group_comments.created_at','group_comments.messages','group_comments.image','group_comments.user_id')
             ->orderBy('id', 'desc')
             ->get();
 

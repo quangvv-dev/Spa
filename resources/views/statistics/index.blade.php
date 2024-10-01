@@ -3,6 +3,23 @@
     <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
     <style>
+        .font-30 {
+            font-size: 20px;
+        }
+
+        .h4.text-center {
+            color: cornflowerblue;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        #column text {
+            fill: #fff; /* Đổi màu văn bản trong legend thành màu xanh */
+            font-weight: bold; /* Đặt đậm cho văn bản trong legend */
+        }
+        #column2 text {
+            fill: #fff; /* Đổi màu văn bản trong legend thành màu xanh */
+            font-weight: bold; /* Đặt đậm cho văn bản trong legend */
+        }
         .daterange-custom {
             background: #131313;
             border: 1px solid #686777;
@@ -10,10 +27,6 @@
             padding: 13.5px 16px;
             outline: none;
             border-radius: 8px;
-        }
-        #myChart1,#myChart2,#myChart3 {
-            height: 250px;
-            width: 250px;
         }
         .thong-ke__item {
             background: radial-gradient(150.73% 226.72% at -38.48% 56.41%, #253763 0%, #1A2749 23%, #121B34 50%, #0D1328 75%, #0C1124 100%);
@@ -26,6 +39,11 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-size: 28px;
+        }
+        .number-gradient{
+            background: linear-gradient(172.37deg, #FBF0D0 4.96%, #FFFAF4 45.9%, #64c2df 74.55%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent;
         }
     </style>
 @endsection

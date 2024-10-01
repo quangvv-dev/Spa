@@ -231,7 +231,7 @@
                     </td>
                 @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::MARKETING)
                         <td class="text-center {{in_array(4,$user_filter_grid) ? '':'display-none'}}" style="position: relative;max-width: 146px">
-                            <textarea class="description-cus textarea-custom">{{ $customer->message }}</textarea>
+                            <textarea class="description-cus">{{ $customer->message }}</textarea>
                         </td>
                     @endif
                     <td class="text-center category-db {{in_array(5,$user_filter_grid) ? '':'display-none'}}"
@@ -240,7 +240,7 @@
                     <td class="text-center telesale-customer {{in_array(7,$user_filter_grid) ? '':'display-none'}}"
                         data-customer-id="{{$customer->id}}">{{ @$customer->telesale->full_name }}</td>
                     <td class="text-center {{in_array(8,$user_filter_grid) ? '':'display-none'}}" style="position: relative;max-width: 146px">
-                        <textarea data-id="{{$customer->id}}" class="description-cus textarea-custom">{{ $customer->description }}</textarea>
+                        <textarea data-id="{{$customer->id}}" class="description-cus">{{ $customer->description }}</textarea>
                     </td>
 {{--                    <td class="text-center {{in_array(9,$user_filter_grid) ? '':'display-none'}}">{{$customer->expired_text}}</td>--}}
 {{--                    <td class="text-center {{in_array(10,$user_filter_grid) ? '':'display-none'}}">{{@$customer->time_move}}</td>--}}

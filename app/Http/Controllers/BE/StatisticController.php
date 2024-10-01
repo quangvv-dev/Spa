@@ -362,7 +362,6 @@ class StatisticController extends Controller
         $payTwice = clone $payCurrent;
         $pay = $payCurrent->where('status', UserConstant::ACTIVE);
         $pay2 = clone $pay;
-//        $pay3 = clone $pay;
         $payAll = clone $pay;
         $payBranch = clone $pay;
 
@@ -372,6 +371,18 @@ class StatisticController extends Controller
             ->groupBy('status')->get();
         $payBranch = $payBranch->select('so_tien', 'branch_id', \DB::raw('SUM(so_tien) AS sum_price'))->with('branch')
             ->groupBy('branch_id')->orderByDesc('sum_price')->get();
+        $branch_names = [];
+        $prices = [];
+        foreach ($payBranch as $item) {
+            $branch_names[] = $item->branch->name;
+            $prices[] = $item->sum_price;
+        }
+        $branch_names = array_map(function($item) {
+            return "'$item'";
+        }, $branch_names);
+        $branch_names = implode(',', $branch_names);
+        $prices = count($prices)? implode(", ", $prices) : 0;
+
         $list_pay = [
             'money' => $pay2->where('type', 0)->sum('so_tien'),
             //            'card' => $pay3->where('type', 1)->sum('so_tien'),
@@ -383,13 +394,12 @@ class StatisticController extends Controller
             'payment' => $all_payment,
             'wallet_payment' => $payment_wallet->sum('price'),
         ];
-
         if ($request->ajax()) {
             return view('thu_chi.statistics.ajax',
-                compact('list_payment', 'data', 'list_pay', 'payAll', 'payStatus', 'payBranch'));
+                compact('list_payment', 'data', 'list_pay', 'payAll', 'payStatus', 'branch_names', 'prices'));
         }
 
         return view('thu_chi.statistics.index',
-            compact('list_payment', 'data', 'list_pay', 'payAll', 'payStatus', 'payBranch'));
+            compact('list_payment', 'data', 'list_pay', 'payAll', 'payStatus', 'payBranch','branch_names', 'prices'));
     }
 }

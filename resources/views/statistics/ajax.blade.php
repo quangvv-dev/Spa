@@ -1,29 +1,9 @@
-<style>
-    .font-30 {
-        font-size: 20px;
-    }
-
-    .h4.text-center {
-        color: cornflowerblue;
-        font-weight: 600;
-        margin-top: 10px;
-    }
-    #column text {
-        fill: #fff; /* Đổi màu văn bản trong legend thành màu xanh */
-        font-weight: bold; /* Đặt đậm cho văn bản trong legend */
-    }
-    #column2 text {
-        fill: #fff; /* Đổi màu văn bản trong legend thành màu xanh */
-        font-weight: bold; /* Đặt đậm cho văn bản trong legend */
-    }
-</style>
-
 <div class="mt-16 d-flex justify-content-between gap-16">
     <div style="height: 178px;width: 50%;;background: url('{{asset('layout/images/BG_tong_dai.png')}}') no-repeat; background-size: 100% 178px;">
         <div class="d-flex justify-content-center align-items-center" style="height: calc(100% - 77px);">
             <div class="text-center">
                 <div class="fs-18 linear-text">Khách hàng mới</div>
-                <div class="linear-text fs-32">{{@number_format($data['customers'])}}</div>
+                <div class="linear-text fs-32 bold number-gradient">{{@number_format($data['customers'])}}</div>
             </div>
         </div>
         <div class="d-flex justify-content-center align-items-center"
@@ -52,7 +32,7 @@
         <div class="d-flex justify-content-center align-items-center" style="height: calc(100% - 77px);">
             <div class="text-center">
                 <div class="fs-18 linear-text">Tổng số đơn hàng</div>
-                <div class="linear-text fs-32">{{@number_format($data['orders'] + $wallets['orders'])}}</div>
+                <div class="linear-text fs-32 bold number-gradient">{{@number_format($data['orders'] + $wallets['orders'])}}</div>
             </div>
         </div>
         <div class="d-flex justify-content-center align-items-center"
@@ -105,7 +85,7 @@
         <div class="top d-flex justify-content-center align-items-center mt-16">
             <div class="text-center">
                 <div class="linear-text" style="font-size: 17px;">Tổng doanh số</div>
-                <div class="number">{{@number_format($data['all_total'] + $wallets['revenue'])}}</div>
+                <div class="number bold">{{@number_format($data['all_total'] + $wallets['revenue'])}}</div>
             </div>
             <div class="color-red" style="color: #FF0000;">
                 <img src="images/TrendDown.png" alt=""> 12%
@@ -134,7 +114,7 @@
         <div class="top d-flex justify-content-center align-items-center mt-16">
             <div class="text-center">
                 <div class="linear-text" style="font-size: 17px;">Thực thu</div>
-                <div class="number">{{@number_format($data['payment'] + $wallets['payment'] - $wallets['used'])}}</div>
+                <div class="number bold">{{@number_format($data['payment'] + $wallets['payment'] - $wallets['used'])}}</div>
             </div>
             <div class="color-red" style="color: #FF0000;">
                 <img src="images/TrendDown.png" alt=""> 12%
@@ -163,7 +143,7 @@
         <div class="top d-flex justify-content-center align-items-center mt-16">
             <div class="text-center">
                 <div class="linear-text" style="font-size: 17px;">Nguồn tiền từ đơn hàng</div>
-                <div class="number">{{@number_format($data['payment'])}}</div>
+                <div class="number bold">{{@number_format($data['payment'])}}</div>
             </div>
             <div class="color-red" style="color: #FF0000;">
                 <img src="images/TrendDown.png" alt=""> 12%
@@ -191,7 +171,7 @@
 </div>
 
 <div class="d-none col-xs-none d-md-block">
-    <div class="h4 text-center">BIỂU ĐỒ</div>
+    <div class="fs-32 text-center mt-4 linear-text">BIỂU ĐỒ</div>
 
     <div class="row row-cards">
         <div class="col-md-4">
@@ -247,9 +227,6 @@
             width: '500',
             pieHole: 0.5,
             height: 300,
-            // hAxis: {
-            //     width: 200
-            // },
             colors: ['#3BDBFF', '#005A7F', '#00AEFF', '#00688B','#87CEEB','#87CEFF','#7EC0EE','#6CA6CD'],
             backgroundColor: 'transparent',
             titleTextStyle: {
@@ -487,6 +464,9 @@
                     color: '#fff' // Set legend text color
                 }
             },
+            textStyle: {
+                color: '#fff',
+            },
             colors: ['#3BDBFF', '#005A7F', '#00AEFF', '#00688B','#87CEEB','#87CEFF','#7EC0EE','#6CA6CD'],
             backgroundColor: 'transparent',
             isStacked: true,
@@ -522,6 +502,9 @@
                 textStyle: {
                     color: '#fff' // Set legend text color
                 }
+            },
+            textStyle: {
+                color: '#fff',
             },
             colors: ['#3BDBFF', '#005A7F', '#00AEFF', '#00688B','#87CEEB','#87CEFF','#7EC0EE','#6CA6CD'],
             backgroundColor: 'transparent',

@@ -60,15 +60,6 @@ class ChartController extends Controller
             $all_totals[] = $data['all_total'] + $wallets['revenue'];
             $gross_revenues[] = $data['gross_revenue'];
             $payments[] = $data['payment'] + $wallets['revenue'] - $wallets['used'];
-//            $result[] = [
-//                'branch' => $item->name,
-//                'all_total' => $data['all_total'] + $wallets['revenue'],
-//                'gross_revenue' => $data['gross_revenue'],
-//                'payment' => $data['payment'] + $wallets['revenue'] - $wallets['used'],
-//            ];
-//            usort($result, function ($a, $b) {
-//                return $b['payment'] <=> $a['payment'];
-//            });
         }
         $branchs = array_map(function($item) {
             return "'$item'";

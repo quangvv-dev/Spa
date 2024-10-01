@@ -56,6 +56,10 @@
         .ren-navbar.fixed-header1.visible-title {
             top: 0;
         }
+        button.btn.btn-success.chat-save {
+            position: absolute;
+            left: 25px;
+        }
     </style>
 @endsection
 @section('content')
@@ -220,88 +224,95 @@
                 }).done(function (data) {
                     check_show_button = true;
                     let category = '';
+                    let option = '';
 
                     data.customer.categories.forEach(function (item) {
                         category += item.name + `, `;
                     });
-                    {{--let hidden_phone = {{auth()->user()->permission('phone.open') ? 'true' :'false'}};--}}
-                    // let phoneNumber = hidden_phone == true ? data.customer.phone : data.customer.phone.slice(0, 7)+'xxx';
-                    let html = '';
-                    html += `<div class="row" style="padding-bottom: 10px;">
-                    <div class="chat-flash col-md-12">
-                        <div class="white-space" style="display: flex; align-items: center;justify-content: space-around;">
-                            <img width="50" height="50" class="fl mr10 a40 border"
-                                 src="{{asset('default/no-image.png')}}" style="border-radius:100%">
-
-                            <div class="mt10 pb10" style="height:86px ; color:black">
-                            <div class="col-md-10 info-avatar padding5 last_contacthover box_last">
-                            <p><i class="fa fa-user mr5" style="color: black;"></i> ` + data.customer.full_name + `
-                                <i class="fa orange fa-star" aria-hidden="true" style="color: orange;"></i>
-                            </p>
-                            <p class="mt10"><i class="fa fa-phone mr10" style="color: black;" aria-hidden="true"></i><a class="clickToCall blue" data-contact-id="5678"
-                                                          rel="tooltip" data-original-title="Click để gọi"
-                                                          data-placement="right" data-flag="1"
-                                                          data-type="crm"> ` + data.customer.account_code + `</a></p>
-                            <p> <i class="fa fa-users"style="color: black;" aria-hidden="true"></i>` + category + `</p>
-                            <p class="mt10 white-space"><i class="icon-envelope mr5"></i></p></div>
-                        </div>
-                        <a class="bold blue uppercase user-name" href="javascript:void(0);" style="margin-left: 5px">
-                            <span>@` + (data.customer.telesale ? data.customer.telesale.full_name : "") + `</span></br>
-                            <span>Cskh: ` + (data.customer.cskh ? data.customer.cskh.full_name : "") + `</span>
-                            </a>
-                        </div>
-
-                         <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }} "style="margin-top: 20px;">
-                            {!! Form::label('status_id', 'Trạng thái', array('class' => 'control-label')) !!}` +
-                        `<select name="status_id" class="form-control status-result select2" data-id="` + data.customer.id + `" style="font-size: 14px;">`;
                     data.status.forEach(function (item) {
-                        html += `<option value="` + item.id + `"  ` + (item.id === data.customer.status_id ? "selected" : "") + `>` + item.name + `</option>`;
-                    });
-                    html += `</select>`;
-                    html += `
-                <div class="row mt10" style="color:black;"> <div class="col-md-5">Nguồn khách hàng:</div> <div class="col-md-7 word-break">` + (data.customer.source_customer ? data.customer.source_customer.name : "") + `</div> </div>
-                <div class="row mt10" style="color:black;"> <div class="col-md-5">Liên hệ lần cuối:</div> <div class="col-md-7 word-break">` + (data.last_contact ? data.last_contact : "") + `</div> </div>
-                <div class="row mt10" style="color:black;"> <div class="col-md-5">Giá trị:</div> <div class="col-md-7 word-break" style="color:orange;">` + data.order_revenue + ` VND</div> </div>
-                </div>
-                        <div class="form-group required {{ $errors->has('enable') ? 'has-error' : '' }}">
-                            {!! Form::textArea('messages', null, array('class' => 'form-control message textarea-custom', 'rows'=> 3, 'required' => 'required')) !!}
-                        <span class="help-block">{{ $errors->first('enable', ':message') }}</span>
-                        </div>
+                        option += `<option value="` + item.id + `"  ` + (item.id === data.customer.status_id ? "selected" : "") + `>` + item.name + `</option>`;
+                    })
+                    let html = '';
+                    html = `
+                    <div class="detail__info">
+                    <div class="d-flex align-items-center gap-24">
+                        <span>` + data.customer.full_name + `-` + data.customer.account_code + `-`+category+`</span>
+                        <img src="{{asset('')}}" alt="">
                     </div>
-                    <div class="col-md-12">
-                        <button type="submit" class="btn btn-success chat-save" id="chat-save" data-customer-id="">Lưu</button>
-
+                    <div class="d-flex align-items-center gap-4">
+                        <img src="images/Ava1.png" alt="">
+                        <span class="text-white">` + (data.customer.telesale ? data.customer.telesale.full_name : "") + ` -</span>
+                        <span style="color: var(--bg-main);">` + (data.customer.cskh ? data.customer.cskh.full_name : "") + `</span>
+                    </div>
+                </div>
+                <div class="row mt-12 no-mrl">
+                    <span style="color: var(--color-dark);">Trạng thái</span>
+                    <select name="status_id" class="form-control status-result select2" data-id="` + data.customer.id + `>`+option+`</select>
+                </div>
+                <div class="row mt-12 no-mrl">
+                    <div class="col-5 p-0">Nguồn khách hàng</div>
+                    <div class="col-7 p-0 d-flex align-items-center gap-8">
+                        <img src="images/Facebook.png" alt="">
+                        <span class="fs-18">` + (data.customer.source_customer ? data.customer.source_customer.name : "") + `</span>
+                    </div>
+                </div>
+                <div class="row mt-12 no-mrl">
+                    <div class="col-5 p-0">Liên hệ lần cuối</div>
+                    <div class="col-7 p-0 d-flex align-items-center gap-8">
+                        <img src="images/Calendar.png" alt="">
+                        <span class="fs-18">` + (data.last_contact ? data.last_contact : "") + `</span>
+                    </div>
+                </div>
+                <div class="row mt-12 no-mrl">
+                    <div class="col-5 p-0">Giá trị</div>
+                    <div class="col-7 p-0 d-flex align-items-center gap-8 color-green">
+                        <img src="images/Dollar_active.png" alt="">
+                        <span class="fs-18">` + data.order_revenue + ` VND</span>
+                    </div>
+                </div>
+                <div class="row mt-12 no-mrl">
+                    <span style="color: var(--color-dark);">Ghi chú</span>
+                    <textarea name="messages" placeholder="Nhập ghi chú ..." class="message textarea-custom color-white w-100 mt-8 fs-16" style="height: 100px;"></textarea>
+                </div>
+                <div class="list-note mt-16 p-12-16 chat-ajax">
+                    @include('message_zalo.index')
+                </div>
+                <div class="mt-24 text-right">
+                    <button class="btn btn-success chat-save">Lưu</button>
                         <button type="button" class="btn btn-warning message-chat float-right" data-phone="`+ data.customer.account_code +`">Zalo Messages</button>
-                        <button type="button" class="btn btn-info sale-note float-right mr-1">Trao đổi</button>
-                    </div>
+                        <button type="button" class="btn btn-primary sale-note float-right mr-1">Trao đổi</button>
                 </div>
-                @include('message_zalo.index')
-                <div class="chat-ajax" >
-
-                        </div>`;
+                    `;
 
                 let html1 = '';
                     data.group_comments.forEach(function (item) {
-                        html1 += `<div class="col comment-fast" style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;">
-                                <div class="no-padd col-md-12">
-                                    <div class="col-md-11"><p><a href="#" class="bold blue">` + (item.full_name ?? "") + `</a>
-                                        <span><i class="fa fa-clock"> ` + item.created_at + `</i></span></p>
-                                    </div>` +
-                            (data.id_login == item.user_id ? `<div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
-                                        @if(!in_array('comment.edit',setting('permissions')??[]))
-                                        <a data-original-title="Sửa"  rel="tooltip" style="margin-right: 5px">
-                                        <i class="fas fa-edit btn-edit-comment" data-id="` + item.id + `"></i>
-                                        </a>
-                                        @endif
+                        html1 += `<div class="note__item"><div class="d-flex align-items-center gap-8">
+                            <img src="`+item.avatar +`" width="36" height="36" alt="">
+                            <div class="fs-16">` + (item.full_name ?? "") + `</div>
+                            <div class="fs-14 color-dark">|</div>
+                            <div class="fs-14 color-dark">` + item.created_at + `</div>
+                        </div>
+                        <div class="mt-1">` + item.messages + `</div> </div>`;
+                        {{--html1 += `<div class="col comment-fast" style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;">--}}
+                        {{--        <div class="no-padd col-md-12">--}}
+                        {{--            <div class="col-md-11"><p><a href="#" class="bold blue">` + (item.full_name ?? "") + `</a>--}}
+                        {{--                <span><i class="fa fa-clock"> ` + item.created_at + `</i></span></p>--}}
+                        {{--            </div>` +--}}
+                        {{--    (data.id_login == item.user_id ? `<div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">--}}
+                        {{--                @if(!in_array('comment.edit',setting('permissions')??[]))--}}
+                        {{--                <a data-original-title="Sửa"  rel="tooltip" style="margin-right: 5px">--}}
+                        {{--                <i class="fas fa-edit btn-edit-comment" data-id="` + item.id + `"></i>--}}
+                        {{--                </a>--}}
+                        {{--                @endif--}}
 
-                                        <a data-original-title="Xóa" rel="tooltip">
-                                            <i class="fas fa-trash-alt btn-delete-comment" data-id="` + item.id + `"></i>
-                                        </a>
-                                    </div>` : "") +
-                            `<div class="col-md-12 comment" style="margin-top: 5px; margin-bottom: 5px; white-space: pre-line;">` + item.messages + `
-                                    </div>
-                                </div>
-                            </div>`;
+                        {{--                <a data-original-title="Xóa" rel="tooltip">--}}
+                        {{--                    <i class="fas fa-trash-alt btn-delete-comment" data-id="` + item.id + `"></i>--}}
+                        {{--                </a>--}}
+                        {{--            </div>` : "") +--}}
+                        {{--    `<div class="col-md-12 comment" style="margin-top: 5px; margin-bottom: 5px; white-space: pre-line;">` + item.messages + `--}}
+                        {{--            </div>--}}
+                        {{--        </div>--}}
+                        {{--    </div>`;--}}
                     });
 
                     $(".status-result").val(data.customer.status_id).change();
@@ -334,23 +345,13 @@
                     }
                 }).done(function (data) {
                     let html = '';
-                    html += `<div style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;" >
-                    <div class="no-padd col-md-12 comment-fast">
-                    <div class="col-md-11"><p><a href="#" class="bold blue">` + data.group_comment.user.full_name + `</a>
-                        <span><i class="fa fa-clock"> ` + data.group_comment.created_at + `</i></span></p>
-                    </div>` +
-                        (data.id_login == data.group_comment.user_id ? `<div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
-                                        <a data-original-title="Sửa"  rel="tooltip" style="margin-right: 5px">
-                                            <i class="fas fa-edit btn-edit-comment" data-id="` + data.group_comment.id + `"></i>
-                                        </a>
-                                        <a data-original-title="Xóa" rel="tooltip">
-                                            <i class="fas fa-trash-alt btn-delete-comment" data-id="` + data.group_comment.id + `"></i>
-                                        </a>
-                                    </div>` : "") +
-                        `<div class="col-md-12 comment" style="margin-top: 5px; margin-bottom: 5px; white-space: pre-line;">` + data.group_comment.messages + `</div>
-                    </div>
-                    </div>`;
-
+                    html += `<div class="note__item"><div class="d-flex align-items-center gap-8">
+                            <img src="`+data.group_comment.user.avatar +`" width="36" height="36" alt="">
+                            <div class="fs-16">` + data.group_comment.user.full_name + `</div>
+                            <div class="fs-14 color-dark">|</div>
+                            <div class="fs-14 color-dark">` + data.group_comment.created_at + `</div>
+                        </div>
+                        <div class="mt-1">` + data.group_comment.messages + `</div> </div>`
                     $('.chat-ajax').prepend(html);
                 });
 
