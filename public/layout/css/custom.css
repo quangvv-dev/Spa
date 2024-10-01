@@ -450,6 +450,9 @@ label{
 td, a, p.word-wrap{
     font-family: 'svn-regular' !important;
 }
+.radius-50{
+    border-radius: 50%;
+}
 td i{
     color: #fff !important;
 }

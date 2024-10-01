@@ -36,6 +36,9 @@
     th.fc-day-header.fc-widget-header {
         background: #36354A;
     }
+    span.fc-title{
+        font-family: 'svn-regular' !important;
+    }
     .card-header{
         background-color: #131313 !important;
     }

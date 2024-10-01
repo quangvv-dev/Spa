@@ -513,9 +513,9 @@
                    data-toggle="dropdown" aria-expanded="false">
                     <div class="avatar">
                         @if(\Auth::user()->avatar)
-                            <img src="{{ url(\Auth::user()->avatar) }}" alt="">
+                            <img class="radius-50" src="{{ url(\Auth::user()->avatar) }}" alt="">
                         @else
-                            <img src="{{ url('assets/images/faces/female/25.jpg') }}" alt="">
+                            <img class="radius-50" src="{{ url('assets/images/faces/female/25.jpg') }}" alt="">
                         @endif
 
                     </div>
