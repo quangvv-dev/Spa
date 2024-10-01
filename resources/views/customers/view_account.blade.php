@@ -356,7 +356,7 @@
             <div class="">
                 <a href="{{ route('customers.edit', $customer->id) }}">
                     <button class="btn btn-gradient btn-icon line-height-1" type="button">
-                        <img src="{{asset('layout/layout/images/Edit.png')}}" alt="">
+                        <img src="{{asset('layout/images/Edit.png')}}" alt="">
                         <span>Chỉnh sửa</span>
                     </button>
                 </a>
