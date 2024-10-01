@@ -80,7 +80,7 @@
         @foreach(@$statuses as $k => $item)
 
             <div class="smiley pointer account_relation status" data-name="{{$item->id}}">
-                <img src="{{asset('layout/images/Smiley.png')}}" alt="">
+{{--                <img src="{{asset('layout/images/Smiley.png')}}" alt="">--}}
                 <span style="color: {{$item->color ?:''}}">{{ $item->name }} ({{ @$item->customers_count }})</span>
             </div>
             @php
@@ -218,7 +218,7 @@
                         <a href="{{ route('customers.show', $customer->id) }}" class="color-primary">{{ $customer->full_name }}</a>
                         <span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>
                         <a target="_blank" href="https://zalo.me/{{@$customer->phone}}">
-                            <img width="15" height="15" src="{{asset('assets/images/zalo_icon.png')}}">
+                            <img width="25" height="25" src="{{asset('assets/images/zalo_icon.png')}}">
                         </a>
                     </td>
                     <td class="text-center phone-customer {{in_array(3,$user_filter_grid) ? '':'display-none'}}" data-phone="{{$customer->phone}}" data-customer-id="{{ $customer->id }}">
