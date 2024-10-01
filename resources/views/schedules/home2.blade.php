@@ -33,9 +33,12 @@
         }
     }
 
-    /*thead > tr th {*/
-    /*    background: #fff !important;*/
-    /*}*/
+    th.fc-day-header.fc-widget-header {
+        background: #36354A;
+    }
+    .card-header{
+        background-color: #131313 !important;
+    }
 
 </style>
 @section('content')
@@ -66,7 +69,7 @@
                          @break
                          @endswitch;margin-left: 3px;text-align: left">
                             <input class="status" id="{{$k}}" type="checkbox" data-id="{{$k}}">
-                            <label>{{$item}}</label>
+                            <span style="font-weight: 600">{{$item}}</span>
                         </div>
                     @endforeach
                     <div class="col">

@@ -576,51 +576,51 @@
 
                     <div class="border padding mt10 ml2">
                         <div class="infor-top-ct">
-                            <span class="uppercase mb10 font12 bold mg0" style="margin-bottom: 10px!important;">Thông tin khách hàng</span>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Chi nhánh:</p>
+                            <span class="uppercase mb10 fs-16 linear-text bold mg0 " style="margin-bottom: 10px!important;">Thông tin khách hàng</span>
+                            <div class="mb10 clearfix fs-14"><p class="bold pr5 fl">Chi nhánh:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->branch->name }}</p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Người phụ trách:</p>
+                            <div class="mb10 clearfix fs-14"><p class="bold pr5 fl">Người phụ trách:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->telesale->full_name }}</p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">CSKH:</p>
+                            <div class="mb10 clearfix fs-14"><p class="bold pr5 fl">CSKH:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->cskh->full_name }}</p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Liên hệ cuối:</p>
+                            <div class="mb10 clearfix fs-14"><p class="bold pr5 fl">Liên hệ cuối:</p>
                                 <p class="word-wrap text-danger"> &nbsp;{{ @diffTime($customer->last_time) }}</p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Nhóm giới tính:</p>
+                            <div class="mb10 clearfix fs-14"><p class="bold pr5 fl">Nhóm giới tính:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->genitive->name }}</p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Nguồn KH:</p>
+                            <div class="mb10 clearfix fs-14"><p class="bold pr5 fl">Nguồn KH:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->source_customer->name }}</p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Sinh nhật:</p>
+                            <div class="mb10 clearfix fs-14"><p class="bold pr5 fl">Sinh nhật:</p>
                                 <p class="word-wrap"> &nbsp;{{ $customer->birthday }}</p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Mối quan hệ:</p>
+                            <div class="mb10 clearfix fs-14"><p class="bold pr5 fl">Mối quan hệ:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->status->name }}</p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Ngày tạo:</p>
+                            <div class="mb10 clearfix fs-14"><p class="bold pr5 fl">Ngày tạo:</p>
                                 <p class="word-wrap"> &nbsp;{{ $customer->created_at }}</p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Giới tính:</p>
+                            <div class="mb10 clearfix fs-14"><p class="bold pr5 fl">Giới tính:</p>
                                 <p class="word-wrap"> &nbsp;{{ $customer->genderText }}</p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Mô tả:</p>
+                            <div class="mb10 clearfix fs-14"><p class="bold pr5 fl">Mô tả:</p>
                                 <p class="word-wrap"> &nbsp;{{ $customer->description }}</p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Số đơn hàng:</p>
+                            <div class="mb10 clearfix fs-14"><p class="bold pr5 fl">Số đơn hàng:</p>
                                 <p class="word-wrap "> &nbsp;{{ $customer->orders->count() }}</p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Tổng doanh thu:</p>
+                            <div class="mb10 clearfix fs-14"><p class="bold pr5 fl">Tổng doanh thu:</p>
                                 <p class="word-wrap">
                                     &nbsp;{{number_format($customer->orders->sum('gross_revenue'))}}</p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Tổng số tương tác:</p>
+                            <div class="mb10 clearfix fs-14"><p class="bold pr5 fl">Tổng số tương tác:</p>
                                 <p class="word-wrap">&nbsp;0</p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Giá trị:</p>
+                            <div class="mb10 clearfix fs-14"><p class="bold pr5 fl">Giá trị:</p>
                                 <p class="word-wrap">
                                     &nbsp;{{number_format($customer->orders->sum('gross_revenue'))}}</p>
                             </div>

@@ -46,7 +46,7 @@
                     </div>
                     <div class="col-md-12 ">
                         {!! Form::label('note', 'Ghi chú') !!}
-                        {!! Form::textArea('note', null, array('class' => 'form-control','rows'=>5)) !!}
+                        {!! Form::textArea('note', null, array('class' => 'form-control textarea-custom','rows'=>5)) !!}
                         <span class="help-block">{{ $errors->first('note', ':message') }}</span>
                     </div>
                     <div class="col-md-12" style="padding-top: 10px">
@@ -114,7 +114,7 @@
                     </div>
                     <div class="col-md-12">
                         {!! Form::label('note', 'Ghi chú', array('class' => ' required')) !!}
-                        {!! Form::textArea('note', null, array('class' => 'form-control','id'=>'update_note','rows'=>5)) !!}
+                        {!! Form::textArea('note', null, array('class' => 'form-control textarea-custom','id'=>'update_note','rows'=>5)) !!}
                         <span class="help-block">{{ $errors->first('note', ':message') }}</span>
                     </div>
                     <div class="col-md-12" style="padding-top: 10px">
