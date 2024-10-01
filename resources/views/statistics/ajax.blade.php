@@ -500,7 +500,7 @@
             },
             legend: {
                 textStyle: {
-                    color: '#fff' // Set legend text color
+                    color: '#131313' // Set legend text color
                 }
             },
             textStyle: {

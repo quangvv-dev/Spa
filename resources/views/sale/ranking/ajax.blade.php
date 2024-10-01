@@ -126,7 +126,7 @@
                                  <img src="{{asset('layout/images/images/Polygon.png')}}" alt="" class="header1_bg">
                              </div>
                              <div class="">
-                                 <div class="fs-18">{{@$item['full_name']}}</div>
+                                 <div class="fs-14">{{@$item['full_name']}}</div>
                                  <div class="fs-12 color-dark">{{@$item['branch_name']??'Tất cả chi nhánh'}}</div>
                              </div>
                          </div>
