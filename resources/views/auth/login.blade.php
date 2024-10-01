@@ -93,7 +93,6 @@
     <div class="bg"></div>
     <div style="height: 100vh;display: flex;justify-content: center;align-items: center;">
         <div class="login">
-
             @if ($errors->has('phone') || $errors->has('password'))
                 <div class="alert alert-danger" role="alert" style="font-size: 14px">
                     {{ $errors->first() }}

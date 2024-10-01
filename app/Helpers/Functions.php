@@ -796,5 +796,17 @@ class Functions
 
         return !empty($myTeam->members) ? $myTeam->members->pluck('user_id')->toArray() : [];
     }
-
+    public static function transformRanking($data, $order)
+    {
+        return $data->transform(function ($item) use ($order) {
+            return [
+                'id'            => $item->id,
+                'full_name'     => $item->full_name,
+                'avatar'        => @$item->avatar,
+                'gross_revenue' => @$item->gross_revenue,
+                'branch_name'   => @$item->branch_name ?? 'Tất cả chi nhánh',
+                'orders'        => @$order->firstWhere('id', $item->id)->orders ?? 0,
+            ];
+        });
+    }
 }
