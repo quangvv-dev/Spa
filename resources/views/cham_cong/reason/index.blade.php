@@ -23,7 +23,7 @@
                         <tbody>
                         @forelse($reasons as $key => $item)
                             <tr>
-                                <th class="text-center">{{$key+1}}</th>
+                                <td class="text-center">{{$key+1}}</td>
                                 <td class="text-center"><input type="text" class="form-control name" value="{{$item->name}}"></td>
                                 <td class="text-center"><input type="text" class="form-control count" value="{{$item->count}}"></td>
                                 <td>
