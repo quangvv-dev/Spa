@@ -1,7 +1,7 @@
 <div style="width: 100%; overflow: auto;margin-top: 20px;height: 900px;" class="tableFixHead">
     <table class="table table-bordered table-info hidden-xs" id="table-excel" style="margin-bottom: 0px;"
            data-cols-width="5,30,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,20,20,20,20,20,30">
-        <thead class="bg-primary text-white">
+        <thead class="text-white">
         <tr>
             <th class="text-center" data-fill-color="1E9AD6" data-b-a-c="FFFFFF" data-b-a-s="thin" data-f-bold="true" colspan="1" rowspan="2">STT</th>
             <th class="text-center" data-fill-color="1E9AD6" data-b-a-c="FFFFFF" data-b-a-s="thin" data-a-h="center" data-f-bold="true" colspan="1" rowspan="2">NGUỒN</th>

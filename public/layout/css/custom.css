@@ -444,8 +444,18 @@ label{
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
-a, th, td, span, button, p, h1, h2, h3, h4, h5 option {
+ th, button, p, h1, h2, h3, h4, h5 option, span, li{
     font-family: 'Sopher' !important; /* Sử dụng 'sans-serif' như một font fallback */
+}
+td, a{
+    font-family: 'svn-small' !important;
+}
+td i{
+    color: #fff !important;
+}
+tr td.bold {
+    color: #2AABE2;
+    font-weight: 1000 !important;
 }
 .no-mrl {
 margin-left: 0 !important;

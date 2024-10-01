@@ -9,7 +9,7 @@
                 <div class="table-responsive">
                     <div class="table-responsive">
                         <table class="table card-table table-vcenter table-bordered text-nowrap table-primary">
-                            <thead class="bg-primary text-white">
+                            <thead class="text-white">
                             {{--{{dd($docs[0]->key)}}--}}
                                 @if(count($docs) && count($docs[0]->key))
                                     <tr>

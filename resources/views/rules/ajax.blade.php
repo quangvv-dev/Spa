@@ -1,6 +1,6 @@
 <div class="table-responsive">
     <table class="table card-table table-vcenter table-bordered text-nowrap table-primary">
-        <thead class="bg-primary text-white">
+        <thead class="text-white">
         <tr>
             <th class="text-white">STT</th>
             <th class="text-white text-center">Tiêu đề</th>

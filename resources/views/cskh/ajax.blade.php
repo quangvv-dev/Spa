@@ -1,6 +1,6 @@
 <div class="tableFixHead" id="registration-form">
     <table class="table table-bordered table-info hidden-xs" style="margin-bottom: 0px;">
-        <thead class="bg-primary text-white">
+        <thead class="text-white">
         <tr>
             <th class="text-center" rowspan="2">STT</th>
             <th class="text-center" rowspan="2">CSKH</th>

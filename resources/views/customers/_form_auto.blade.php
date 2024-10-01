@@ -9,7 +9,7 @@
             <div class="col">
                 <div class="table-responsive">
                     <table class="table card-table table-bordered table-vcenter text-nowrap table-primary">
-                        <thead style="width: 100%" class="bg-primary text-white">
+                        <thead style="width: 100%" class="text-white">
                         <tr>
                             <th class="text-white text-center">Tên KH</th>
                             <th class="text-white text-center">SĐT</th>

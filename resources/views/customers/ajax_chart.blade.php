@@ -9,7 +9,7 @@
 {{--</div>--}}
 <div class="table-responsive">
     <table class="table card-table table-vcenter table-bordered text-nowrap table-primary">
-        <thead class="bg-primary text-white">
+        <thead class="text-white">
         <tr>
             <th class="text-white text-center">SĐT mới</th>
             <th class="text-white text-center">Số lần trao đổi</th>
@@ -52,7 +52,7 @@
 </div>
 <div class="table-responsive">
     <table class="table card-table table-vcenter table-bordered text-nowrap table-primary" id="revenue_product">
-        <thead class="bg-primary text-white">
+        <thead class="text-white">
         <tr>
             <th class="text-white text-center">STT</th>
             <th class="text-white text-center">Sản phẩm/ Dịch vụ</th>

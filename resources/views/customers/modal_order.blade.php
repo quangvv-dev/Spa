@@ -19,7 +19,7 @@
             <div class="modal-body pd-20">
                 <div class="table-responsive">
                     <table class="table card-table table-bordered table-vcenter text-nowrap table-primary">
-                        <thead class="bg-primary text-white">
+                        <thead class="text-white">
                         <tr>
                             <th class="text-white text-center">STT</th>
                             <th class="text-white text-center">Ngày thực hiện</th>

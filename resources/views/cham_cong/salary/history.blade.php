@@ -72,7 +72,7 @@
                 {{--</div>--}}
                 <div class="table-responsive">
                     <table class="table card-table table-vcenter table-bordered text-nowrap table-primary">
-                        <thead class="bg-primary text-white">
+                        <thead class="text-white">
                         <tr>
                             <th class="text-center" style="width: 40px">TT</th>
                             <th class="text-center">Tên</th>

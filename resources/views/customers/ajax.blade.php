@@ -170,7 +170,7 @@
 
     <div class="content__table">
         <table class="table card-table table-striped table-bordered table-vcenter text-nowrap" style="width: 100%">
-        <thead class="bg-primary text-white">
+        <thead class="text-white">
         <tr>
             <th ><input type="checkbox" class="selectall myCheck"/></th>
             @forelse($user_filter_list as $key => $item)

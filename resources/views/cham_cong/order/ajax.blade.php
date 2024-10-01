@@ -1,5 +1,5 @@
     <table class="table card-table table-vcenter text-nowrap table-bordered table-primary">
-        <thead class="bg-primary text-white">
+        <thead class="text-white">
         <tr>
             <th><input type="checkbox" id="checkAll"/></th>
             <th class="text-center">Mã NV</th>

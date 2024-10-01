@@ -1,5 +1,5 @@
 <div class="col-md-12 col-lg-12">
-    <div class="card">
+    <div class="card" style="background-color: #131313">
         <div class="card-header">
             <h3 class="card-title linear-text fs-24">Danh sách lịch hẹn</h3></br>
             <div class="col">

@@ -35,8 +35,19 @@
                 @else
                     {!! $item->messages !!}
                 @endif
-                {{--đắt quá c k làm, c làm cũng đc, rẻ thì c làm chứ đắt quá c--}}
-                {{--cũng trả cần thiết đắt quá c k làm--}}
+                    @if (isset($item->image))
+                        <div class="col-md-11">
+                            <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
+                                <div class="fileupload fileupload-exists"
+                                     data-provides="fileupload">
+                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 100px">
+                                        <a href="{{ $item->image }}" class="mobileLightBox"><img src="{{ $item->image }}"
+                                                                                                 alt="image"/></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
             </div>
         </div>
 
@@ -96,19 +107,19 @@
                         {{--<span style="font-style: italic">{!! $item->messages !!}</span>--}}
                     {{--@endif--}}
                 {{--</div>--}}
-                {{--@if (isset($item->image))--}}
-                    {{--<div class="col-md-11">--}}
-                        {{--<div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">--}}
-                            {{--<div class="fileupload fileupload-exists"--}}
-                                 {{--data-provides="fileupload">--}}
-                                {{--<div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 100px">--}}
-                                    {{--<a href="{{ $item->image }}" class="mobileLightBox"><img src="{{ $item->image }}"--}}
-                                                                                             {{--alt="image"/></a>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-                {{--@endif--}}
+{{--                @if (isset($item->image))--}}
+{{--                    <div class="col-md-11">--}}
+{{--                        <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">--}}
+{{--                            <div class="fileupload fileupload-exists"--}}
+{{--                                 data-provides="fileupload">--}}
+{{--                                <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 100px">--}}
+{{--                                    <a href="{{ $item->image }}" class="mobileLightBox"><img src="{{ $item->image }}"--}}
+{{--                                                                                             alt="image"/></a>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                @endif--}}
             {{--</div>--}}
         {{--</div>--}}
     @endforeach

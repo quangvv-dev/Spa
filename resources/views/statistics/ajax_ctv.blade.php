@@ -1,6 +1,6 @@
 <div class="table-responsive" id="registration-form">
     <table class="table card-table table-vcenter table-bordered text-nowrap table-primary">
-        <thead class="bg-primary text-white">
+        <thead class="text-white">
         <tr>
             <th class="text-white">STT</th>
             <th class="text-white text-center">Tên</th>

@@ -116,7 +116,7 @@
         }
 
         .banner__menu {
-            margin-left: 136px;
+            margin-left: 15%;
             height: 52px;
         }
 
@@ -350,7 +350,8 @@
     <div class="col-md-12 col-lg-12" style="font-size: 0.8rem">
         <div class="d-flex justify-content-between mt-16" style="height: 33px;">
             <div class="d-flex align-items-center gap-4 pointer">
-                <img src="{{asset('layout/images/Back.png')}}" alt=""> <span>Quay lại</span>
+                <img src="{{asset('layout/images/Back.png')}}" alt="">
+                <a href="{{ route('customers.index') }}"><span style="color: #fff">Quay lại</span></a>
             </div>
             <div class="">
                 <a href="{{ route('customers.edit', $customer->id) }}">
@@ -396,7 +397,7 @@
             </div>
             <div class="banner__background">
                 <div class="banner__menu d-flex align-items-center gap-16 fs-16" style="">
-                    <ul class="nav panel-tabs gap-16">
+                    <ul class="nav panel-tabs gap-24">
                         <li class=""><a href="#tab5" class="banner__menu__item communicate active" data-toggle="tab">Trao đổi</a>
                         </li>
                         <li><a href="#tab7" class="banner__menu__item appointment" id="click_tab_7" data-id="{{$customer->id}}"
@@ -517,7 +518,7 @@
                         <div class="border padding infor-list-ct ml2">
                             <div class="row">
                                 <div class="col-md-8">
-                                    <h3 class="uppercase pb5 mb10 font12 bold mg0">Mối quan hệ</h3>
+                                    <span class="uppercase pb5 mb10 font12 bold mg0">Mối quan hệ</span>
                                     <div>{{ @$customer->status->name }}</div></div>
                                 <div class="col-md-4 qrcode-container">
                                     <div id="qrcodeTable"></div>
@@ -529,42 +530,42 @@
                         <div class="border padding infor-list-ct ml2">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <h3 class="uppercase pb5 mb10 font12 bold mg0">
+                                    <span class="uppercase pb5 mb10 font12 bold mg0">
                                         <i class="fa fa-random mr5 gray margin-left-10 tooltip-nav">
                                             <span class="tooltiptext">Nguồn</span>
                                         </i>
-                                    </h3>
+                                    </span>
                                 </div>
                                 <div class="col-md-8">
                                     <div class="text-a">{{ @$customer->source_customer->name }}</div>
                                 </div>
                                 <div class="col-md-4">
-                                    <h3 class="uppercase pb5 mb10 font12 bold mg0">
+                                    <span class="uppercase pb5 mb10 font12 bold mg0">
                                         <i class="fa fa-user mr5 gray margin-left-10 tooltip-nav">
                                             <span class="tooltiptext">Người tạo</span>
                                         </i>
-                                    </h3>
+                                    </span>
                                 </div>
                                 <div class="col-md-8">
                                     <div class="text-a">{{ @$customer->marketing->full_name }}</div>
                                 </div>
                                 <div class="col-md-4">
-                                    <h3 class="uppercase pb5 mb10 font12 bold mg0">
+                                    <span class="uppercase pb5 mb10 font12 bold mg0">
                                         <i class="fa fa-calendar mr5 gray margin-left-10 tooltip-nav">&nbsp;
                                             <span class="tooltiptext">Ngày Tạo</span>
                                         </i>
-                                    </h3>
+                                    </span>
                                 </div>
                                 <div class="col-md-8">
                                     <div
                                         class="text-a">{{ \Carbon\Carbon::parse($customer->created_at)->format('d/m/Y') }}</div>
                                 </div>
                                 <div class="col-md-4">
-                                    <h3 class="uppercase pb5 mb10 font12 bold mg0"><i
+                                    <span class="uppercase pb5 mb10 font12 bold mg0"><i
                                             class="fa fa-shopping-cart mr5 gray margin-left-10 tooltip-nav">
                                             <span class="tooltiptext">Đơn</span>
                                         </i>
-                                    </h3>
+                                    </span>
                                 </div>
                                 <div class="col-md-8">
                                     <div class="text-a">{{ $customer->orders->count() }}</div>
@@ -575,18 +576,7 @@
 
                     <div class="border padding mt10 ml2">
                         <div class="infor-top-ct">
-                            <h3 class="uppercase mb10 font12 bold mg0" style="margin-bottom: 10px!important;">Thông tin khách hàng</h3>
-                            {{--<div class="mb10 clearfix "><p class="bold pr5 fl">Mã KH:</p>--}}
-                                {{--<p class="word-wrap bold text-info"> &nbsp;{{$customer->account_code}}</p>--}}
-                            {{--</div>--}}
-                            {{--<div class="mb10 clearfix "><p class="bold pr5 fl">Tên KH:</p>--}}
-                                {{--<p class="word-wrap bold text-info"> &nbsp;{{ $customer->full_name }} </p>--}}
-                            {{--</div>--}}
-                            {{--<div class="mb10 clearfix"><p class="bold pr5 fl">Điện thoại:</p>--}}
-                                {{--<p class="word-wrap bold text-info"><a class="" data-account-id="4629"--}}
-                                                        {{--data-type="crm" data-issensitive="true">--}}
-                                        {{--&nbsp;{{auth()->user()->permission('phone.open') ? $customer->phone : str_limit($customer->phone, 7, 'xxx')}} </a></p>--}}
-                            {{--</div>--}}
+                            <span class="uppercase mb10 font12 bold mg0" style="margin-bottom: 10px!important;">Thông tin khách hàng</span>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Chi nhánh:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->branch->name }}</p>
                             </div>
@@ -651,200 +641,46 @@
                                 <div class="tab-content" style="font-size: 15px;">
                                     <div class="tab-pane active " id="tab5">
                                         <div class="col-md-12 col-lg-12">
-                                            {{--<div class="card">--}}
-                                                {{--<div class="card-header">--}}
-                                                    {{--<h3 class="card-title linear-text fs-24">{{$title}}</h3>--}}
-                                                    {{--<div class="col" style="float: right">--}}
-                                                    {{--</div>--}}
-                                                {{--</div>--}}
-                                                {{--{!! Form::open(array('url' => url('group_comments/'.request()->segment(count(request()->segments())) ), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}--}}
-                                                {{--<div class="col-md-12 form-group required">--}}
-                                                    {{--{!! Form::textArea('messages', null, array('class' => 'form-control', 'rows' => 3)) !!}--}}
-                                                {{--</div>--}}
-                                                {{--<br>--}}
-                                                {{--<div class="col-xs-12 col-md-12">--}}
-                                                    {{--<div class="form-group required">--}}
-                                                        {{--<div class="fileupload fileupload-new"--}}
-                                                             {{--data-provides="fileupload">--}}
-                                                            {{--<div--}}
-                                                                    {{--class="fileupload-preview fileupload-exists thumbnail"--}}
-                                                                    {{--style="max-width: 150px">--}}
-
-                                                            {{--</div>--}}
-                                                            {{--<div>--}}
-                                                                {{--<button type="button"--}}
-                                                                        {{--class="btn btn-default btn-file">--}}
-                                                                        {{--<span class="fileupload-new"><i--}}
-                                                                                    {{--class="fa fa-paper-clip"></i> Chọn ảnh</span>--}}
-                                                                    {{--<span class="fileupload-exists"><i--}}
-                                                                                {{--class="fa fa-undo"></i> Thay đổi</span>--}}
-                                                                    {{--<input type="file" name="image_contact"--}}
-                                                                           {{--accept="image/*"--}}
-                                                                           {{--class="btn-default upload"/>--}}
-                                                                {{--</button>--}}
-                                                            {{--</div>--}}
-                                                        {{--</div>--}}
-                                                    {{--</div>--}}
-                                                {{--</div>--}}
-                                                {{--<div class="col-md-12">--}}
-                                                    {{--<button style="float: right" type="submit"--}}
-                                                            {{--class="btn btn-success">Gửi--}}
-                                                    {{--</button>--}}
-                                                {{--</div>--}}
-                                                {{--{{ Form::close() }}--}}
-
-                                                {{--<div id="registration-form">--}}
-                                                    {{--@include('group_comment.ajax')--}}
-                                                {{--</div>--}}
-                                                {{--<!-- table-responsive -->--}}
-                                            {{--</div>--}}
-
-
                                             <div class="content__right">
                                                 <div class="content__right__header font-sopher">
                                                     Trao đổi
                                                 </div>
-                                                <div class="content__right__body" id="registration-form">
-                                                    @include('group_comment.ajax')
-                                                    {{--<div class="item">--}}
-                                                        {{--<div class="d-flex align-items-center gap-8">--}}
-                                                            {{--<img src="{{asset('layout/images/Ava.png')}}" width="40" height="40" alt="">--}}
-                                                            {{--<div>--}}
-                                                                {{--<div class="fs-16">Lương Bảo Ngọc</div>--}}
-                                                            {{--</div>--}}
-                                                            {{--<div class="color-dark time font-svn-small">09:16--}}
-                                                                {{--09/12/2023--}}
-                                                            {{--</div>--}}
-                                                        {{--</div>--}}
-                                                        {{--<div class="mt-8 fs-16" style="padding-left: 48px;">--}}
-                                                            {{--đắt quá c k làm, c làm cũng đc, rẻ thì c làm chứ đắt quá c--}}
-                                                            {{--cũng trả cần thiết đắt quá c k làm--}}
-                                                        {{--</div>--}}
-                                                    {{--</div>--}}
-                                                    {{--<div class="item high-light">--}}
-                                                        {{--<div class="d-flex align-items-center gap-8">--}}
-                                                            {{--<img src="{{asset('layout/images/Ava.png')}}" width="40" height="40" alt="">--}}
-                                                            {{--<div>--}}
-                                                                {{--<div class="fs-16">Trang Hoàng</div>--}}
-                                                                {{--<div class="fs-12 color-dark font-svn-small">Leader--}}
-                                                                    {{--Telesale Dr Tiến--}}
-                                                                {{--</div>--}}
-                                                            {{--</div>--}}
-                                                            {{--<div class="color-dark font-svn-small time">09:16--}}
-                                                                {{--09/12/2023--}}
-                                                            {{--</div>--}}
-                                                        {{--</div>--}}
-                                                        {{--<div class="mt-8 fs-16" style="padding-left: 48px;">--}}
-                                                            {{--đắt quá c k làm đắt quá c k làm, c làm cũng đc, rẻ thì c làm--}}
-                                                            {{--chứ đắt quá c cũng trả cần thiết--}}
-                                                        {{--</div>--}}
-                                                    {{--</div>--}}
-                                                    {{--<div class="item">--}}
-                                                        {{--<div class="d-flex align-items-center gap-8">--}}
-                                                            {{--<img src="{{asset('layout/images/Ava.png')}}" width="40" height="40" alt="">--}}
-                                                            {{--<div>--}}
-                                                                {{--<div class="fs-16">Trang Hoàng</div>--}}
-                                                                {{--<div class="fs-12 color-dark font-svn-small">Leader--}}
-                                                                    {{--Telesale Dr Tiến--}}
-                                                                {{--</div>--}}
-                                                            {{--</div>--}}
-                                                            {{--<div class="color-dark font-svn-small time">09:16--}}
-                                                                {{--09/12/2023--}}
-                                                            {{--</div>--}}
-                                                        {{--</div>--}}
-                                                        {{--<div class="mt-8 fs-16" style="padding-left: 48px;">--}}
-                                                            {{--đắt quá c k làm đắt quá c k làm, c làm cũng đc, rẻ thì c làm--}}
-                                                            {{--chứ đắt quá c cũng trả cần thiết--}}
-                                                        {{--</div>--}}
-                                                    {{--</div>--}}
-                                                    {{--<div class="item">--}}
-                                                        {{--<div class="d-flex align-items-center gap-8">--}}
-                                                            {{--<img src="{{asset('layout/images/Ava.png')}}" width="40" height="40" alt="">--}}
-                                                            {{--<div>--}}
-                                                                {{--<div class="fs-16">Lương Bảo Ngọc</div>--}}
-                                                            {{--</div>--}}
-                                                            {{--<div class="color-dark time font-svn-small">09:16--}}
-                                                                {{--09/12/2023--}}
-                                                            {{--</div>--}}
-                                                        {{--</div>--}}
-                                                        {{--<div class="mt-8 fs-16" style="padding-left: 48px;">--}}
-                                                            {{--đắt quá c k làm, c làm cũng đc, rẻ thì c làm chứ đắt quá c--}}
-                                                            {{--cũng trả cần thiết đắt quá c k làm--}}
-                                                        {{--</div>--}}
-                                                    {{--</div>--}}
-                                                    {{--<div class="item high-light">--}}
-                                                        {{--<div class="d-flex align-items-center gap-8">--}}
-                                                            {{--<img src="{{asset('layout/images/Ava.png')}}" width="40" height="40" alt="">--}}
-                                                            {{--<div>--}}
-                                                                {{--<div class="fs-16">Trang Hoàng</div>--}}
-                                                                {{--<div class="fs-12 color-dark font-svn-small">Leader--}}
-                                                                    {{--Telesale Dr Tiến--}}
-                                                                {{--</div>--}}
-                                                            {{--</div>--}}
-                                                            {{--<div class="color-dark font-svn-small time">09:16--}}
-                                                                {{--09/12/2023--}}
-                                                            {{--</div>--}}
-                                                        {{--</div>--}}
-                                                        {{--<div class="mt-8 fs-16" style="padding-left: 48px;">--}}
-                                                            {{--đắt quá c k làm đắt quá c k làm, c làm cũng đc, rẻ thì c làm--}}
-                                                            {{--chứ đắt quá c cũng trả cần thiết--}}
-                                                        {{--</div>--}}
-                                                    {{--</div>--}}
-                                                    {{--<div class="item">--}}
-                                                        {{--<div class="d-flex align-items-center gap-8">--}}
-                                                            {{--<img src="{{asset('layout/images/Ava.png')}}" width="40" height="40" alt="">--}}
-                                                            {{--<div>--}}
-                                                                {{--<div class="fs-16">Trang Hoàng</div>--}}
-                                                                {{--<div class="fs-12 color-dark font-svn-small">Leader--}}
-                                                                    {{--Telesale Dr Tiến--}}
-                                                                {{--</div>--}}
-                                                            {{--</div>--}}
-                                                            {{--<div class="color-dark font-svn-small time">09:16--}}
-                                                                {{--09/12/2023--}}
-                                                            {{--</div>--}}
-                                                        {{--</div>--}}
-                                                        {{--<div class="mt-8 fs-16" style="padding-left: 48px;">--}}
-                                                            {{--đắt quá c k làm đắt quá c k làm, c làm cũng đc, rẻ thì c làm--}}
-                                                            {{--chứ đắt quá c cũng trả cần thiết--}}
-                                                        {{--</div>--}}
-                                                    {{--</div>--}}
-                                                </div>
-                                                <div class="content__right__footer p-24">
+                                                <div class="p-24">
                                                     {!! Form::open(array('url' => url('group_comments/'.request()->segment(count(request()->segments())) ), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
-                                                    <input type="text" name="messages" placeholder="Nhập tin nhắn.....">
+                                                    <input type="text" name="messages" placeholder="Nhập tin nhắn....." style="background: #2e2e2e;padding: 24px 16px;width: 100%;color: #fff">
                                                     <img id="blah" src="#" class="d-none" width="42" height="42" style="position: absolute; top: 38px; right: 115px;object-fit: cover;"/>
 
                                                     <div class="send">
-                                                        <input type="file" style="display: none;" id="imgInp" name="image_contact" class="file">
-                                                        <img src="{{asset('layout/images/Image_3.png')}}" class="pointer upload-file" alt="">
-                                                        <img src="{{asset('layout/images/Send.png')}}" class="pointer" alt="" type="submit">
+                                                        <div class="form-group required">
+                                                            <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                                <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 150px">
+                                                                </div>
+                                                                <div>
+                                                                    <button type="button" class="btn btn-file">
+                                                                        <span class="fileupload-new">
+                                                                             <img src="{{asset('layout/images/Image_3.png')}}" class="pointer upload-file" alt="">
+                                                                        </span>
+                                                                        <span class="fileupload-exists">
+                                                                            <img src="{{asset('layout/images/Image_3.png')}}" class="pointer upload-file" alt="">
+                                                                        </span>
+                                                                        <input type="file" name="image_contact" accept="image/*" class="btn-default upload"/>
+                                                                    </button>
+                                                                    <button type="submit" class="btn">
+                                                                        <img src="{{asset('layout/images/Send.png')}}" class="pointer" alt="" type="submit">
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     {{ Form::close() }}
                                                 </div>
+                                                <div class="content__right__body" id="registration-form">
+                                                    @include('group_comment.ajax')
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                                     <div class="tab-pane " id="tab6">
                                         <div class="card-header row">
                                             <div class="col-md-8" style="display: flex">
