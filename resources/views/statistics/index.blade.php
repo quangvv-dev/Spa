@@ -13,11 +13,11 @@
             margin-top: 10px;
         }
         #column text {
-            fill: #fff; /* Đổi màu văn bản trong legend thành màu xanh */
+            fill: #8ec3f2; /* Đổi màu văn bản trong legend thành màu xanh */
             font-weight: bold; /* Đặt đậm cho văn bản trong legend */
         }
         #column2 text {
-            fill: #fff; /* Đổi màu văn bản trong legend thành màu xanh */
+            fill: #8ec3f2; /* Đổi màu văn bản trong legend thành màu xanh */
             font-weight: bold; /* Đặt đậm cho văn bản trong legend */
         }
         .daterange-custom {

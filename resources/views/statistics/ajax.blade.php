@@ -500,12 +500,12 @@
             },
             legend: {
                 textStyle: {
-                    color: '#131313' // Set legend text color
+                    color: '#fff' // Set legend text color
                 }
             },
-            textStyle: {
-                color: '#fff',
-            },
+            // textStyle: {
+            //     color: '#131313',
+            // },
             colors: ['#3BDBFF', '#005A7F', '#00AEFF', '#00688B','#87CEEB','#87CEFF','#7EC0EE','#6CA6CD'],
             backgroundColor: 'transparent',
             isStacked: true,
