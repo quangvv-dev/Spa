@@ -208,7 +208,7 @@
     </div>
 @endsection
 @section('_script')
-    <script src="{{asset('js/crypto.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('js/crypto.min.js')}}"></script>
     <script type="text/javascript">
         $("#search").focus();
         $(function () {
