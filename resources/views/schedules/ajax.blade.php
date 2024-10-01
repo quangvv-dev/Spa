@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table card-table table-vcenter text-nowrap table-primary">
+    <table class="table card-table table-vcenter table-bordered text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white">STT</th>
@@ -15,7 +15,7 @@
         @if(@count($schedules))
             @foreach($schedules as $k => $s)
                 <tr>
-                    <th scope="row">{{$k}}</th>
+                    <td class="text-center">{{$k}}</td>
                     <td class="text-center">{{$s->date}}</td>
                     <td class="text-center">{{$s->time_from}}</td>
                     <td class="text-center">{{@$s->time_to}}</td>

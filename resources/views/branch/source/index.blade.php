@@ -82,7 +82,7 @@
         .row-cards{
             min-width: 0;
             word-wrap: break-word;
-            background-color: #fff;
+            background-color: #131313;
             background-clip: border-box;
             box-shadow: 0 0 0 1px rgb(61 119 180 / 12%), 0 8px 16px 0 rgb(91 139 199 / 24%);
         }
@@ -103,7 +103,7 @@
             {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'col-md-12', 'id'=> 'gridForm','role'=>'form')) !!}
             <div class="row">
                 <div class="col-md-4">
-                    <h3 class="card-title bold">BÁO CÁO CHI TIẾT NGUỒN DỮ LIỆU</h3>
+                    <h3 class="card-title linear-text bold">BÁO CÁO CHI TIẾT NGUỒN DỮ LIỆU</h3>
 
                 </div>
                 <div class="col-md-3">

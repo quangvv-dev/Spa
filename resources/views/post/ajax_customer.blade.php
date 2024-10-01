@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table card-table table-vcenter text-nowrap table-primary">
+    <table class="table card-table table-vcenter text-nowrap table-bordered table-primary">
         <thead class="bg-primary text-white">
         <tr>
             <th><input type="checkbox" class="selectall myCheck"></th>

@@ -9,7 +9,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{$title}}</h3></br>
+                <h3 class="card-title linear-text fs-24">{{$title}}</h3></br>
                 <div class="col" style="float: right">
                     <a class="right btn btn-primary btn-flat" href="{{ url('schedules/'.request()->segment(count(request()->segments())) ) }}"><i
                                 class="fa fa-arrow-right"></i>Tới đặt lịch</a>

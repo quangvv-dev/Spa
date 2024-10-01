@@ -25,7 +25,7 @@
         .row-cards {
             min-width: 0;
             word-wrap: break-word;
-            background-color: #fff;
+            background-color: #131313;
             background-clip: border-box;
             box-shadow: 0 0 0 1px rgb(61 119 180 / 12%), 0 8px 16px 0 rgb(91 139 199 / 24%);
         }
@@ -46,7 +46,7 @@
         <div id="fix-scroll" class="row padding mb10 header-dard border-bot shadow row">
             {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'col-md-12', 'id'=> 'gridForm','role'=>'form')) !!}
             <div class="row">
-                <div class="col-md-3"><h3 class="card-title bold">XẾP HẠNG TELESALE</h3></div>
+                <div class="col-md-3"><h3 class="card-title linear-text fs-24 bold">XẾP HẠNG TELESALE</h3></div>
             </div>
             <div class="row mt-3">
                 <div class="col-md-2">

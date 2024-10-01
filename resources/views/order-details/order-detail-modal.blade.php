@@ -3,7 +3,7 @@
         color: black;
     }
 </style>
-<div class="modal fade" id="orderDetailModal" role="dialog">
+<div class="modal fade modal-custom" id="orderDetailModal" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -14,7 +14,7 @@
                 <div class="customer-info" style="margin-bottom: 10px">
 
                 </div>
-                <table class="table card-table table-vcenter text-nowrap table-primary">
+                <table class="table card-table table-vcenter table-bordered text-nowrap table-primary">
                     <thead class="bg-primary text-white">
                     <tr class="bold b-gray">
                         <td class="padding5">Tên sản phẩm</td>

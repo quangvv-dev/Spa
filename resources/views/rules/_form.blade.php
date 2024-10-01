@@ -264,7 +264,7 @@
 
             <form id="rule_form" action="{{url('rules')}}" method="POST" class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Rule</h3>
+                    <h3 class="card-title linear-text fs-24">Rule</h3>
                 </div>
                 <div class="card-body">
                     @csrf
@@ -295,7 +295,7 @@
                                 <div>
                                     <small style="color: orangered">Chuột phải vào vùng dưới để thêm đối tượng</small>
                                 </div>
-                                <textarea style="display:none" name="configs" cols="30"
+                                <textarea class="textarea-custom" style="display:none" name="configs" cols="30"
                                           rows="10">{{!empty($rule->configs) ? $rule->configs : '{}' }}</textarea>
                                 <div style="position:relative">
                                     <div id="myDiagramDiv" style="width:100%; height:600px; border: 1px solid;"></div>

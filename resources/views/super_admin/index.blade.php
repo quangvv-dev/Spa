@@ -81,7 +81,7 @@
 
                                         </div>
                                         <div class="table-responsive col-md-12">
-                                            <table id="list-user" class="table table-bordered table-hover">
+                                            <table id="list-user" class="table table-bordered table-hover table-bordered">
                                                 <thead class="bg-info text-white">
                                                 <tr>
                                                     <th>Quyền</th>

@@ -71,8 +71,8 @@
                 {{--</nav>--}}
                 {{--</div>--}}
                 <div class="table-responsive">
-                    <table class="table card-table table-vcenter text-nowrap table-primary">
-                        <thead class="bg-primary text-white">
+                    <table class="table card-table table-vcenter table-bordered text-nowrap table-primary">
+                        <thead class="text-white">
                         <tr>
                             <th class="text-center" style="width: 40px">TT</th>
                             <th class="text-center">Tên</th>
@@ -113,7 +113,7 @@
     </div>
 
 
-    <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal fade modal-custom" id="myModal" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">

@@ -1,8 +1,8 @@
-<div class="modal fade" id="show-branch-account" role="dialog"  aria-hidden="true">
+<div class="modal fade modal-custom" id="show-branch-account" role="dialog"  aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="example-Modal3">Chuyển chi nhánh</h5>
+                <h5 class="modal-title-custom linear-text fs-24" id="example-Modal3">Chuyển chi nhánh</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

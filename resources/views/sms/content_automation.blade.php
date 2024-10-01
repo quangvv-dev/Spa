@@ -30,7 +30,7 @@
                 {{--                </div>--}}
             </div>
             <div class="col-md-6 col-xs-12">
-                <table class="table card-table table-vcenter text-nowrap table-primary">
+                <table class="table card-table table-vcenter table-bordered text-nowrap table-primary">
                     <thead class="bg-primary text-white">
                     <tr>
                         <th class="text-white text-center">ID</th>
@@ -86,7 +86,7 @@
         let name = $(this).html();
         $(target).find('.campaign_name').empty();
         let html = '';
-        html += `<textarea data-id=` + id + ` class="campaign-result" style="width: 100%; height: 58px; font-size: 14px; overflow-y: hidden;"> ` + name + `</textarea>`;
+        html += `<textarea data-id=` + id + ` class="campaign-result textarea-custom" style="width: 100%; height: 58px; font-size: 14px; overflow-y: hidden;"> ` + name + `</textarea>`;
         $(target).find(".campaign_name").append(html);
     });
     $(document).on('focusout', '.campaign-result', function (e) {

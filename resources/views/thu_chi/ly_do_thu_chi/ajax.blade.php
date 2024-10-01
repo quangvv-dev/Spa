@@ -1,5 +1,5 @@
 <div class="table-responsive" id="registration-form">
-    <table class="table card-table table-vcenter text-nowrap table-primary">
+    <table class="table card-table table-vcenter table-bordered text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white">STT</th>
@@ -15,7 +15,7 @@
         @if(@count($docs))
             @foreach($docs as $k => $s)
                 <tr>
-                    <td scope="row">{{$k+1}}</td>
+                    <td class="text-center">{{$k+1}}</td>
                     <td>
                         {!! Form::select('category_id',$categories,@$s->category_id, array('class' => 'form-control select2 category_ids','placeholder'=>'Chọn danh mục')) !!}
                     </td>

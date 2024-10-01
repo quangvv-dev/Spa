@@ -211,7 +211,7 @@
 
 
 <!-- modal -->
-{{--<div class="modal fade" id="customer-book" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">--}}
+{{--<div class="modal fade modal-custom" id="customer-book" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">--}}
 {{--<div class="modal-dialog modal-layout">--}}
 {{--<!--Modal content-->--}}
 {{--<div class="modal-content modal-container">--}}
@@ -249,7 +249,7 @@
     {{--</button>--}}
 {{--</div>--}}
 <!-- modal register -->
-<div class="modal fade" id="register" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade modal-custom" id="register" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-layout modal-register">
         <!--Modal content-->
         <div class="modal-content modal-container">

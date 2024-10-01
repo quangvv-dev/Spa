@@ -1,10 +1,10 @@
-<div class="modal fade text-left modal-retweet" id="bootstrap" tabindex="-1" role="dialog"
+<div class="modal fade modal-custom text-left modal-retweet" id="bootstrap" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel35"
      style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-main">
-                <h3 class="modal-title" id="myModalLabel35">CẤU HÌNH ĐỒNG BỘ BÀI POST, TIN NHẮN</h3>
+                <h3 class="modal-title-custom linear-text fs-24" id="myModalLabel35">CẤU HÌNH ĐỒNG BỘ BÀI POST, TIN NHẮN</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>

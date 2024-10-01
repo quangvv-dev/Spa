@@ -1,6 +1,6 @@
 <div class="table-responsive">
-    <table class="table card-table table-vcenter text-nowrap table-primary">
-        <thead class="bg-primary text-white">
+    <table class="table card-table table-bordered table-vcenter text-nowrap table-primary">
+        <thead class="text-white">
         <tr>
             <th class="text-white">STT</th>
             <th class="text-white text-center">Tên nhóm</th>
@@ -13,7 +13,7 @@
         @if(@count($docs))
             @foreach($docs as $k => $s)
                 <tr>
-                    <th scope="row">{{$k}}</th>
+                    <td class="text-center">{{$k}}</td>
                     <td class="text-center">{{$s->name}}</td>
                     <td class="text-center">{{$s->code}}</td>
                     <td class="text-center">{{@$s->categories->name}}

@@ -34,7 +34,7 @@ class MarketingController extends Controller
         $branchs = Branch::search()->pluck('name', 'id');
         $location = Branch::getLocation();
         view()->share([
-            'branchs' => $branchs,
+            'branchs'  => $branchs,
             'location' => $location,
         ]);
 
@@ -47,7 +47,8 @@ class MarketingController extends Controller
      */
     public function index(Request $request)
     {
-        $teams = Team::select('id','name')->where('department_id', DepartmentConstant::MARKETING)->pluck('name','id')->toArray();
+        $teams = Team::select('id', 'name')->where('department_id', DepartmentConstant::MARKETING)->pluck('name',
+            'id')->toArray();
 
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
@@ -63,7 +64,7 @@ class MarketingController extends Controller
             $group_branch = Branch::where('location_id', @Auth::user()->branch->location_id)->pluck('id')->toArray();
             $input['group_branch'] = $group_branch;
         }
-        $marketing = User::where('department_id', DepartmentConstant::MARKETING)->where('active',StatusCode::ON)
+        $marketing = User::where('department_id', DepartmentConstant::MARKETING)->where('active', StatusCode::ON)
             ->when(!empty($members), function ($q) use ($members) {
                 $q->whereIn('id', $members);
             })->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
@@ -83,7 +84,7 @@ class MarketingController extends Controller
                 $item->schedules = Schedule::search($input)->count();
                 return $item;
             })->sortByDesc('gross_revenue');
-        $marketing =  MarketingResource::collection($marketing);
+        $marketing = MarketingResource::collection($marketing);
         if ($request->ajax()) {
             return view('marketing.leader.ajax', compact('marketing'));
         }
@@ -105,6 +106,7 @@ class MarketingController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -116,6 +118,7 @@ class MarketingController extends Controller
      * Display the specified resource.
      *
      * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request)
@@ -136,7 +139,8 @@ class MarketingController extends Controller
             if (count($input['group_user'])) {
                 $schedules = Schedule::search($input)->select('id');
                 $item->schedules = $schedules->count();
-                $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+                $item->schedules_den = $schedules->whereIn('status',
+                    [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
             } else {
                 $item->schedules = 0;
                 $item->schedules_den = 0;
@@ -166,6 +170,7 @@ class MarketingController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function addLinePriceMarketing(Request $request)
@@ -175,11 +180,11 @@ class MarketingController extends Controller
             foreach ($request->id as $key => $item) {
                 PriceMarketing::find($item)->update([
                     'source_id' => $request->source_id,
-                    'budget' => str_replace(",", "", $request->budget[$key]),
-                    'comment' => str_replace(",", "", $request->comment[$key]),
-                    'message' => str_replace(",", "", $request->message[$key]),
-                    'date' => Carbon::createFromFormat('d/m/Y', $request->date[$key])->format('Y-m-d'),
-                    'user_id' => $user->id,
+                    'budget'    => str_replace(",", "", $request->budget[$key]),
+                    'comment'   => str_replace(",", "", $request->comment[$key]),
+                    'message'   => str_replace(",", "", $request->message[$key]),
+                    'date'      => Carbon::createFromFormat('d/m/Y', $request->date[$key])->format('Y-m-d'),
+                    'user_id'   => $user->id,
                     'branch_id' => $request->branch_id,
                 ]);
             }
@@ -187,12 +192,12 @@ class MarketingController extends Controller
             foreach ($request->budget as $key => $item) {
                 PriceMarketing::create([
                     'source_id' => $request->source_id,
-                    'user_id' => $user->id,
+                    'user_id'   => $user->id,
                     'branch_id' => $request->branch_id,
-                    'budget' => str_replace(",", "", $item),
-                    'comment' => str_replace(",", "", $request->comment[$key]),
-                    'message' => str_replace(",", "", $request->message[$key]),
-                    'date' => Functions::createYearMonthDay($request->date[$key]),
+                    'budget'    => str_replace(",", "", $item),
+                    'comment'   => str_replace(",", "", $request->comment[$key]),
+                    'message'   => str_replace(",", "", $request->message[$key]),
+                    'date'      => Functions::createYearMonthDay($request->date[$key]),
                 ]);
             }
         }
@@ -210,7 +215,8 @@ class MarketingController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -222,6 +228,7 @@ class MarketingController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
@@ -234,11 +241,13 @@ class MarketingController extends Controller
      * Bảng xếp hạng MKT
      *
      * @param Request $request
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function ranking(Request $request)
     {
-        $teams = Team::select('id','name')->where('department_id', DepartmentConstant::MARKETING)->pluck('name','id')->toArray();
+        $teams = Team::select('id', 'name')->where('department_id', DepartmentConstant::MARKETING)->pluck('name',
+            'id')->toArray();
 
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
@@ -246,24 +255,49 @@ class MarketingController extends Controller
         $members = Functions::members($request->all());
 
         $input = $request->all();
-        $marketing = User::where('department_id', DepartmentConstant::MARKETING)->where('active',StatusCode::ON)
-            ->when(!empty($members), function ($q) use ($members) {
-                $q->whereIn('id', $members);
-            })->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
-            $input['marketing'] = $item->id;
-            $input['is_upsale'] = OrderConstant::NON_UPSALE;
-            $payment = PaymentHistory::search($input, 'price,order_id')->whereHas('order', function ($item) {
-                $item->where('is_upsale', OrderConstant::NON_UPSALE);
-            });
-            $item->gross_revenue = $payment->sum('price');
-            return $item;
-        })->sortByDesc('gross_revenue')->toArray();
-
-        $my_key = array_keys(array_column((array)$marketing, 'id'), Auth::user()->id);
+        $marketing = $this->getMarketing($members, $input);
+        $orders = $this->getMarketingOrders($members, $input);
+        $marketing = Functions::transformRanking($marketing, $orders);
 
         if ($request->ajax()) {
-            return view('marketing.ranking.ajax', compact('marketing', 'my_key'));
+            return view('marketing.ranking.ajax', compact('marketing'));
         }
-        return view('marketing.ranking.index', compact('marketing', 'my_key', 'teams'));
+        return view('marketing.ranking.index', compact('marketing', 'teams'));
+    }
+
+    public function getMarketing($members, $input)
+    {
+        return User::leftJoin('branchs as b', 'users.branch_id', '=', 'b.id')
+            ->join('orders as o', 'o.mkt_id', '=', 'users.id')
+            ->join('payment_histories as ph', 'o.id', '=', 'ph.order_id')
+            ->where('users.department_id', DepartmentConstant::MARKETING)->where('users.active', StatusCode::ON)
+            ->when(!empty($members), function ($q) use ($members) {
+                $q->whereIn('users.id', $members);
+            })
+            ->where('o.is_upsale', OrderConstant::NON_UPSALE)
+            ->whereBetween('ph.payment_date', [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ])
+            ->select('users.id', 'users.full_name', 'users.avatar', 'b.name as branch_name',
+                \DB::raw('sum(ph.price) as gross_revenue'))
+            ->groupBy('users.id')
+            ->orderBy('gross_revenue', 'desc')->get();
+    }
+
+    public function getMarketingOrders($members, $input)
+    {
+        return User::join('orders as o', 'o.mkt_id', '=', 'users.id')
+            ->where('users.department_id', DepartmentConstant::MARKETING)->where('users.active', StatusCode::ON)
+            ->when(!empty($members), function ($q) use ($members) {
+                $q->whereIn('users.id', $members);
+            })
+            ->where('o.is_upsale', OrderConstant::NON_UPSALE)
+            ->whereBetween('o.created_at', [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ])
+            ->select('users.id', \DB::raw('count(o.id) as orders'))
+            ->groupBy('users.id')->get();
     }
 }

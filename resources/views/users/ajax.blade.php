@@ -13,7 +13,7 @@
             Nhân sự tạm nghỉ : <span class="text-warning">0</span>
         </div>
     </div>
-    <table class="table card-table table-vcenter text-nowrap table-primary">
+    <table class="table card-table table-vcenter text-nowrap table-primary table-bordered">
         <thead class="bg-primary text-white">
         <tr>
 {{--            <th class="text-white">Mã NV</th>--}}
@@ -32,7 +32,7 @@
         @if (count($users))
             @foreach($users as $user)
                 <tr>
-{{--                    <th scope="row">{{ $user->code }}</th>--}}
+{{--                    <th class="text-center">{{ $user->code }}</th>--}}
 {{--                    <td class="text-center">{{ $user->approval_code }}</td>--}}
                     <td class="text-center"><a href="{{route('users.edit',$user->id)}}">{{ $user->full_name }}</a>
                         <br>

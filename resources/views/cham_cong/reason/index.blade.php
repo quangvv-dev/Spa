@@ -7,8 +7,8 @@
             </div>
             <div id="registration-form">
                 <div class="table-responsive">
-                    <table class="table card-table table-vcenter text-nowrap table-primary">
-                        <thead class="bg-primary text-white">
+                    <table class="table card-table table-vcenter table-bordered text-nowrap table-primary">
+                        <thead class="text-white">
                         <tr>
                             <th class="text-white">STT</th>
                             <th class="text-white text-center">Lý do</th>
@@ -23,7 +23,7 @@
                         <tbody>
                         @forelse($reasons as $key => $item)
                             <tr>
-                                <th scope="row">{{$key+1}}</th>
+                                <th class="text-center">{{$key+1}}</th>
                                 <td class="text-center"><input type="text" class="form-control name" value="{{$item->name}}"></td>
                                 <td class="text-center"><input type="text" class="form-control count" value="{{$item->count}}"></td>
                                 <td>

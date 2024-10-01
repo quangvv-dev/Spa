@@ -111,20 +111,49 @@ class CarepageController extends Controller
         }
 
         $input = $request->all();
-        $marketing = User::where('department_id', DepartmentConstant::CARE_PAGE)->where('active',UserConstant::ACTIVE)
-            ->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
-            $input['carepage_id'] = $item->id;
-            $input['is_upsale'] = OrderConstant::NON_UPSALE;
-            $data = Order::searchAll($input)->select('gross_revenue');
-            $item->gross_revenue = $data->sum('gross_revenue');
-            return $item;
-        })->sortByDesc('gross_revenue')->toArray();
-
-        $my_key = array_keys(array_column((array)$marketing, 'id'), Auth::user()->id);
+        $marketing = $this->getCare(null, $input);
+        $orders = $this->getCareOrders(null, $input);
+        $marketing = Functions::transformRanking($marketing, $orders);
 
         if ($request->ajax()) {
-            return view('marketing.rankingCarepage.ajax', compact('marketing', 'my_key'));
+            return view('marketing.ranking.ajax', compact('marketing'));
         }
-        return view('marketing.rankingCarepage.index', compact('marketing', 'my_key'));
+        return view('marketing.rankingCarepage.index', compact('marketing'));
+    }
+
+    public function getCare($members, $input)
+    {
+        return User::leftJoin('branchs as b', 'users.branch_id', '=', 'b.id')
+            ->join('orders as o', 'o.carepage_id', '=', 'users.id')
+            ->join('payment_histories as ph', 'o.id', '=', 'ph.order_id')
+            ->where('users.department_id', DepartmentConstant::CARE_PAGE)->where('users.active', StatusCode::ON)
+            ->when(!empty($members), function ($q) use ($members) {
+                $q->whereIn('users.id', $members);
+            })
+            ->where('o.is_upsale', OrderConstant::NON_UPSALE)
+            ->whereBetween('ph.payment_date', [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ])
+            ->select('users.id', 'users.full_name', 'users.avatar', 'b.name as branch_name',
+                \DB::raw('sum(ph.price) as gross_revenue'))
+            ->groupBy('users.id')
+            ->orderBy('gross_revenue', 'desc')->get();
+    }
+
+    public function getCareOrders($members, $input)
+    {
+        return User::join('orders as o', 'o.carepage_id', '=', 'users.id')
+            ->where('users.department_id', DepartmentConstant::CARE_PAGE)->where('users.active', StatusCode::ON)
+            ->when(!empty($members), function ($q) use ($members) {
+                $q->whereIn('users.id', $members);
+            })
+            ->where('o.is_upsale', OrderConstant::NON_UPSALE)
+            ->whereBetween('o.created_at', [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ])
+            ->select('users.id', \DB::raw('count(o.id) as orders'))
+            ->groupBy('users.id')->get();
     }
 }

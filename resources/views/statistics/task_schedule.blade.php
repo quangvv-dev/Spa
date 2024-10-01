@@ -7,7 +7,7 @@
     <div class="col-md-12 col-lg-12" style="margin-top: 3%;">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title col-md-7">Thống kê công việc & lịch hẹn</h3>
+                <h3 class="card-title linear-text fs-24 col-md-7">Thống kê công việc & lịch hẹn</h3>
                 <div class="col-md-7">
                     {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'row', 'id'=> 'gridForm','role'=>'form')) !!}
                     <div class="col-md-4">

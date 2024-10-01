@@ -1,4 +1,4 @@
-<div class="modal fade" id="myModal" role="dialog">
+<div class="modal fade modal-custom" id="myModal" role="dialog">
     <div class="modal-dialog modal-lg">
         <!-- Modal content-->
         <div class="modal-content" style="max-height: 90vh;overflow-y: auto">
@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
-                    <table class="table card-table table-center text-nowrap table-primary">
+                    <table class="table card-table table-center table-bordered text-nowrap table-primary">
                         <thead class="bg-primary text-white">
                         <tr>
                             <th class="text-white">STT</th>

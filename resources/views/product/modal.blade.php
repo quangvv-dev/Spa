@@ -1,4 +1,4 @@
-<div class="modal fade" id="myModalImport" role="dialog">
+<div class="modal fade modal-custom" id="myModalImport" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content" style="height: 25%">

@@ -3,7 +3,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{$title}}</h3></br>
+                <h3 class="card-title linear-text fs-24">{{$title}}</h3></br>
             </div>
             <div class="card-header">
                 <div class="display btn-group" id="btn_tool_group" style="display: none">

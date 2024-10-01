@@ -1,9 +1,9 @@
-<div id="paymentModal" class="modal fade mt30 bs-example-modal-sm in"
+<div id="paymentModal" class="modal fade modal-custom mt30 bs-example-modal-sm in"
      tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-backdrop="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel" style="width: 100%">Thanh toán nạp ví</h5>
+                <h5 class="modal-title-custom linear-text fs-24" id="exampleModalLabel" style="width: 100%">Thanh toán nạp ví</h5>
                 <br>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>

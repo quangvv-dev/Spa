@@ -134,7 +134,6 @@
                         var row = $('body').find('.content-notify');
                         var html = '';
                         $.each(data, function (i, v) {
-                            console.log(v.data.task_id,'data list');
                             var obj = v.data;
 
                             if(v.type == 3){

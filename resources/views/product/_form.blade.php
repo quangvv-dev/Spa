@@ -4,7 +4,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{$title}}</h3></br>
+                <h3 class="card-title linear-text fs-24">{{$title}}</h3></br>
             </div>
 
             @if (isset($doc))
@@ -77,7 +77,7 @@
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('enable') ? 'has-error' : '' }}">
                         {!! Form::label('description', 'Mô tả') !!}
-                        {!! Form::textArea('description', null, array('class' => 'form-control')) !!}
+                        {!! Form::textArea('description', null, array('class' => 'form-control textarea-custom')) !!}
                         <span class="help-block">{{ $errors->first('enable', ':message') }}</span>
                     </div>
                 </div>

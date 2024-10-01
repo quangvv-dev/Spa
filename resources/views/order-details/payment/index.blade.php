@@ -57,7 +57,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{$title}}</h3>
+                <h3 class="card-title linear-text">{{$title}}</h3>
                 <div class="col">
                 </div>
             </div>

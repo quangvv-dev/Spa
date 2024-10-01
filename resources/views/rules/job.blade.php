@@ -72,7 +72,7 @@
                     <div class="form-group col-12">
                         <div class="form-group exactly">
                             <label>Nội dung công việc</label>
-                            <textarea name="sms_content" class="form-control autocomplete-textarea"></textarea>
+                            <textarea name="sms_content" class="form-control autocomplete-textarea textarea-custom"></textarea>
                         </div>
 {{--                        <div class="conditional-input form-group repeat">--}}
 {{--                            <label>Nội dung sms báo lịch</label>--}}

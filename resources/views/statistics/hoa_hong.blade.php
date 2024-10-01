@@ -319,19 +319,19 @@
     </div>
     <!-- // card-actions section end -->
     <!-- Modal -->
-    <div class="modal fade" id="modalMultiPage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade modal-custom" id="modalMultiPage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Danh sách đơn</h5>
+                    <h5 class="modal-title-custom linear-text fs-24" id="exampleModalLabel">Danh sách đơn</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body" style="height: 55vh;overflow: auto;">
                     <div class="table-responsive">
-                        <table class="table card-table table-vcenter text-nowrap table-primary">
+                        <table class="table card-table table-bordered table-vcenter text-nowrap table-primary">
                             <tr>
                                 <td class="text-center">STT</td>
                                 <td class="text-center">Số điện thoại</td>

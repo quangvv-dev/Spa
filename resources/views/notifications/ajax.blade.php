@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table card-table table-vcenter text-nowrap">
+    <table class="table card-table table-bordered table-vcenter text-nowrap">
         <tbody>
         @if(count($docs))
             @foreach($docs as $doc)

@@ -57,7 +57,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Các đơn hàng bị xoá</h3></br>
+                <h3 class="card-title linear-text">Các đơn hàng bị xoá</h3></br>
                 <div class="col">
                 </div>
             </div>

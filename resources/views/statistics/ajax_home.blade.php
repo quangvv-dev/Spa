@@ -5,7 +5,7 @@
 </style>
 
 <div class="table-responsive">
-    <table class="table card-table table-vcenter text-nowrap table-primary">
+    <table class="table card-table table-vcenter text-nowrap table-bordered table-primary">
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white text-center">Khách hàng mới</th>
@@ -133,10 +133,10 @@
 </div>
 
 <div class="card-header">
-    <h3 class="card-title">Đơn hàng bán</h3>
+    <h3 class="card-title linear-text fs-24">Đơn hàng bán</h3>
 </div>
 <div class="table-responsive">
-    <table class="table card-table table-vcenter text-nowrap table-primary">
+    <table class="table card-table table-vcenter text-nowrap table-bordered table-primary">
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white">STT</th>

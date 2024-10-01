@@ -3,11 +3,11 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title"></h3></br>
+                <h3 class="card-title"></h3>
             </div>
             <div id="registration-form">
                 <div class="table-responsive">
-                    <table class="table card-table table-vcenter text-nowrap table-primary">
+                    <table class="table card-table table-vcenter table-bordered text-nowrap table-primary">
                         <thead class="bg-primary text-white">
                         <tr>
                             <th class="text-white">STT</th>
@@ -21,7 +21,7 @@
                         <tbody>
                         @forelse($time_status as $key => $item)
                             <tr>
-                                <th scope="row">{{$key+1}}</th>
+                                <td class="text-center">{{$key+1}}</td>
                                 <td class="text-center">{{@$item->status->name}}</td>
                                 <td class="text-center">
                                     {{--{{$item->expired_time}}--}}

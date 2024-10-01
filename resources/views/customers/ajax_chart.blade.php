@@ -8,8 +8,8 @@
 {{--    </div>--}}
 {{--</div>--}}
 <div class="table-responsive">
-    <table class="table card-table table-vcenter text-nowrap table-primary">
-        <thead class="bg-primary text-white">
+    <table class="table card-table table-vcenter table-bordered text-nowrap table-primary">
+        <thead class="text-white">
         <tr>
             <th class="text-white text-center">SĐT mới</th>
             <th class="text-white text-center">Số lần trao đổi</th>
@@ -51,8 +51,8 @@
     {!! Form::select('type',[2=>'Sản phẩm',1=>'Dịch vụ'], $type, array( 'id'=>'type','class' => 'form-control','required'=>true)) !!}
 </div>
 <div class="table-responsive">
-    <table class="table card-table table-vcenter text-nowrap table-primary" id="revenue_product">
-        <thead class="bg-primary text-white">
+    <table class="table card-table table-vcenter table-bordered text-nowrap table-primary" id="revenue_product">
+        <thead class="text-white">
         <tr>
             <th class="text-white text-center">STT</th>
             <th class="text-white text-center">Sản phẩm/ Dịch vụ</th>

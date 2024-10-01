@@ -2,11 +2,12 @@
 @section('_style')
     <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
 @endsection
+<script type="text/javascript" src="{{asset('layout/js/chart.js')}}"></script>
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title" style="margin-right: 100px;">{{$title}}</h3></br>
+                <h3 class="card-title linear-text fs-24" style="margin-right: 100px;">{{$title}}</h3></br>
                 {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'row', 'id'=> 'gridForm','role'=>'form')) !!}
                 <div class="col-md-10">
                     <input type="hidden" name="start_date" id="start_date">

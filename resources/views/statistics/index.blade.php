@@ -3,17 +3,56 @@
     <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
     <style>
-        .title {
-            text-align: left;
+        .font-30 {
+            font-size: 20px;
+        }
+
+        .h4.text-center {
+            color: cornflowerblue;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        #column text {
+            fill: #fff; /* Đổi màu văn bản trong legend thành màu xanh */
+            font-weight: bold; /* Đặt đậm cho văn bản trong legend */
+        }
+        #column2 text {
+            fill: #fff; /* Đổi màu văn bản trong legend thành màu xanh */
+            font-weight: bold; /* Đặt đậm cho văn bản trong legend */
+        }
+        .daterange-custom {
+            background: #131313;
+            border: 1px solid #686777;
+            color: #fff;
+            padding: 13.5px 16px;
+            outline: none;
+            border-radius: 8px;
+        }
+        .thong-ke__item {
+            background: radial-gradient(150.73% 226.72% at -38.48% 56.41%, #253763 0%, #1A2749 23%, #121B34 50%, #0D1328 75%, #0C1124 100%);
+            width: 33.3%;
+            height: 230px;
+            border-radius: 16px;
+        }
+        .thong-ke__item .number{
+            background: linear-gradient(172.37deg, #FBF0D0 4.96%, #FFFAF4 45.9%, #CC9F5F 74.55%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 28px;
+        }
+        .number-gradient{
+            background: linear-gradient(172.37deg, #FBF0D0 4.96%, #FFFAF4 45.9%, #64c2df 74.55%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent;
         }
     </style>
 @endsection
 @section('content')
-    <div class="col-md-12 col-lg-12" style="margin-top: 3%;">
+    <div class="col-md-12 col-lg-12" style="margin-top: 1%;">
         <div class="card">
             <div class="card-header">
                 <div class="col-md-4">
-                    <h3 class="card-title bold">THỐNG KÊ DOANH THU</h3>
+                    <h3 class="card-title linear-text fs-24 bold">THỐNG KÊ DOANH THU</h3>
                 </div>
                 <div class="col-md-8">
                     {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'row', 'id'=> 'gridForm','role'=>'form')) !!}

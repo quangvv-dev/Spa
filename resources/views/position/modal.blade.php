@@ -1,4 +1,4 @@
-<div class="modal fade" id="myModal" role="dialog">
+<div class="modal fade modal-custom" id="myModal" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content" style="height: 25%">
@@ -27,7 +27,7 @@
 
 </div>
 
-<div class="modal fade" id="updateModal" role="dialog">
+<div class="modal fade modal-custom" id="updateModal" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content" style="height: 25%">

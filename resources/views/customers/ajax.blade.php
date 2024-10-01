@@ -20,7 +20,7 @@
     .birthday-count{
         top: -9px;
         position: absolute;
-        left: 20px;
+        left: 12px;
     }
     .tooltip-nav{
         padding-left: 10px;
@@ -41,7 +41,7 @@
         color: red !important;
     }
 </style>
-<div class="card-header filter-box filterbox-sticky">
+<div class="card-header filter-box filterbox-sticky" style="background: rgba(19, 19, 19, 1); border-bottom: none;">
     <div class="display btn-group open">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="true"
@@ -57,42 +57,13 @@
             </li>
         </ul>
     </div>
-    <div class="display btn-group" id="btn_tool_group" style="display: none;">
-        <button type="button" class="btn btn-default position dropdown-toggle" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false"> Thao tác <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-            {{--<li class="dropdown_action" id="send_email"><a>Gửi Email</a></li>--}}
-            {{--<li class="dropdown_action" id="send_sms"><a>Gửi SMS</a></li>--}}
-            {{--<li class="dropdown_action" id="mark_as_potential"><a>Tạo cơ hội</a></li>--}}
-            {{--<li class="dropdown_action" id="show_popup_task"><a>Tạo công việc</a></li>--}}
-            {{--<li class="dropdown_action" id="show_group_type_account"><a>Nhóm khách hàng</a></li>--}}
-            @if(auth()->user()->permission('customer.changeSale'))
-                <li class="dropdown_action" id="show_manager_account"><a>Chuyển người phụ trách</a></li>
-            @endif
-            @if(auth()->user()->permission('customer.changeCskh'))
-                <li class="dropdown_action" data-toggle="modal" data-target="#show-cskh-account"><a>Chuyển CSKH</a></li>
-            @endif
-            <li class="dropdown_action"><a id="change_relations">Trạng thái khách hàng</a></li>
-            @if(auth()->user()->permission('customer.changeBranch'))
-                <li class="dropdown_action" data-toggle="modal" data-target="#show-branch-account"><a>Chuyển chi nhánh</a></li>
-            @endif
-            @if(auth()->user()->permission('customers.delete'))
-                <li class="dropdown_action" id="remove_selected_account"><a>Xóa nhiều</a></li>
-            @endif
-            <li class="dropdown_action" id="restore_account"><a>Khôi phục</a></li>
-            <li class="dropdown_action" id="permanently_delete_account"><a>Destroy (Huỷ data)</a></li>
-{{--            <li class="dropdown_action" data-toggle="modal" data-target="#show-modal-phanbo"><a>Phân bổ data</a></li>--}}
-            @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::ADMIN)
-            <li class="dropdown_action"><a href="{{route('settings.phanbo')}}">Phân chia hàng loạt</a></li>
-            @endif
-        </ul>
-    </div>
-    <div style="margin-left: 10px">
-        <button data-name="" class="btn btn-default status btn white account_relation position"
-                style="height: 40px;">
-            TẤT CẢ
-            <span class="not-number-account white all_count">{{$statuses->sum('customers_count')}}</span>
-        </button>
+    <div class="d-flex gap-24 menu">
+        <div class="squares-four pointer account_relation status active">
+            <img src="{{asset('layout/images/SquaresFour_active.png')}}" alt="">
+            <span class="text-white" style="white-space: nowrap">Tất cả</span>
+{{--            <span class="text-white fs-12">({{$statuses->sum('customers_count')}})</span>--}}
+            <div class="active-border"></div>
+        </div>
     </div>
     <div style="margin-left: 10px">
         <button class="btn btn-default" style="height: 40px;font-weight: 600;">
@@ -101,93 +72,105 @@
             </a>
         </button>
     </div>
-    <div class="scrollmenu col-md-7">
+
+    <div class="scrollmenu col-md-8 d-flex gap-24 menu">
         @php
             $customers_count = 0;
         @endphp
         @foreach(@$statuses as $k => $item)
-            <button class="status btn white account_relation position btn-new" data-name="{{$item->id}}"
-                    style="background: {{$item->color ?:''}}">{{ $item->name }}<span
-                    class="not-number-account white noti-reletion">{{ @$item->customers_count }}</span></button>
+
+            <div class="smiley pointer account_relation status" data-name="{{$item->id}}">
+                <img src="{{asset('layout/images/Smiley.png')}}" alt="">
+                <span style="color: {{$item->color ?:''}}">{{ $item->name }} ({{ @$item->customers_count }})</span>
+            </div>
             @php
             $customers_count += $item->customers_count;
             @endphp
         @endforeach
     </div>
-    <div class="col-md-2 row" style="margin-top: 10px;color: black; font-weight: bold; justify-content: center;
-  align-items: baseline;">
-        <div style="float: right">
-            <span>{{$customers->firstItem()}} - {{$customers->lastItem()}}</span>
-        </div>
-        <div style="float: right">
-            {{ $customers->appends(['search' => request()->search ])->links('vendor.pagination.simple-bootstrap-4') }}
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="display birthday_tab position font20 pointer mt7 tooltip-nav">
-             <i class="fa fa-birthday-cake gf-icon-h02" aria-hidden="true"></i>
-            <span class="tooltiptext">Sinh nhật hôm nay</span>
-            <span class="noti-number noti-number-on birthday-count">{{$birthday}}</span>
-        </div>
-        <div class="display" style="width: 28px; height: 20px;">
-            <div class="dropdown ope tooltip-nav">
-                <i class="fa fa-eye dropdown-toggle" role="button" data-toggle="dropdown" style="margin-top: 8px; margin-left: 5px;"></i>
-                <span class="tooltiptext">Hiển thị số trang</span>
-                <ul class="dropdown-menu pull-right tl mt5" role="menu" style="border-top:1px">
-                    <li><a class="b-white b-hover limiting {{@$_COOKIE['defaultPagination'] == 20?'active_limit bold':''}}" data-limit="20">Hiển thị 20 kết quả/trang</a></li>
-                    <li><a class="b-white b-hover limiting {{@$_COOKIE['defaultPagination'] == 50?'active_limit bold':''}}" data-limit="50">Hiển thị 50 kết quả/trang</a></li>
-                    <li><a class="b-white b-hover limiting {{@$_COOKIE['defaultPagination'] == 100?'active_limit bold':''}}" data-limit="100">Hiển thị 100 kết quả/trang</a></li>
-                    <li><a class="b-white b-hover limiting {{@$_COOKIE['defaultPagination'] == 200?'active_limit bold':''}}" data-limit="200">Hiển thị 200 kết quả/trang</a></li>
-                </ul>
-            </div>
-        </div>
-        <div id="div_created_at_dropdown" class="display position pointer mt5 open tooltip-nav">
-            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><i id="created_at_icon"
-              class="far fa-clock" style="font-size:22px"></i></a>
-            <span class="tooltiptext">Thời gian tạo KH</span>
-            <div class="add-drop add-d-right other_time_panel"
-                 style="left: auto; right: 0px; display: none;"><s class="gf-icon-neotop"></s>
-                <div class="padding tl"><p>Ngày bắt đầu</p>
-                    <input type="text" class="form-control filter_start_date" id="datepicker"
-                           data-toggle="datepicker" name="payment_date">
+    <div class="col-md-3 d-flex justify-content-end">
+        <div class="d-flex gap-16" style="margin-right: 30px;">
+            <div class="d-flex align-items-center pagination1 gap-8" style="background: #36354A;">
+                <div>
+                    <span class="color-white">{{$customers->firstItem()}} - {{$customers->lastItem()}}</span>
                 </div>
-                <div class="padding tl"><p>Ngày kết thúc</p>
-                    <input type="text" class="form-control filter_end_date" id="datepicker"
-                           data-toggle="datepicker" name="payment_date">
-                </div>
-                <div class="padding5-10 tl mb5">
-                    <button class="btn btn-info submit_other_time">Tìm kiếm</button>
-                    <button class="btn btn-default cancel_other_time">Đóng</button>
+                <div>
+                    {{ $customers->appends(['search' => request()->search ])->links('vendor.pagination.simple-bootstrap-4') }}
                 </div>
             </div>
-            <ul class="dropdown-menu pull-right tr">
-                <li class="created_at_item bor-bot tc"><a data-time="TODAY" class="btn_choose_time">Hôm
-                        nay</a>
-                </li>
-                <li class="created_at_item bor-bot tc"><a data-time="YESTERDAY" class="btn_choose_time">Hôm
-                        qua</a></li>
-                <li class="created_at_item bor-bot tc"><a data-time="THIS_WEEK" class="btn_choose_time">Tuần
-                        này</a></li>
-                <li class="created_at_item bor-bot tc"><a data-time="LAST_WEEK" class="btn_choose_time">Tuần
-                        trước</a></li>
-                <li class="created_at_item bor-bot tc"><a data-time="THIS_MONTH" class="btn_choose_time">Tháng
-                        này</a></li>
-                <li class="created_at_item bor-bot tc"><a data-time="LAST_MONTH" class="btn_choose_time">Tháng
-                        trước</a></li>
-                <li class="created_at_item bor-bot tc">
-                    <a class="other_time">Khác</a>
-                </li>
-            </ul>
-        </div>
-        <div class="display dropdown-custom1" title="Cài đặt hiển thị bảng">
-            @include('components.user_filter_grid')
-        </div>
+            <div class="d-flex align-items-center gap-16">
+                <div class="display birthday_tab position pointer mt7 tooltip-nav p-0">
+                    {{--<i class="fa fa-birthday-cake gf-icon-h02" aria-hidden="true"></i>--}}
+                    <img src="{{asset('layout/images/Icons1.png')}}" alt="" class="pointer">
+                    <span class="tooltiptext">Sinh nhật hôm nay</span>
+                    <span class="noti-number noti-number-on birthday-count">{{$birthday}}</span>
+                </div>
+                <div class="display">
+                    <div class="dropdown ope tooltip-nav p-0">
+                        {{--<i class="fa fa-eye dropdown-toggle" role="button" data-toggle="dropdown" style="margin-top: 8px; margin-left: 5px;"></i>--}}
+                        <img src="{{asset('layout/images/Eye_active.png')}}" alt="" class="dropdown-toggle pointer" role="button" data-toggle="dropdown">
+                        <span class="tooltiptext">Hiển thị số trang</span>
+                        <ul class="detail__pagination dropdown-menu pull-right tl mt5" role="menu" style="border-top:1px;left: -132px;">
+                            <li><a class="b-white b-hover limiting {{@$_COOKIE['defaultPagination'] == 20?'active_limit bold':''}}" data-limit="20">Hiển thị 20 kết quả/trang</a></li>
+                            <li><a class="b-white b-hover limiting {{@$_COOKIE['defaultPagination'] == 50?'active_limit bold':''}}" data-limit="50">Hiển thị 50 kết quả/trang</a></li>
+                            <li><a class="b-white b-hover limiting {{@$_COOKIE['defaultPagination'] == 100?'active_limit bold':''}}" data-limit="100">Hiển thị 100 kết quả/trang</a></li>
+                            <li><a class="b-white b-hover limiting {{@$_COOKIE['defaultPagination'] == 200?'active_limit bold':''}}" data-limit="200">Hiển thị 200 kết quả/trang</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="div_created_at_dropdown" class="display position pointer mt5 open tooltip-nav p-0">
+                    {{--<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">--}}
+                    {{--<i id="created_at_icon"--}}
+                    {{--class="far fa-clock" style="font-size:22px"></i>--}}
 
+                    <img src="{{asset('layout/images/Time_active.png')}}" alt="" class="dropdown-toggle pointer" role="button" data-toggle="dropdown">
+                    <span class="tooltiptext">Thời gian tạo KH</span>
+                    <div class="dropdown-customize add-drop add-d-right other_time_panel"
+                         style="left: auto; right: 0px; display: none;"><s class="gf-icon-neotop"></s>
+                        <div class="padding tl"><p>Ngày bắt đầu</p>
+                            <input type="text" class="form-control filter_start_date" id="datepicker"
+                                   data-toggle="datepicker" name="payment_date">
+                        </div>
+                        <div class="padding tl"><p>Ngày kết thúc</p>
+                            <input type="text" class="form-control filter_end_date" id="datepicker"
+                                   data-toggle="datepicker" name="payment_date">
+                        </div>
+                        <div class="padding5-10 tl mb5">
+                            <button class="btn btn-info submit_other_time">Tìm kiếm</button>
+                            <button class="btn btn-default cancel_other_time">Đóng</button>
+                        </div>
+                    </div>
+                    <ul class="dropdown-customize dropdown-menu pull-right tr" style="left: -100px !important;">
+                        <li class="created_at_item bor-bot tc"><a data-time="TODAY" class="btn_choose_time">Hôm
+                                nay</a>
+                        </li>
+                        <li class="created_at_item bor-bot tc"><a data-time="YESTERDAY" class="btn_choose_time">Hôm
+                                qua</a></li>
+                        <li class="created_at_item bor-bot tc"><a data-time="THIS_WEEK" class="btn_choose_time">Tuần
+                                này</a></li>
+                        <li class="created_at_item bor-bot tc"><a data-time="LAST_WEEK" class="btn_choose_time">Tuần
+                                trước</a></li>
+                        <li class="created_at_item bor-bot tc"><a data-time="THIS_MONTH" class="btn_choose_time">Tháng
+                                này</a></li>
+                        <li class="created_at_item bor-bot tc"><a data-time="LAST_MONTH" class="btn_choose_time">Tháng
+                                trước</a></li>
+                        <li class="created_at_item bor-bot tc">
+                            <a class="other_time">Khác</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="display dropdown-custom1" title="Cài đặt hiển thị bảng">
+                    @include('components.user_filter_grid')
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div class="table-responsive fixed-scrollbar" style="font-size: 12px">
-    <table class="table card-table table-vcenter text-nowrap table-primary" style="width: 100%">
-        <thead class="bg-primary text-white">
+
+    <div class="content__table">
+        <table class="table card-table table-striped table-bordered table-vcenter text-nowrap" style="width: 100%">
+        <thead class="text-white">
         <tr>
             <th ><input type="checkbox" class="selectall myCheck"/></th>
             @forelse($user_filter_list as $key => $item)
@@ -232,14 +215,14 @@
                                 <i class="fas fa-info-circle"></i>
                             @endif
                         </a>
-                        <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
+                        <a href="{{ route('customers.show', $customer->id) }}" class="color-primary">{{ $customer->full_name }}</a>
                         <span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>
                         <a target="_blank" href="https://zalo.me/{{@$customer->phone}}">
                             <img width="15" height="15" src="{{asset('assets/images/zalo_icon.png')}}">
                         </a>
                     </td>
                     <td class="text-center phone-customer {{in_array(3,$user_filter_grid) ? '':'display-none'}}" data-phone="{{$customer->phone}}" data-customer-id="{{ $customer->id }}">
-                        <a href="javascript:void(0)">{{ str_limit($customer->phone,7,'xxx') }}
+                        <a href="javascript:void(0)" class="color-primary">{{ str_limit($customer->phone,7,'xxx') }}
                         </a>
 {{--                        <a href=""><i style="color: red !important" class="{!! $customer->is_duplicate == 1 ? "fa fa fa-copy" :'' !!}"></i></a>--}}
                         @if(!empty($customer->call_back))
@@ -293,6 +276,8 @@
         @endif
         </tbody>
     </table>
+    </div>
+
     <div class="pull-left">
         <div class="page-info">
             {{ 'Tổng số ' . $customers->total() . ' khách hàng ' . (request()->search ? 'found' : '') }}

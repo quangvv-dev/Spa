@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table card-table table-vcenter text-nowrap table-primary">
+    <table class="table card-table table-vcenter table-bordered text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white">STT</th>
@@ -14,7 +14,7 @@
         @if(count(@$docs))
             @foreach($docs as $k => $s)
                 <tr data-id="{{$s->id}}" data-position='{{$s->position}}'>
-                    <th scope="row">{{$k}}</th>
+                    <td class="text-center">{{$k}}</td>
                     <td class="text-center">{{$s->name}}</td>
                     <td class="text-center">{{$s->code}}</td>
                     <td class="text-center">

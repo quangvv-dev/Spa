@@ -23,7 +23,7 @@
 @php $i =0; @endphp
 
 <div class="table-responsive tableFixHead">
-    <table class="table card-table table-center text-nowrap table-primary">
+    <table class="table card-table table-center text-nowrap table-bordered table-primary">
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white text-center">STT</th>

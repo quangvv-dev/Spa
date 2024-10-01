@@ -167,27 +167,53 @@ class SalesController extends Controller
         $members = Functions::members($request->all());
 
         $params = $request->all();
-        $sale = User::where('department_id', DepartmentConstant::TELESALES)
-            ->where('active', StatusCode::ON)
-            ->when(!empty($members), function ($q) use ($members) {
-                $q->whereIn('id', $members);
-            })->get()
-            ->map(function ($item) use ($params) {
-                $params['telesales'] = $item->id;
-                $detail = PaymentHistory::search($params, 'price');//đã thu trong kỳ
-                $item->gross_revenue = $detail->whereHas('order', function ($qr) use ($params) {
-                    $qr->where('is_upsale', OrderConstant::NON_UPSALE);
-                })->sum('price');
-                return $item;
-            })->sortByDesc('gross_revenue')->toArray();
 
-        $my_key = array_keys(array_column((array)$sale, 'id'), Auth::user()->id);
+        $sale = $this->getSale($members, $params);
+        $orders = $this->getSaleOrders($members, $params);
+        $sale = Functions::transformRanking($sale, $orders);
 
         if ($request->ajax()) {
-            return view('sale.ranking.ajax', compact('sale', 'my_key'));
+            return view('sale.ranking.ajax', compact('sale'));
         }
-        return view('sale.ranking.index', compact('sale', 'my_key','teams'));
+        return view('sale.ranking.index', compact('sale','teams'));
     }
+
+    public function getSale($members, $input)
+    {
+        return User::leftJoin('branchs as b', 'users.branch_id', '=', 'b.id')
+            ->join('orders as o', 'o.telesale_id', '=', 'users.id')
+            ->join('payment_histories as ph', 'o.id', '=', 'ph.order_id')
+            ->where('users.department_id', DepartmentConstant::TELESALES)->where('users.active', StatusCode::ON)
+            ->when(!empty($members), function ($q) use ($members) {
+                $q->whereIn('users.id', $members);
+            })
+            ->where('o.is_upsale', OrderConstant::NON_UPSALE)
+            ->whereBetween('ph.payment_date', [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ])
+            ->select('users.id', 'users.full_name', 'users.avatar', 'b.name as branch_name',
+                \DB::raw('sum(ph.price) as gross_revenue'))
+            ->groupBy('users.id')
+            ->orderBy('gross_revenue', 'desc')->get();
+    }
+
+    public function getSaleOrders($members, $input)
+    {
+        return User::join('orders as o', 'o.telesale_id', '=', 'users.id')
+            ->where('users.department_id', DepartmentConstant::TELESALES)->where('users.active', StatusCode::ON)
+            ->when(!empty($members), function ($q) use ($members) {
+                $q->whereIn('users.id', $members);
+            })
+            ->where('o.is_upsale', OrderConstant::NON_UPSALE)
+            ->whereBetween('o.created_at', [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ])
+            ->select('users.id', \DB::raw('count(o.id) as orders'))
+            ->groupBy('users.id')->get();
+    }
+
 
     /**
      * Thống kê nhóm sản phẩm dịch vụ

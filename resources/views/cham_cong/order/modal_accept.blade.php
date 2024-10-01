@@ -1,5 +1,5 @@
 
-<div class="modal fade" id="myModalDuyet" role="dialog">
+<div class="modal fade modal-custom" id="myModalDuyet" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content" style="height: 25%">

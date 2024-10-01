@@ -11,12 +11,12 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{$title}}</h3></br>
+                <h3 class="card-title linear-text fs-24">{{$title}}</h3></br>
             </div>
             <div id="registration-form">
-                <div class="table card-table table-vcenter text-nowrap table-primary"
+                <div class="table card-table table-vcenter table-bordered text-nowrap table-primary"
                      style="width: 100%; overflow-x: auto;">
-                    <table class="table-sortable1 table table-custom">
+                    <table class="table-sortable1 table-bordered table table-custom">
                         <thead>
                         <tr>
                             <th class="text-center" style="width: 30px;">STT</th>
@@ -39,7 +39,7 @@
                                     <td class="text-center"><input type="text" class="name txt-dotted" value="{{$item->name}}">
                                     </td>
                                     <td class="text-center">
-                                        <textarea rows="2" type="text" class="description txt-dotted">{{$item->description}}</textarea>
+                                        <textarea rows="2" type="text" class="description txt-dotted textarea-custom">{{$item->description}}</textarea>
                                     </td>
                                     <td class="text-center">{{$item->updated_at}}</td>
                                     <td class="text-center">

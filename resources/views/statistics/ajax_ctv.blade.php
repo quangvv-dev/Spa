@@ -1,6 +1,6 @@
 <div class="table-responsive" id="registration-form">
-    <table class="table card-table table-vcenter text-nowrap table-primary">
-        <thead class="bg-primary text-white">
+    <table class="table card-table table-vcenter table-bordered text-nowrap table-primary">
+        <thead class="text-white">
         <tr>
             <th class="text-white">STT</th>
             <th class="text-white text-center">Tên</th>
@@ -16,7 +16,7 @@
         <tbody>
         @forelse($ctv as $key=>$item)
             <tr>
-                <th scope="row">{{$key+1}}</th>
+                <th class="text-center">{{$key+1}}</th>
                 <td class="text-center">
                     {{$item->full_name}}
                     <br>

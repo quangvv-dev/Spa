@@ -21,6 +21,8 @@
             line-height: 20px;
             font-size: 11px;
             border: none;
+            background: #131313;
+            color: white;
         }
 
         .description-cus:focus, .description-cus:hover {
@@ -54,79 +56,135 @@
         .ren-navbar.fixed-header1.visible-title {
             top: 0;
         }
+        button.btn.btn-success.chat-save {
+            position: absolute;
+            left: 25px;
+        }
     </style>
 @endsection
 @section('content')
     <div class="col-md-12 col-lg-12">
         <form id="gridFormA">
-            <div class="card" >
-                <div class="card-header search-box searchbox-sticky">
-                    <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm" tabindex="1"
-                           type="text" id="search">
-                    <div class="col-md-2 col-xs-12">
-                        <select name="telesales_id" id="telesales_id" class="form-control telesales select2">
-                            <option value="">Người phụ trách</option>
-                            @foreach($telesales as $k => $l)
-                                    @foreach($l as $kl => $vl)
-                                        <option
-                                            {{@$customer->telesales_id == $vl?'selected':''}} value="{{ $vl }}">{{ $kl }}</option>
+            <div class="" >
+
+
+
+                <div class="">
+{{--                    <div class="d-flex justify-content-between customer">--}}
+{{--                        <div class="customer__left d-flex justify-content-between align-items-baseline gap-16">--}}
+{{--                            <span class="linear-text fs-32 fw-700">Khách hàng</span>--}}
+{{--                            <span class="linear-text fs-16">1,200 khách hàng</span>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+                    <div class="search d-flex justify-content-between mt-16">
+                        <div class="search__left d-flex align-items-center gap-8">
+                            <div class="search__input d-flex align-items-center gap-8">
+                                <img src="{{asset('layout/images/MagnifyingGlass.png')}}" alt="" class="pointer">
+                                <input name="search" placeholder="Tìm kiếm" type="text" id="search">
+                            </div>
+                            <!-- <select class="select2" name="" id="">
+                                <option value="1">Người phụ trách</option>
+                            </select> -->
+                            {{--<button class="btn btn-outline-default font-svn-lage fs-14 p-12">Người phụ trách</button>--}}
+                            <div class="" style="width: 140px;">
+                                <select name="telesales_id" class="select2 telesales font-svn-lage"  id="telesales_id" data-placeholder="Người phụ trách">
+                                    <option value="">Người phụ trách</option>
+                                    @foreach($telesales as $k => $l)
+                                        @foreach($l as $kl => $vl)
+                                            <option {{@$customer->telesales_id == $vl?'selected':''}} value="{{ $vl }}">{{ $kl }}</option>
+                                        @endforeach
                                     @endforeach
-                            @endforeach
-                        </select>
+                                </select>
+                            </div>
+                            {{--<select name="telesales_id" id="telesales_id" class="form-control telesales select2">--}}
+
+
+                            <div class="" style="width: 140px;">
+                                <select class="select2 group font-svn-lage" name="group" id="" data-placeholder="Nhóm dịch vụ">
+                                    <option value="">Nhóm dịch vụ</option>
+                                    @foreach($categories as $item)
+                                        <option value="{{$item->id}}">{{ $item->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="" style="width: 159px;">
+                                <select name="call_back" class="call_back select2">
+                                    <option value="">Tất cả công việc</option>
+                                    <option value="{{\App\Constants\StatusCode::GOI_LAI}}">GỌI LẠI</option>
+                                </select>
+                            </div>
+                            <div class="" style="width: 158px;">
+                                <select name="branch_id" class="select2 branch_id">
+                                    <option value="">Tất cả chi nhánh</option>
+                                    @foreach($branchs as $k=> $item)
+                                        <option {{$k==1?'selected':''}} value="{{$k}}">{{ $item}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="w-40 h-40 icon-double-down pointer show-more-menu">
+                                <a style="display: none" href="#" class="angleDoubleUp">
+                                    <img src="{{asset('layout/images/Icon.png')}}" alt="">
+                                </a>
+                                <a href="#" class="angleDoubleDown">
+                                    <img src="{{asset('layout/images/icon-double-up.png')}}" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="customer__right d-flex justify-content-between align-items-center gap-12">
+                            <a {{$roleGlobal->permission('customer.import')?:"style=display:none"}}
+                               class="btn tooltip-nav p-0" href="#" data-toggle="modal" data-target="#myModal">
+                                <img src="{{asset('layout/images/Notii_up.png')}}" alt="" class="pointer">
+                                <span class="tooltiptext">Nhập khách hàng (excel)</span>
+                            </a>
+
+                            <a {{$roleGlobal->permission('customer.export')?:"style=display:none"}}
+                               class="btn tooltip-nav p-0" href="#" data-toggle="modal" data-target="#myModalExport">
+                                <img src="{{asset('layout/images/Notii_down.png')}}" alt="" class="pointer">
+                                <span class="tooltiptext">Tải khách hàng (excel)</span>
+                            </a>
+
+                            <a href="{{ route('customers.create') }}">
+                                <button class="btn btn-primary btn-lg btn-100" type="button">Tạo mới</button>
+                            </a>
+                        </div>
                     </div>
-                    <div class="col-md-2 col-xs-12">
-                        <select name="group" class="form-control group select2">
-                            <option value="">Nhóm dịch vụ</option>
-                            @foreach($categories as $item)
-                                <option value="{{$item->id}}">{{ $item->name}}</option>
-                            @endforeach
-                        </select>
+                    <div class="more-menu" style="margin-top: 8px;">
+                        @include('customers.dropdownFilter')
                     </div>
-                    <div class="col-md-2 col-xs-12">
-                        <select name="call_back" class="form-control call_back select2">
-                            <option value="">Tất cả công việc</option>
-                            <option value="{{\App\Constants\StatusCode::GOI_LAI}}">GỌI LẠI</option>
-                        </select>
-                    </div>
-                    <div class="col-xs-12" style="max-width: 170px">
-                        @if(empty($checkRole))
-                            <select name="branch_id" class="form-control branch_id">
-                                <option value="">Tất cả chi nhánh</option>
-                                @foreach($branchs as $k=> $item)
-                                    <option {{$k==1?'selected':''}} value="{{$k}}">{{ $item}}</option>
-                                @endforeach
-                            </select>
-                        @endif
-                    </div>
-                    <div class="col relative">
-                        <a {{$roleGlobal->permission('customer.import')?:"style=display:none"}}
-                            class="btn tooltip-nav" href="#" data-toggle="modal" data-target="#myModal">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <span class="tooltiptext">Nhập khách hàng (excel)</span>
-                        </a>
-                        <a {{$roleGlobal->permission('customer.export')?:"style=display:none"}}
-                           class="btn tooltip-nav" href="#" data-toggle="modal" data-target="#myModalExport">
-                            <i class="fas fa-cloud-download-alt"></i>
-                            <span class="tooltiptext">Tải khách hàng (excel)</span>
-                        </a>
-                        {{--<a class="btn tooltip-nav dropdown-custom1">--}}
-                            {{--@include('components.user_filter_grid')--}}
-                        {{--</a>--}}
-                        @if($roleGlobal->permission('customers.add'))
-                            <a class="right btn btn-primary btn-flat"
-                               href="{{ route('customers.create') }}">Tạo mới</a>
-                        @endif
-                    </div>
-                    <div class="heading-elements">
-                        <ul class="list-inline mb-0">
-                            <li><a style="display: none" href="#" class="angleDoubleUp">
-                                    <i class="fa fa-angle-double-up"></i></a></li>
-                            <li><a href="#" class="angleDoubleDown"><i class="fa fa-angle-double-down"></i></a></li>
-                        </ul>
+
+                    {{--<div class="display btn-group" id="btn_tool_group" style="display: none;">--}}
+                    <div class="" id="btn_tool_group" style="display: none;">
+                        <div class="d-flex gap-12 mt-16">
+                            {{--<div class="action pointer">Trạng thái khách hàng</div>--}}
+                            {{--<div class="action pointer">Xoá nhiều</div>--}}
+                            {{--<div class="action pointer">Khôi phục</div>--}}
+                            {{--<div class="action pointer">Destroy (Huỷ data)</div>--}}
+                            {{--<div class="action pointer">Phân chia hàng loạt</div>--}}
+
+                            @if(auth()->user()->permission('customer.changeSale'))
+                                <div class="dropdown_action action pointer" id="show_manager_account">Chuyển người phụ trách</div>
+                            @endif
+                            @if(auth()->user()->permission('customer.changeCskh'))
+                                <div class="dropdown_action action" data-toggle="modal" data-target="#show-cskh-account"><a>Chuyển CSKH</a></div>
+                            @endif
+                            <div class="dropdown_action action"><a id="change_relations">Trạng thái khách hàng</a></div>
+                            @if(auth()->user()->permission('customer.changeBranch'))
+                                <div class="dropdown_action action" data-toggle="modal" data-target="#show-branch-account"><a>Chuyển chi nhánh</a></div>
+                            @endif
+                            @if(auth()->user()->permission('customers.delete'))
+                                <div class="dropdown_action action" id="remove_selected_account"><a>Xóa nhiều</a></div>
+                            @endif
+                            <div class="dropdown_action action" id="restore_account"><a>Khôi phục</a></div>
+                            <div class="dropdown_action action" id="permanently_delete_account"><a>Destroy (Huỷ data)</a></div>
+                            {{--            <li class="dropdown_action" data-toggle="modal" data-target="#show-modal-phanbo"><a>Phân bổ data</a></li>--}}
+                            @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::ADMIN)
+                                <div class="dropdown_action action"><a href="{{route('settings.phanbo')}}">Phân chia hàng loạt</a></div>
+                            @endif
+                        </div>
                     </div>
                 </div>
-                @include('customers.dropdownFilter')
-                <div id="registration-form">
+                <div id="registration-form" style="margin-top: 5px;">
                     @include('customers.ajax')
                 </div>
                 @include('customers.modal')
@@ -152,7 +210,6 @@
 @section('_script')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script type="text/javascript">
-
         $("#search").focus();
         $(function () {
             $(document).on('click', '.view_modal', function (e) {
@@ -167,88 +224,95 @@
                 }).done(function (data) {
                     check_show_button = true;
                     let category = '';
+                    let option = '';
 
                     data.customer.categories.forEach(function (item) {
                         category += item.name + `, `;
                     });
-                    {{--let hidden_phone = {{auth()->user()->permission('phone.open') ? 'true' :'false'}};--}}
-                    // let phoneNumber = hidden_phone == true ? data.customer.phone : data.customer.phone.slice(0, 7)+'xxx';
-                    let html = '';
-                    html += `<div class="row" style="padding-bottom: 10px;">
-                    <div class="chat-flash col-md-12">
-                        <div class="white-space" style="display: flex; align-items: center;justify-content: space-around;">
-                            <img width="50" height="50" class="fl mr10 a40 border"
-                                 src="{{asset('default/no-image.png')}}" style="border-radius:100%">
-
-                            <div class="mt10 pb10" style="height:86px ; color:black">
-                            <div class="col-md-10 info-avatar padding5 last_contacthover box_last">
-                            <p><i class="fa fa-user mr5" style="color: black;"></i> ` + data.customer.full_name + `
-                                <i class="fa orange fa-star" aria-hidden="true" style="color: orange;"></i>
-                            </p>
-                            <p class="mt10"><i class="fa fa-phone mr10" style="color: black;" aria-hidden="true"></i><a class="clickToCall blue" data-contact-id="5678"
-                                                          rel="tooltip" data-original-title="Click để gọi"
-                                                          data-placement="right" data-flag="1"
-                                                          data-type="crm"> ` + data.customer.account_code + `</a></p>
-                            <p> <i class="fa fa-users"style="color: black;" aria-hidden="true"></i>` + category + `</p>
-                            <p class="mt10 white-space"><i class="icon-envelope mr5"></i></p></div>
-                        </div>
-                        <a class="bold blue uppercase user-name" href="javascript:void(0);" style="margin-left: 5px">
-                            <span>@` + (data.customer.telesale ? data.customer.telesale.full_name : "") + `</span></br>
-                            <span>Cskh: ` + (data.customer.cskh ? data.customer.cskh.full_name : "") + `</span>
-                            </a>
-                        </div>
-
-                         <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }} "style="margin-top: 20px;">
-                            {!! Form::label('status_id', 'Trạng thái', array('class' => 'control-label')) !!}` +
-                        `<select name="status_id" class="form-control status-result select2" data-id="` + data.customer.id + `" style="font-size: 14px;">`;
                     data.status.forEach(function (item) {
-                        html += `<option value="` + item.id + `"  ` + (item.id === data.customer.status_id ? "selected" : "") + `>` + item.name + `</option>`;
-                    });
-                    html += `</select>`;
-                    html += `
-                <div class="row mt10" style="color:black;"> <div class="col-md-5">Nguồn khách hàng:</div> <div class="col-md-7 word-break">` + (data.customer.source_customer ? data.customer.source_customer.name : "") + `</div> </div>
-                <div class="row mt10" style="color:black;"> <div class="col-md-5">Liên hệ lần cuối:</div> <div class="col-md-7 word-break">` + (data.last_contact ? data.last_contact : "") + `</div> </div>
-                <div class="row mt10" style="color:black;"> <div class="col-md-5">Giá trị:</div> <div class="col-md-7 word-break" style="color:orange;">` + data.order_revenue + ` VND</div> </div>
-                </div>
-                        <div class="form-group required {{ $errors->has('enable') ? 'has-error' : '' }}">
-                            {!! Form::textArea('messages', null, array('class' => 'form-control message', 'rows'=> 3, 'required' => 'required')) !!}
-                        <span class="help-block">{{ $errors->first('enable', ':message') }}</span>
-                        </div>
+                        option += `<option value="` + item.id + `"  ` + (item.id === data.customer.status_id ? "selected" : "") + `>` + item.name + `</option>`;
+                    })
+                    let html = '';
+                    html = `
+                    <div class="detail__info">
+                    <div class="d-flex align-items-center gap-24">
+                        <span>` + data.customer.full_name + `-` + data.customer.account_code + `-`+category+`</span>
+                        <img src="{{asset('')}}" alt="">
                     </div>
-                    <div class="col-md-12">
-                        <button type="submit" class="btn btn-success chat-save" id="chat-save" data-customer-id="">Lưu</button>
-
+                    <div class="d-flex align-items-center gap-4">
+                        <img src="images/Ava1.png" alt="">
+                        <span class="text-white">` + (data.customer.telesale ? data.customer.telesale.full_name : "") + ` -</span>
+                        <span style="color: var(--bg-main);">` + (data.customer.cskh ? data.customer.cskh.full_name : "") + `</span>
+                    </div>
+                </div>
+                <div class="row mt-12 no-mrl">
+                    <span style="color: var(--color-dark);">Trạng thái</span>
+                    <select name="status_id" class="form-control status-result select2" data-id="` + data.customer.id + `>`+option+`</select>
+                </div>
+                <div class="row mt-12 no-mrl">
+                    <div class="col-5 p-0">Nguồn khách hàng</div>
+                    <div class="col-7 p-0 d-flex align-items-center gap-8">
+                        <img src="images/Facebook.png" alt="">
+                        <span class="fs-18">` + (data.customer.source_customer ? data.customer.source_customer.name : "") + `</span>
+                    </div>
+                </div>
+                <div class="row mt-12 no-mrl">
+                    <div class="col-5 p-0">Liên hệ lần cuối</div>
+                    <div class="col-7 p-0 d-flex align-items-center gap-8">
+                        <img src="images/Calendar.png" alt="">
+                        <span class="fs-18">` + (data.last_contact ? data.last_contact : "") + `</span>
+                    </div>
+                </div>
+                <div class="row mt-12 no-mrl">
+                    <div class="col-5 p-0">Giá trị</div>
+                    <div class="col-7 p-0 d-flex align-items-center gap-8 color-green">
+                        <img src="images/Dollar_active.png" alt="">
+                        <span class="fs-18">` + data.order_revenue + ` VND</span>
+                    </div>
+                </div>
+                <div class="row mt-12 no-mrl">
+                    <span style="color: var(--color-dark);">Ghi chú</span>
+                    <textarea name="messages" placeholder="Nhập ghi chú ..." class="message textarea-custom color-white w-100 mt-8 fs-16" style="height: 100px;"></textarea>
+                </div>
+                <div class="list-note mt-16 p-12-16 chat-ajax">
+                    @include('message_zalo.index')
+                </div>
+                <div class="mt-24 text-right">
+                    <button class="btn btn-success chat-save">Lưu</button>
                         <button type="button" class="btn btn-warning message-chat float-right" data-phone="`+ data.customer.account_code +`">Zalo Messages</button>
-                        <button type="button" class="btn btn-info sale-note float-right mr-1">Trao đổi</button>
-                    </div>
+                        <button type="button" class="btn btn-primary sale-note float-right mr-1">Trao đổi</button>
                 </div>
-                @include('message_zalo.index')
-                <div class="chat-ajax" >
-
-                        </div>`;
+                    `;
 
                 let html1 = '';
                     data.group_comments.forEach(function (item) {
-                        html1 += `<div class="col comment-fast" style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;">
-                                <div class="no-padd col-md-12">
-                                    <div class="col-md-11"><p><a href="#" class="bold blue">` + (item.full_name ?? "") + `</a>
-                                        <span><i class="fa fa-clock"> ` + item.created_at + `</i></span></p>
-                                    </div>` +
-                            (data.id_login == item.user_id ? `<div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
-                                        @if(!in_array('comment.edit',setting('permissions')??[]))
-                                        <a data-original-title="Sửa"  rel="tooltip" style="margin-right: 5px">
-                                        <i class="fas fa-edit btn-edit-comment" data-id="` + item.id + `"></i>
-                                        </a>
-                                        @endif
+                        html1 += `<div class="note__item"><div class="d-flex align-items-center gap-8">
+                            <img src="`+item.avatar +`" width="36" height="36" alt="">
+                            <div class="fs-16">` + (item.full_name ?? "") + `</div>
+                            <div class="fs-14 color-dark">|</div>
+                            <div class="fs-14 color-dark">` + item.created_at + `</div>
+                        </div>
+                        <div class="mt-1">` + item.messages + `</div> </div>`;
+                        {{--html1 += `<div class="col comment-fast" style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;">--}}
+                        {{--        <div class="no-padd col-md-12">--}}
+                        {{--            <div class="col-md-11"><p><a href="#" class="bold blue">` + (item.full_name ?? "") + `</a>--}}
+                        {{--                <span><i class="fa fa-clock"> ` + item.created_at + `</i></span></p>--}}
+                        {{--            </div>` +--}}
+                        {{--    (data.id_login == item.user_id ? `<div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">--}}
+                        {{--                @if(!in_array('comment.edit',setting('permissions')??[]))--}}
+                        {{--                <a data-original-title="Sửa"  rel="tooltip" style="margin-right: 5px">--}}
+                        {{--                <i class="fas fa-edit btn-edit-comment" data-id="` + item.id + `"></i>--}}
+                        {{--                </a>--}}
+                        {{--                @endif--}}
 
-                                        <a data-original-title="Xóa" rel="tooltip">
-                                            <i class="fas fa-trash-alt btn-delete-comment" data-id="` + item.id + `"></i>
-                                        </a>
-                                    </div>` : "") +
-                            `<div class="col-md-12 comment" style="margin-top: 5px; margin-bottom: 5px; white-space: pre-line;">` + item.messages + `
-                                    </div>
-                                </div>
-                            </div>`;
+                        {{--                <a data-original-title="Xóa" rel="tooltip">--}}
+                        {{--                    <i class="fas fa-trash-alt btn-delete-comment" data-id="` + item.id + `"></i>--}}
+                        {{--                </a>--}}
+                        {{--            </div>` : "") +--}}
+                        {{--    `<div class="col-md-12 comment" style="margin-top: 5px; margin-bottom: 5px; white-space: pre-line;">` + item.messages + `--}}
+                        {{--            </div>--}}
+                        {{--        </div>--}}
+                        {{--    </div>`;--}}
                     });
 
                     $(".status-result").val(data.customer.status_id).change();
@@ -281,23 +345,13 @@
                     }
                 }).done(function (data) {
                     let html = '';
-                    html += `<div style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;" >
-                    <div class="no-padd col-md-12 comment-fast">
-                    <div class="col-md-11"><p><a href="#" class="bold blue">` + data.group_comment.user.full_name + `</a>
-                        <span><i class="fa fa-clock"> ` + data.group_comment.created_at + `</i></span></p>
-                    </div>` +
-                        (data.id_login == data.group_comment.user_id ? `<div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
-                                        <a data-original-title="Sửa"  rel="tooltip" style="margin-right: 5px">
-                                            <i class="fas fa-edit btn-edit-comment" data-id="` + data.group_comment.id + `"></i>
-                                        </a>
-                                        <a data-original-title="Xóa" rel="tooltip">
-                                            <i class="fas fa-trash-alt btn-delete-comment" data-id="` + data.group_comment.id + `"></i>
-                                        </a>
-                                    </div>` : "") +
-                        `<div class="col-md-12 comment" style="margin-top: 5px; margin-bottom: 5px; white-space: pre-line;">` + data.group_comment.messages + `</div>
-                    </div>
-                    </div>`;
-
+                    html += `<div class="note__item"><div class="d-flex align-items-center gap-8">
+                            <img src="`+data.group_comment.user.avatar +`" width="36" height="36" alt="">
+                            <div class="fs-16">` + data.group_comment.user.full_name + `</div>
+                            <div class="fs-14 color-dark">|</div>
+                            <div class="fs-14 color-dark">` + data.group_comment.created_at + `</div>
+                        </div>
+                        <div class="mt-1">` + data.group_comment.messages + `</div> </div>`
                     $('.chat-ajax').prepend(html);
                 });
 
@@ -313,7 +367,7 @@
                 }).done(function (data) {
 
                     let html = `<div class="col-md-12" >
-                    <textarea name="messages" class="form-control message" rows="2" data-id="` + data.id + `">` + data.messages + `</textarea>
+                    <textarea name="messages" class="form-control message textarea-custom" rows="2" data-id="` + data.id + `">` + data.messages + `</textarea>
                     </div>
                     <div class="col-md-12" style="margin-bottom: 30px;">
                         <button style="float: right; margin-top: 5px;" type="submit"
@@ -982,7 +1036,7 @@
             $(document).on('click', '.phone-customer', function (e) {
                 let ext = "{{\Illuminate\Support\Facades\Auth::user()->caller_number??0}}";
                 if(ext == 0){
-                    alertify.warning('Tài khoản chưa có mã tổng đài !',5);
+                    alertify.warning('Tài khoản chưa có mã tổng đài !',10000);
                     return false;
                 }
                 $.ajax({

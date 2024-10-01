@@ -1,5 +1,5 @@
 <!-- The Modal -->
-<div class="modal fade" id="wallet">
+<div class="modal fade modal-custom" id="wallet">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             {!! Form::open(array('url' => route('wallet.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}

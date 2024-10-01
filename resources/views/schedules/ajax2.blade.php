@@ -9,9 +9,15 @@
         td.fc-list-item-title.fc-widget-content {
             font-size: 13px;
         }
+        td.fc-day.fc-widget-content.fc-today {
+            background-color: #0a6775d4;
+        }
+        .side-app{
+            background-color: #131313;
+        }
     </style>
-    <div class="card">
-        <div class="card-status bg-primary br-tr-3 br-tl-3"></div>
+    <div class="card" style="background-color: #131313">
+        <div class="card-status br-tr-3 br-tl-3"></div>
         <div class="card-body">
             <div id='calendar1'>
                 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -156,7 +162,7 @@
                     })
                 </script>
 
-                <div class="modal fade" id="" role="dialog">
+                <div class="modal fade modal-custom" id="" role="dialog">
                     <div class="modal-dialog modal-md">
                         <!-- Modal content-->
                         <div class="modal-content">
@@ -213,7 +219,7 @@
                                     </div>
                                     <div class="col-md-12 ">
                                         {!! Form::label('note', 'Ghi chú', array('class' => ' required')) !!}
-                                        {!! Form::textArea('note', null, array('class' => 'form-control','id'=>'update_note','rows'=>5)) !!}
+                                        {!! Form::textArea('note', null, array('class' => 'form-control textarea-custom','id'=>'update_note','rows'=>5)) !!}
                                         <span class="help-block">{{ $errors->first('note', ':message') }}</span>
                                     </div>
                                     <div class="col-md-12" style="padding-top: 10px">

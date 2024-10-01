@@ -16,8 +16,8 @@
     </div>
 </div>
 <div class="table-responsive tableFixHead" id="parent">
-    <table class="table card-table table-vcenter text-nowrap table-primary" id="fixTable">
-        <thead class="bg-primary text-white">
+    <table class="table card-table table-bordered table-vcenter text-nowrap table-primary" id="fixTable">
+        <thead class="text-white">
         <tr>
             <th class="text-white">Khách hàng</th>
             <th class="text-white text-center">Nhân viên</th>

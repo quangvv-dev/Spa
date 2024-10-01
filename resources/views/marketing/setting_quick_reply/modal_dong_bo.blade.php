@@ -25,12 +25,12 @@
     }
 
 </style>
-<div class="modal fade text-left" id="syncQuickReply" tabindex="-1" role="dialog"
+<div class="modal fade modal-custom text-left" id="syncQuickReply" tabindex="-1" role="dialog"
      style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-main">
-                <h5 class="modal-title" id="myModalLabel"> Đồng bộ trả lời nhanh</h5>
+                <h5 class="modal-title-custom linear-text fs-24" id="myModalLabel"> Đồng bộ trả lời nhanh</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>

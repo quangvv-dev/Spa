@@ -31,20 +31,25 @@
     }
 
     .modal-header {
-        height: 50px;
-        align-items: center;
+        border-bottom: 1px solid #2E2E2E;
+        padding: 24px;
     }
 
-    .modal-header h4 {
-        margin-bottom: 0px !important;
+    .modal-body {
+        padding: 24px;
     }
 
-    tr th, td {
-        background: #fff;
-        border-right: 1px solid #e7effc !important;
-        border-left: 1px solid #e7effc !important;
-        border-bottom: 1px solid #e7effc !important;
+    .modal-content {
+        background: #131313 !important;
+        border-radius: 24px;
     }
+
+    /*tr th, td {*/
+    /*    background: #fff;*/
+    /*    border-right: 1px solid #e7effc !important;*/
+    /*    border-left: 1px solid #e7effc !important;*/
+    /*    border-bottom: 1px solid #e7effc !important;*/
+    /*}*/
 
     label.required:after {
         content: " *";
@@ -95,17 +100,17 @@
         font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
     }
 
-    .modal-footer {
-        background: #f7f8f9;
-    }
+    /*.modal-footer {*/
+    /*    background: #f7f8f9;*/
+    /*}*/
 
-    .modal-header {
-        background: #0fa2e8;
-    }
+    /*.modal-header {*/
+    /*    background: #0fa2e8;*/
+    /*}*/
 
-    .modal-header h2, .modal-header h3, .modal-header h4, .modal-header h5, .modal-header button {
-        color: #fff !important;
-    }
+    /*.modal-header h2, .modal-header h3, .modal-header h4, .modal-header h5, .modal-header button {*/
+    /*    color: #fff !important;*/
+    /*}*/
 
     .small-tip {
         font-size: 11px;
@@ -142,14 +147,14 @@
         <div class="container content-custom">
             <div class="side-app">
                 <div class="row row-cards">
-                    <div class="row">
-                        <div class="col-xl-12">
-                            <div class="page-title-box">
-                                <h4 class="page-title float-left">@yield('title')</h4>
-                                <div class="clearfix"></div>
-                            </div>
-                        </div>
-                    </div>
+{{--                    <div class="row">--}}
+{{--                        <div class="col-xl-12">--}}
+{{--                            <div class="page-title-box">--}}
+{{--                                <h4 class="page-title float-left">@yield('title')</h4>--}}
+{{--                                <div class="clearfix"></div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
                     <div>
                         @if(Session::has('warning'))
                             <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -195,7 +200,6 @@
             </div>
         </div>
         @php
-
                 @endphp
 
         @if(setting('expiry') &&  date('Y-m-d')>setting('expiry'))

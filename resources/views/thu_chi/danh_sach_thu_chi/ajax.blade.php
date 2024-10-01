@@ -1,5 +1,5 @@
 <div class="table-responsive" id="registration-form">
-    <table class="table card-table table-vcenter text-nowrap table-primary">
+    <table class="table card-table table-vcenter table-bordered text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white">STT</th>
@@ -24,7 +24,7 @@
         @if(count($docs))
             @foreach($docs as $k => $s)
                 <tr>
-                    <th scope="row">{{$k+1}}</th>
+                    <th class="text-center">{{$k+1}}</th>
                     <td class="text-center">
                         {{@$s->thucHien->full_name}}
                         <br>

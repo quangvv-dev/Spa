@@ -1,9 +1,9 @@
 <!-- Large Modal -->
-<div id="largeModal" class="modal fade">
+<div id="largeModal" class="modal fade modal-custom">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content history-update-order">
             <div class="modal-header pd-x-20">
-                <h6 class="modal-title">Lịch sử liệu trình </h6>
+                <h6 class="modal-title-custom linear-text fs-24">Lịch sử liệu trình </h6>
                 <div class="col-md-3">
                     {!! Form::select('list_service', [], null, array('id'=>'list_service','class' => 'form-control')) !!}
                 </div>
@@ -18,8 +18,8 @@
             </div>
             <div class="modal-body pd-20">
                 <div class="table-responsive">
-                    <table class="table card-table table-vcenter text-nowrap table-primary">
-                        <thead class="bg-primary text-white">
+                    <table class="table card-table table-bordered table-vcenter text-nowrap table-primary">
+                        <thead class="text-white">
                         <tr>
                             <th class="text-white text-center">STT</th>
                             <th class="text-white text-center">Ngày thực hiện</th>

@@ -20,7 +20,7 @@
                 <div class="col-lg-12 col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">{{ $title }}</h3>
+                            <h3 class="card-title linear-text fs-24">{{ $title }}</h3>
                         </div>
                         <div id="fix-scroll" class="row padding mb10 header-dard border-bot shadow">
                             <div class="col-md-4 no-padd">

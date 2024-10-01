@@ -1,6 +1,6 @@
 <div class="table-responsive">
-    <table class="table card-table table-vcenter text-nowrap table-primary">
-        <thead class="bg-primary text-white">
+    <table class="table card-table table-bordered table-vcenter text-nowrap table-primary">
+        <thead class="text-white">
         <tr>
             <th class="text-white">STT</th>
             <th class="text-white">Ảnh</th>
@@ -17,10 +17,10 @@
         @if(@count($docs))
             @foreach($docs as $k => $s)
                 <tr>
-                    <th scope="row">{{$k+1}}</th>
-                    <th scope="row">
+                    <td class="text-center">{{$k+1}}</td>
+                    <td class="text-center">
                         <img src="{{App\Helpers\Functions::getImageModels($s,'services','images')}}" class="rounded-circle" height="60" width="60" />
-                    </th>
+                    </td>
                     <td class="text-center">{{@$s->name}}</td>
                     <td class="text-center">{{@$s->code}}</td>
 {{--                    <td class="text-center">{{$s->description}}</td>--}}

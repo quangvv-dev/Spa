@@ -1,6 +1,6 @@
 <div class="table-responsive">
-    <table class="table card-table table-vcenter text-nowrap table-primary">
-        <thead class="bg-primary text-white">
+    <table class="table card-table table-vcenter table-bordered text-nowrap table-primary">
+        <thead class="text-white">
         <tr>
             <th class="text-white">STT</th>
             <th class="text-white text-center">Tiêu đề</th>
@@ -14,7 +14,7 @@
         @if(@count($docs))
             @foreach($docs as $k => $rule)
                 <tr>
-                    <th scope="row">{{$k}}</th>
+                    <th class="text-center">{{$k}}</th>
                     <td class="lalign">{{$rule->title}}</td>
                     {{--<td><span class="text-center">{{$rule->start_at}}</span></td>--}}
                     {{--<td><span class="text-center">{{$rule->end_at}}</span></td>--}}

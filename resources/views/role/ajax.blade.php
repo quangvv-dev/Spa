@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table card-table table-vcenter text-nowrap table-primary">
+    <table class="table card-table table-vcenter table-bordered text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white">STT</th>
@@ -12,7 +12,7 @@
         <tbody>
         @forelse($docs as $k => $item)
             <tr>
-                <th scope="row">{{$k+1}}</th>
+                <td class="text-center">{{$k+1}}</td>
                 <td class="text-center">{{date('d-m-Y', strtotime($item->created_at))}}</td>
                 <td class="text-center">{{$item->name}}</td>
                 <td class="text-center">{{@$item->department->name}}</td>

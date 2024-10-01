@@ -16,7 +16,7 @@
                 <div class="col row">
                     <div class="col-12 form-group">
                         {!! Form::label('sms_group', 'Nội dung tin nhắn KH đặt lịch', array('class' => ' required')) !!}
-                        {!! Form::textArea('sms_schedules', setting('sms_schedules'), array('class' => 'form-control autocomplete-textarea','id'=>'sms_schedules','maxlength'=>152)) !!}
+                        {!! Form::textArea('sms_schedules', setting('sms_schedules'), array('class' => 'form-control textarea-custom autocomplete-textarea','id'=>'sms_schedules','maxlength'=>152)) !!}
                         <span class="help-block">Lưu ý nội dung tin nhắn không dấu<br>
                         Nhấn <b>@</b> để chọn biến</span>
                     </div>

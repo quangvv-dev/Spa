@@ -1,9 +1,9 @@
-<div class="modal fade text-left" id="import" tabindex="-1" role="dialog" aria-labelledby="myModalLabel35"
+<div class="modal fade modal-custom text-left" id="import" tabindex="-1" role="dialog" aria-labelledby="myModalLabel35"
      style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-xs" role="document">
         <div class="modal-content">
             <div class="modal-header bg-main">
-                <h5 class="modal-title" id="myModalLabel"> Import sản phẩm</h5>
+                <h5 class="modal-title-custom linear-text fs-24" id="myModalLabel"> Import sản phẩm</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
