@@ -2,6 +2,7 @@
 @section('_style')
     <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
 @endsection
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">
