@@ -9,9 +9,9 @@
 <!-- Horizantal menu-->
 <div class="ren-navbar header" id="headerMenuCollapse">
     <div class="container d-flex justify-content-between align-items-center">
-        <div class="logo pointer">
+        <a class="logo pointer" href="{{route('customers.index')}}">
             <img src="{{url('layout/images/Logo.png')}}" alt="">
-        </div>
+        </a>
         <div class="center">
             <ul class="navbar-nav bd-navbar-nav flex-row">
 
