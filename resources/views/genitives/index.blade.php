@@ -1,12 +1,4 @@
-@extends('layout.app')
-<style>
-    .txt-dotted{
-        border: 1px solid transparent;
-        border-bottom: dotted 1px #999;
-        width: 100%;
-        padding: 0px;
-    }
-</style>
+@extends('layout.app')>
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">

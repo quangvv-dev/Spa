@@ -14,7 +14,7 @@
         @if(@count($docs))
             @foreach($docs as $k => $rule)
                 <tr>
-                    <th class="text-center">{{$k}}</th>
+                    <td class="text-center">{{$k}}</td>
                     <td class="lalign">{{$rule->title}}</td>
                     {{--<td><span class="text-center">{{$rule->start_at}}</span></td>--}}
                     {{--<td><span class="text-center">{{$rule->end_at}}</span></td>--}}

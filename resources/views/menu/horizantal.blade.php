@@ -39,7 +39,7 @@
                 </li>
             @endif
             <li class="nav-item with-sub">
-                <a class="{{ Request::is('marketing/dashboard')||Request::is('marketing/source-landipage')||Request::is('landipages*')||Request::is('posts*')||Request::is('customer-post*')||Request::is('rules*') ? 'active' : '' }}"
+                <a class="{{ Request::is('marketing/dashboard')||Request::is('marketing/source-landipage')||Request::is('landipages*')||Request::is('posts*')||Request::is('customer-post*')||Request::is('rules*')||Request::is('promotions*') ? 'active' : '' }}"
                    href="#">
                     <div class="gradient-btn">
                         <img src="{{asset('layout/images/Marketing.png')}}" alt="">
@@ -63,16 +63,16 @@
                             </div>
                         </li>
                         @if($roleGlobal->permission('marketing.dashboard'))
-                            <li class="sub-with-sub active">
+                            <li class="sub-with-sub {{ Request::is('marketing/dashboard')||Request::is('marketing/ranking')?'active' : ''}}">
                                 <a href="#">Xếp hạng</a>
                                 <ul>
-                                    <li class="active"><a href="{{route('marketing.dashboard')}}">Marketing Dashbroad</a></li>
+                                    <li><a href="{{route('marketing.dashboard')}}">Marketing Dashbroad</a></li>
                                     <li><a href="{{url('marketing/ranking')}}">Bảng xếp hạng</a></li>
                                 </ul>
                             </li>
                         @endif
                         @if($roleGlobal->permission('source.list') || $roleGlobal->permission('marketing.seeding_number'))
-                            <li class="sub-with-sub">
+                            <li class="sub-with-sub {{ Request::is('marketing/source-landipage') ?'active' : ''}}">
                                 <a href="#">Dữ liệu</a>
                                 <ul>
                                     @if($roleGlobal->permission('source.list'))
@@ -94,7 +94,7 @@
                             </li>
                         @endif
                         @if(empty($permissions) || !in_array('rules.index',$permissions)|| !in_array('promotions.index',$permissions))
-                            <li class="sub-with-sub">
+                            <li class="sub-with-sub {{ Request::is('promotions*')||Request::is('rules') ?'active' : ''}}">
                                 <a href="#">Nâng cao</a>
                                 <ul>
                                     @if(empty($permissions) || !in_array('rules.index',$permissions))
@@ -119,8 +119,8 @@
             </li>
             <li class="nav-item with-sub">
                 <a class="{{ Request::is('category*')||Request::is('tips')||Request::is('orders-payment')||Request::is('list-orders*')
-                ||Request::is('combos*')||Request::is('services*')||Request::is('products*')||Request::is('trademark*')
-                ||Request::is('category-product*') ||Request::is('orders-payment*')||Request::is('payment-wallet*') ? 'active' : '' }}"
+                ||Request::is('combos*')||Request::is('services*')||Request::is('products*')||Request::is('trademark*')||Request::is('orders-destroy')
+                ||Request::is('category-product*') ||Request::is('orders-payment*')||Request::is('payment-wallet*')||Request::is('genitives*') ? 'active' : '' }}"
                    href="#">
                     <div class="gradient-btn">
                         <img src="{{asset('layout/images/Sell.png')}}" alt="">
@@ -195,7 +195,7 @@
             </li>
             @if($roleGlobal->permission('tasks.employee'))
             <li class="nav-item">
-                <a class="{{ Request::is('tasks') ? 'active' : '' }}"
+                <a class="{{ Request::is('tasks')||Request::is('tasks-employee') ? 'active' : '' }}"
                    href="{{url('tasks-employee')}}">
                     <div class="gradient-btn">
                         <img src="{{asset('layout/images/CS1.png')}}" alt="">
@@ -213,7 +213,9 @@
             </li>
                 @endif
             <li class="nav-item with-sub">
-                <a class="{{ Request::is('statistics*')||Request::is('report*')||Request::is('history-sms') ? 'active' : '' }}"
+                <a class="{{ Request::is('statistics*')||Request::is('report*')||Request::is('chart-revenue')||Request::is('chart-pay')
+                ||Request::is('marketing/ranking')||Request::is('marketing/carepage-ranking')||Request::is('call-center')
+                ||Request::is('marketing/leader')||Request::is('history-sms') ? 'active' : '' }}"
                    href="#">
                     <div class="gradient-btn">
                         <img src="{{asset('layout/images/Report.png')}}" alt="">
@@ -318,7 +320,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="{{ Request::is('depots/product') ? 'active' : '' }}" href="#">
+                <a class="{{ Request::is('depots*') ? 'active' : '' }}" href="#">
                     <div class="gradient-btn">
                         <img src="{{asset('layout/images/Storage.png')}}" alt="">
                         <span class="fs-18 show-text text-white">Kho vận</span>
@@ -342,7 +344,7 @@
 
             @if($roleGlobal->permission('thu-chi.list'))
                 <li class="nav-item">
-                    <a class="{{ Request::is('danh-muc-thu-chi*')||Request::is('thu-chi*') ? 'active' : '' }}"
+                    <a class="{{ Request::is('danh-muc-thu-chi*')||Request::is('ly-do-thu-chi')||Request::is('thu-chi*') ? 'active' : '' }}"
                        href="#">
                         <div class="gradient-btn">
                             <img src="{{asset('layout/images/Money2.png')}}" alt="">
@@ -371,7 +373,7 @@
             @endif
 
             <li class="nav-item">
-                <a class="{{ Request::is('settings*')||Request::is('settings*') ? 'active' : '' }}"
+                <a class="{{ Request::is('settings*')||Request::is('approval*') ? 'active' : '' }}"
                    href="#">
                     <div class="gradient-btn">
                         <img src="{{asset('layout/images/Employee.png')}}" alt="">

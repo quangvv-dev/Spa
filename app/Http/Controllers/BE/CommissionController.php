@@ -299,21 +299,6 @@ class CommissionController extends Controller
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
-
-//        $commission = Commission::whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
-//            ->select('*', \DB::raw('SUM(doctor) AS total_doctor'),\DB::raw('SUM(yta1) AS total_yta1'),\DB::raw('SUM(yta2) AS total_yta2'),\DB::raw('SUM(support1) AS total_support1'),\DB::raw('SUM(support2) AS total_support2'))->groupBy('order_id');
-//
-//        $support_order = SupportOrder::whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])->paginate(StatusCode::PAGINATE_20);
-
-        //        $support_order->setCollection($support_order->getCollection()->map(function ($item) use ($commission) {
-//            $commission->where('order_id',$item->order_id)->first();
-//            $item->doctor
-//            $item->yta1
-//            $item->yta2
-//            $item->yta2
-//            $item->order_id;
-//        }));
-
         $paginate = 20;
         $current_user = Auth::user();
 

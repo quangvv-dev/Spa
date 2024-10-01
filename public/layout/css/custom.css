@@ -423,6 +423,13 @@ body {
     left: 16px;
 }
  /*Quang css*/
+.txt-dotted {
+    border: 1px solid transparent;
+    border-bottom: dotted 1px #999;
+    width: 100%;
+    padding: 0px;
+    height: 32px;
+}
 input {
     background-color: #131313 !important;
     border: 1px solid #686777 !important;

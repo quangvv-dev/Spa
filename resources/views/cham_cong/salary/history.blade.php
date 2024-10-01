@@ -1,12 +1,6 @@
 @extends('layout.app')
 @section('content')
     <style>
-        .txt-dotted {
-            border: 1px solid transparent;
-            border-bottom: dotted 1px #999;
-            width: 100%;
-            padding: 0px;
-        }
         .users-summary {
             display: inline-block;
             width: 30px;

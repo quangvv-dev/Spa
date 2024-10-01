@@ -16,12 +16,9 @@
         <tbody>
         @forelse($ctv as $key=>$item)
             <tr>
-                <th class="text-center">{{$key+1}}</th>
+                <td class="text-center">{{$key+1}}</td>
                 <td class="text-center">
                     {{$item->full_name}}
-                    <br>
-                    <span class="small-tip">12341234</span>
-
                 </td>
                 <td class="text-center">{{number_format($item->doanh_so)}}</td>
                 <td class="text-center">{{number_format($item->doanh_thu)}}</td>
