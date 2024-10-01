@@ -152,7 +152,7 @@
                                 <i style="color: red">Vui lòng tải file excel (*xlsx) <br>
                                     Trong file phải có cột mã nhân viên & tổng tiền
                                 </i><br><br>
-                                <label class="btn btn-primary">
+                                <label class="btn btn-info">
                                     Browse… <input required="" name="file" type="file" style="display: none">
                                 </label>
                             </div>

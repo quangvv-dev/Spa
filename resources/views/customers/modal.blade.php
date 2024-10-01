@@ -12,7 +12,7 @@
                     <div class="col-md-12">
                         <i style="color: red">Vui lòng tải file excel (*xlsx)</i><br><br>
 {{--                        {!! Form::file('file', null, array('class' => 'form-control','required'=>true)) !!}--}}
-                        <label class="btn btn-primary">
+                        <label class="btn btn-info">
                             Browse… <input required name="file" type="file" style="display: none" >
                         </label>
                     </div>

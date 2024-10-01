@@ -286,7 +286,7 @@
                 let html1 = '';
                     data.group_comments.forEach(function (item) {
                         html1 += `<div class="note__item"><div class="d-flex align-items-center gap-8">
-                            <img src="`+(item.avatar ?? "{{asset('layout/images/Ava1.png')}}")+`" width="36" height="36" alt="">
+                            <img src="`+(item.avatar ?? "{{asset('layout/images/Ava1.png')}}")+`" width="36" height="36" alt="" style="border-radius: 50%">
                             <div class="fs-16">` + (item.full_name ?? "") + `</div>
                             <div class="fs-14 color-dark">|</div>
                             <div class="fs-14 color-dark">` + item.created_at + `</div>
