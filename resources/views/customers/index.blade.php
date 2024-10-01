@@ -271,7 +271,7 @@
                 </div>
                 <div class="row mt-12 no-mrl">
                     <span style="color: var(--color-dark);">Ghi chú</span>
-                    <textarea name="messages" placeholder="Nhập ghi chú ..." class="message textarea-custom color-white w-100 mt-8 fs-16" style="height: 100px;"></textarea>
+                    <textarea name="messages" placeholder="Nhập ghi chú ..." class="message textarea-custom color-white w-100 mt-8 fs-16" style="height: 70px;"></textarea>
                 </div>
                 <div class="list-note mt-16 p-12-16 chat-ajax">
                     @include('message_zalo.index')
@@ -287,9 +287,9 @@
                     data.group_comments.forEach(function (item) {
                         html1 += `<div class="note__item"><div class="d-flex align-items-center gap-8">
                             <img src="`+(item.avatar ?? "{{asset('layout/images/Ava1.png')}}")+`" width="36" height="36" alt="" style="border-radius: 50%">
-                            <div class="fs-16">` + (item.full_name ?? "") + `</div>
-                            <div class="fs-14 color-dark">|</div>
-                            <div class="fs-14 color-dark">` + item.created_at + `</div>
+                            <div class="fs-14">` + (item.full_name ?? "") + `</div>
+                            <div class="fs-12 color-dark">|</div>
+                            <div class="fs-12 color-dark">` + item.created_at + `</div>
                         </div>
                         <div class="mt-1">` + item.messages + `</div> </div>`;
                         {{--html1 += `<div class="col comment-fast" style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;">--}}

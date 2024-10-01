@@ -475,8 +475,7 @@ margin-right: 0 !important;
 }
 .note__item {
     border-bottom: 1px solid #2E2E2E;
-    padding-bottom: 16px;
-    margin-top: 16px;
+    padding-bottom: 3px;
 }
 .textarea-custom {
     /*background-color: #131313 !important;*/
