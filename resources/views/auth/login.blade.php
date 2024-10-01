@@ -31,7 +31,8 @@
         .content {
             background-color: #131313;
             height: 100vh;
-            width: 1440px;
+            /*width: 1440px;*/
+            width: 100%;
         }
 
         .bg {
