@@ -63,10 +63,10 @@
                             </div>
                         </li>
                         @if($roleGlobal->permission('marketing.dashboard'))
-                            <li class="sub-with-sub">
+                            <li class="sub-with-sub active">
                                 <a href="#">Xếp hạng</a>
                                 <ul>
-                                    <li><a href="{{route('marketing.dashboard')}}">Marketing Dashbroad</a></li>
+                                    <li class="active"><a href="{{route('marketing.dashboard')}}">Marketing Dashbroad</a></li>
                                     <li><a href="{{url('marketing/ranking')}}">Bảng xếp hạng</a></li>
                                 </ul>
                             </li>

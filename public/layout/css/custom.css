@@ -925,6 +925,19 @@ margin-right: 0 !important;
     font-size: 16px;
     color: #fff;
 }
+.ren-navbar.header .profile .dropdown-custom .dropdown-item{
+    color: #fff;
+}
+.ren-navbar.header .profile .dropdown-custom .dropdown-item:hover{
+    background-color: unset;
+    color: var(--color-primary);
+}
+.ren-navbar.header .center .sub-item li.active > a{
+    color: var(--color-primary) !important;
+}
+/*.ren-navbar.header .center .sub-item li.active ul li.active> a{*/
+    /*color: var(--color-primary);*/
+/*}*/
 .navbar-nav .sub-item .dropdown-menu__header,
 .navbar-nav .sub-item .dropdown-menu__header:hover {
     font-family: sopher;

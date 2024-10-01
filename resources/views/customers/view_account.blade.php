@@ -144,9 +144,6 @@
             color: var(--color-primary);
         }
 
-
-
-
         .communicate {
             background-image: url("../layout/images/communicate.png");
         }
@@ -341,6 +338,28 @@
             border-radius: 50%;
             background-color: rgb(150, 217, 201);
         }
+        .fileupload .thumbnail {
+            margin-bottom: 0;
+        }
+        .fileupload-preview.fileupload-exists.thumbnail {
+            width: 71px;
+            height: 50.7px;
+            position: absolute;
+            right: 100px;
+            top: -11px;
+        }
+        .fileupload-preview.fileupload-exists.thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .full-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 167px;
+            display: inline-block;
+        }
     </style>
     @php
         $roleGlobal = auth()->user()?:[];
@@ -500,8 +519,8 @@
                         <div class="d-flex align-items-start gap-4">
                             <img src="{{!empty($customer->telesale->avatar)?$customer->telesale->avatar:'/default/noavatar.png'}}" width="36" height="36" alt="" style="border-radius: 50%;">
                             <div class="" style="margin-top: -5px;">
-                                <span class="fs-16">{{ @$customer->telesale->full_name }}</span>
-                                <div class="fs-12 color-dark">The Pyo Hà Nội</div>
+                                <span class="fs-16 full-name" title="{{ @$customer->telesale->full_name }}">{{ @$customer->telesale->full_name }}</span>
+                                <div class="fs-12 color-dark">{{ @$customer->branch->name }}</div>
                                 <div class="d-flex align-items-center gap-8">
                                     <img src="{{asset('layout/images/Hotline_active.png')}}" width="12" height="12" alt="">
                                     <span class="fs-12 color-info">Người phụ trách</span>
@@ -645,18 +664,18 @@
                                                 <div class="content__right__header font-sopher">
                                                     Trao đổi
                                                 </div>
-                                                <div class="p-24">
+                                                <div class="p-24 position-relative">
                                                     {!! Form::open(array('url' => url('group_comments/'.request()->segment(count(request()->segments())) ), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
                                                     <input type="text" name="messages" placeholder="Nhập tin nhắn....." style="background: #2e2e2e;padding: 24px 16px;width: 100%;color: #fff">
                                                     <img id="blah" src="#" class="d-none" width="42" height="42" style="position: absolute; top: 38px; right: 115px;object-fit: cover;"/>
 
-                                                    <div class="send">
+                                                    <div class="send position-absolute" style="top: 43px;right: 40px;">
                                                         <div class="form-group required">
-                                                            <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                            <div class="fileupload fileupload-new d-flex gap-16" data-provides="fileupload">
                                                                 <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 150px">
                                                                 </div>
                                                                 <div>
-                                                                    <button type="button" class="btn btn-file">
+                                                                    <button type="button" class="btn btn-file p-0" style="margin-right: 16px">
                                                                         <span class="fileupload-new">
                                                                              <img src="{{asset('layout/images/Image_3.png')}}" class="pointer upload-file" alt="">
                                                                         </span>
@@ -665,7 +684,7 @@
                                                                         </span>
                                                                         <input type="file" name="image_contact" accept="image/*" class="btn-default upload"/>
                                                                     </button>
-                                                                    <button type="submit" class="btn">
+                                                                    <button type="submit" class="btn p-0">
                                                                         <img src="{{asset('layout/images/Send.png')}}" class="pointer" alt="" type="submit">
                                                                     </button>
                                                                 </div>
