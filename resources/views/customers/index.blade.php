@@ -236,13 +236,12 @@
                     html = `
                     <div class="detail__info">
                     <div class="d-flex align-items-center gap-24">
-                        <span>` + data.customer.full_name + `-` + data.customer.account_code + `-`+category+`</span>
-                        <img src="{{asset('')}}" alt="">
+                        <span>` + data.customer.full_name + ` - ` + data.customer.account_code + ` - `+category+`</span>
                     </div>
                     <div class="d-flex align-items-center gap-4">
-                        <img src="images/Ava1.png" alt="">
-                        <span class="text-white">` + (data.customer.telesale ? data.customer.telesale.full_name : "") + ` -</span>
-                        <span style="color: var(--bg-main);">` + (data.customer.cskh ? data.customer.cskh.full_name : "") + `</span>
+                        <img src="{{asset('layout/images/Ava1.png')}}" alt="">
+                        <span class="text-white svn-medium">Sale: ` + (data.customer.telesale ? data.customer.telesale.full_name : "") + ` ---</span>
+                        <span class="svn-medium" style="color: var(--bg-main);">CSKH: ` + (data.customer.cskh ? data.customer.cskh.full_name : "") + `</span>
                     </div>
                 </div>
                 <div class="row mt-12 no-mrl">
@@ -252,21 +251,21 @@
                 <div class="row mt-12 no-mrl">
                     <div class="col-5 p-0">Nguồn khách hàng</div>
                     <div class="col-7 p-0 d-flex align-items-center gap-8">
-                        <img src="images/Facebook.png" alt="">
+                        <img src="{{asset('layout/images/Facebook.png')}}" alt="">
                         <span class="fs-18">` + (data.customer.source_customer ? data.customer.source_customer.name : "") + `</span>
                     </div>
                 </div>
                 <div class="row mt-12 no-mrl">
                     <div class="col-5 p-0">Liên hệ lần cuối</div>
                     <div class="col-7 p-0 d-flex align-items-center gap-8">
-                        <img src="images/Calendar.png" alt="">
+                        <img src="{{asset('layout/images/Calendar.png')}}" alt="">
                         <span class="fs-18">` + (data.last_contact ? data.last_contact : "") + `</span>
                     </div>
                 </div>
                 <div class="row mt-12 no-mrl">
                     <div class="col-5 p-0">Giá trị</div>
                     <div class="col-7 p-0 d-flex align-items-center gap-8 color-green">
-                        <img src="images/Dollar_active.png" alt="">
+                    <img src="{{asset('layout/images/Dollar_active.png')}}" alt="">
                         <span class="fs-18">` + data.order_revenue + ` VND</span>
                     </div>
                 </div>
@@ -287,7 +286,7 @@
                 let html1 = '';
                     data.group_comments.forEach(function (item) {
                         html1 += `<div class="note__item"><div class="d-flex align-items-center gap-8">
-                            <img src="`+item.avatar +`" width="36" height="36" alt="">
+                            <img src="`+(item.avatar ?? "{{asset('layout/images/Ava1.png')}}")+`" width="36" height="36" alt="">
                             <div class="fs-16">` + (item.full_name ?? "") + `</div>
                             <div class="fs-14 color-dark">|</div>
                             <div class="fs-14 color-dark">` + item.created_at + `</div>

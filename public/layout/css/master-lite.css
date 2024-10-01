@@ -23,3 +23,12 @@
 .btn-100{
     max-width: 100px;
 }
+.detail__info div:first-child {
+    font-family: sopher;
+    font-size: 16px;
+    color: var(--bg-main);
+    font-weight: 700;
+}
+.svn-medium{
+    font-family: 'svn-medium' !important;
+}
