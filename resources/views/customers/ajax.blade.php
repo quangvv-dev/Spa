@@ -73,7 +73,7 @@
         </button>
     </div>
 
-    <div class="scrollmenu col-md-8 d-flex gap-24 menu">
+    <div class="scrollmenu col-md-8 d-flex gap-16 menu">
         @php
             $customers_count = 0;
         @endphp
