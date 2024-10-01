@@ -38,8 +38,8 @@
                         array('class' => 'form-control')) !!}
                     </div>
                     <div class="col-md-12 col-xs-12">
-                        {!! Form::label('description', 'Nội dung', array('class' => ' required')) !!}
-                        {!! Form::textarea('description', null, array('class' => 'form-control','id'=>'description','rows' => 6)) !!}
+                        {!! Form::label('description', 'Nội dung', array('class' => 'required')) !!}
+                        {!! Form::textarea('description', null, array('class' => 'form-control textarea-custom','id'=>'description','rows' => 6)) !!}
                     </div>
                     <div class="col-md-12" style="padding-top: 10px">
                         <button type="submit" class="btn btn-success">Lưu</button>

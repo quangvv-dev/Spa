@@ -61,7 +61,7 @@
         <div class="squares-four pointer account_relation status active">
             <img src="{{asset('layout/images/SquaresFour_active.png')}}" alt="">
             <span class="text-white" style="white-space: nowrap">Tất cả</span>
-{{--            <span class="text-white fs-12">({{$statuses->sum('customers_count')}})</span>--}}
+            <span class="text-white fs-12">(&nbsp;{{$statuses->sum('customers_count')}})</span>
             <div class="active-border"></div>
         </div>
     </div>
