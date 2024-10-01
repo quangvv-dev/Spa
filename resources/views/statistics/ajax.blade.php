@@ -87,9 +87,9 @@
                 <div class="linear-text" style="font-size: 17px;">Tổng doanh số</div>
                 <div class="number bold">{{@number_format($data['all_total'] + $wallets['revenue'])}}</div>
             </div>
-            <div class="color-red" style="color: #FF0000;">
-                <img src="images/TrendDown.png" alt=""> 12%
-            </div>
+{{--            <div class="color-red" style="color: #FF0000;">--}}
+{{--                <img src="images/TrendDown.png" alt=""> 12%--}}
+{{--            </div>--}}
         </div>
         <div class="p-16">
             <div class="d-flex justify-content-between">
@@ -116,9 +116,9 @@
                 <div class="linear-text" style="font-size: 17px;">Thực thu</div>
                 <div class="number bold">{{@number_format($data['payment'] + $wallets['payment'] - $wallets['used'])}}</div>
             </div>
-            <div class="color-red" style="color: #FF0000;">
-                <img src="images/TrendDown.png" alt=""> 12%
-            </div>
+{{--            <div class="color-red" style="color: #FF0000;">--}}
+{{--                <img src="images/TrendDown.png" alt=""> 12%--}}
+{{--            </div>--}}
         </div>
         <div class="p-16">
             <div class="d-flex justify-content-between">
@@ -145,9 +145,9 @@
                 <div class="linear-text" style="font-size: 17px;">Nguồn tiền từ đơn hàng</div>
                 <div class="number bold">{{@number_format($data['payment'])}}</div>
             </div>
-            <div class="color-red" style="color: #FF0000;">
-                <img src="images/TrendDown.png" alt=""> 12%
-            </div>
+{{--            <div class="color-red" style="color: #FF0000;">--}}
+{{--                <img src="images/TrendDown.png" alt=""> 12%--}}
+{{--            </div>--}}
         </div>
         <div class="p-16">
             <div class="d-flex justify-content-between">

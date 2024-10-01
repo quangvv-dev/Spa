@@ -26,9 +26,9 @@
                 <div class="linear-text" style="font-size: 17px;">Thực thu</div>
                 <div class="number bold">{{@number_format($data['payment'] + $data['wallet_payment'] - $data['used'])}}</div>
             </div>
-            <div class="color-red" style="color: #FF0000;">
-                <img src="images/TrendDown.png" alt=""> 12%
-            </div>
+{{--            <div class="color-red" style="color: #FF0000;">--}}
+{{--                <img src="images/TrendDown.png" alt=""> 12%--}}
+{{--            </div>--}}
         </div>
         <div class="p-16">
             <div class="d-flex justify-content-between">
@@ -51,9 +51,9 @@
                 <div class="linear-text" style="font-size: 17px;">Tổng chi</div>
                 <div class="number bold">{{@number_format($list_pay['money'] + $list_pay['CK'] +$list_pay['card'])}}</div>
             </div>
-            <div class="color-red" style="color: #FF0000;">
-                <img src="images/TrendDown.png" alt=""> 12%
-            </div>
+{{--            <div class="color-red" style="color: #FF0000;">--}}
+{{--                <img src="images/TrendDown.png" alt=""> 12%--}}
+{{--            </div>--}}
         </div>
         <div class="p-16">
             <div class="d-flex justify-content-between">
@@ -72,9 +72,9 @@
                 <div class="linear-text" style="font-size: 17px;">Còn lại</div>
                 <div class="number bold">{{@number_format(($data['payment'] + $data['wallet_payment'] - $data['used'])-($list_pay['money'] + $list_pay['CK'] +$list_pay['card']))}}</div>
             </div>
-            <div class="color-red" style="color: #FF0000;">
-                <img src="images/TrendDown.png" alt=""> 12%
-            </div>
+{{--            <div class="color-red" style="color: #FF0000;">--}}
+{{--                <img src="images/TrendDown.png" alt=""> 12%--}}
+{{--            </div>--}}
         </div>
         <div class="p-16">
             <div class="d-flex justify-content-between">
