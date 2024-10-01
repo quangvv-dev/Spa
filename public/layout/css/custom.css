@@ -448,7 +448,7 @@ label{
     font-family: 'Sopher' !important; /* Sử dụng 'sans-serif' như một font fallback */
 }
 td, a, p.word-wrap{
-    font-family: 'svn-small' !important;
+    font-family: 'svn-regular' !important;
 }
 td i{
     color: #fff !important;
