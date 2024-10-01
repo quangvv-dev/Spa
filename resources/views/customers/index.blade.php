@@ -317,6 +317,10 @@
                     $(".status-result").val(data.customer.status_id).change();
                     $('.customer-chat').append(html);
                     $('.chat-ajax').html(html1);
+                    $('.select2').select2({ //apply select2 to my element
+                        placeholder: "Chọn nhóm KH",
+                        allowClear: true
+                    });
                     $('#view_chat').modal("show");
                     $('.chat-save').attr('data-customer-chat-id', data.customer.id);
                     $('#view_chat .chatApplication').hide();
