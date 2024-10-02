@@ -85,7 +85,7 @@
 
                 <div class="table-responsive">
                     <table class="table table-vcenter table-bordered text-nowrap">
-                        <thead class="bg-primary">
+                        <thead>
                         <tr style="white-space: nowrap">
                             <th class="custom-th text-center" width="350px">Dịch vụ</th>
                             <th class="custom-th text-center">S.buổi | SL</th>

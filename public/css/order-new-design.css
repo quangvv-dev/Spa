@@ -32,7 +32,7 @@ ul.thumbnails.image_picker_selector li .thumbnail{
 .box-add {
     width: 114px;
     height: 114px;
-    background: #FFFFFF;
+    background: #131313;
     border: 1px dashed #D4D7E7;
     border-radius: 4px;
     display: flex;
@@ -47,7 +47,7 @@ ul.thumbnails.image_picker_selector li .thumbnail{
 .box-add-custom {
     width: 180px;
     min-height: 114px;
-    background: #FFFFFF;
+    background: #131313;
     border: 1px dashed #D4D7E7;
     border-radius: 4px;
     margin-left: 20px;
@@ -87,8 +87,7 @@ border-radius: 8px;
 }
 
 .info {
-background: #E8EAF6;
-color: #4E4B66;
+background: #131313;
 padding: 5px 25px;
 line-height: 2.5;
 }

@@ -1,7 +1,7 @@
 <div class="modal fade modal-custom" id="userBacSy" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
-        <div class="modal-content">
+        <div class="modal-content" style="min-width: 510px">
             <div class="modal-header">
                 <h4>Chọn Bác Sỹ</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>

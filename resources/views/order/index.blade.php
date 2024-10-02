@@ -82,7 +82,7 @@
                 </div>
                 <div class="table-responsive">
                     <table class="table card-table table-vcenter table-bordered text-nowrap table-primary">
-                        <thead class="bg-primary">
+                        <thead>
                         <tr style="white-space: nowrap">
                             <th class="custom-th text-center" width="350px">Sản phẩm</th>
                             <th class="custom-th text-center">Số lượng</th>
@@ -115,7 +115,7 @@
                                                 </select>
                                             </div>
                                             <span class="btn btn-default col-md-1 no-padd add_note"
-                                                  style="height:34px; background-color: #ffffff;"> <i
+                                                  style="height:34px; "> <i
                                                         class="fa fa-plus font16" aria-hidden="true"></i> </span>
                                             <textarea class="product_note form-control pt5 italic"
                                                       style="margin-left: 12px; display: none" placeholder="Ghi chú"
@@ -163,7 +163,7 @@
 
                                         </div>
                                         <span class="btn btn-default col-md-1 no-padd add_note"
-                                              style="height:34px; background-color: #ffffff;"> <i
+                                              style="height:34px; "> <i
                                                     class="fa fa-plus font16"
                                                     aria-hidden="true"></i> </span>
                                         <textarea class="product_note form-control pt5 italic"
