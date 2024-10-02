@@ -60,7 +60,7 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h4>Cập nhật công việc</h4>
+                <span class="linear-text fs-30">Cập nhật công việc</span>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             {!! Form::open(array('url' => "", 'method' => 'put', 'files'=> true,'class'=>'formUpdateTask','id'=>'fvalidate','enctype'=>'multipart/form-data','autocomplete'=>'off')) !!}
@@ -96,7 +96,7 @@
                     </div>
                     <div class="col-md-12 col-xs-12">
                         {!! Form::label('description', 'Nội dung', array('class' => ' required')) !!}
-                        {!! Form::textarea('description', null, array('class' => 'form-control','id'=>'description_update','rows' => 6)) !!}
+                        {!! Form::textarea('description', null, array('class' => 'form-control','id'=>'description_update textarea-custom','rows' => 6)) !!}
                     </div>
                     <div class="col-md-12" style="padding-top: 10px">
                         <button type="submit" class="btn btn-success">Lưu</button>
