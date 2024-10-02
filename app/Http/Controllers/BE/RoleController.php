@@ -78,7 +78,6 @@ class RoleController extends Controller
         'order.orders-destroy',
         'personal.index',
         'phone.open',
-        'time-status.index'
     ];
 
     protected $filter = [
