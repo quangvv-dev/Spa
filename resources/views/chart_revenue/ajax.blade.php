@@ -26,7 +26,7 @@
                     barThickness: 30 // Độ cao của các thanh
                 },
                 {
-                    label: 'Đã thu trong kỳ',
+                    label: 'Thực thu',
                     data: [{{$payments}}],
                     backgroundColor: '#00AEFF',
                     borderWidth: 1,
