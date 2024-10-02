@@ -488,7 +488,7 @@ margin-right: 0 !important;
 .textarea-custom {
     /*background-color: #131313 !important;*/
     background: #2E2E2E !important;
-    color: #fff;
+    color: #fff !important;
     outline: none;
     padding: 16px;
     border-radius: 8px;
