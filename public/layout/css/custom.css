@@ -451,6 +451,17 @@ label{
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+td.available {
+    background-color: #ffffff !important;
+    color: #ccc;
+}
+td.in-range.available {
+    font-weight: 700 !important;
+    background-color: #afbfcd !important;
+}
+.daterangepicker .ranges li:hover {
+    background-color: #bb1b1b !important;
+}
  th, button, p, h1, h2, h3, h4, h5 option, span, li{
     font-family: 'Sopher' !important; /* Sử dụng 'sans-serif' như một font fallback */
 }
