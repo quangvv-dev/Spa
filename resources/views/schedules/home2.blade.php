@@ -39,10 +39,28 @@
     span.fc-title{
         font-family: 'svn-regular' !important;
     }
+    .fc-unthemed .fc-list-item:hover td {
+        background-color: #3183fbba !important;
+
+    }
+    td.fc-widget-header {
+        color: #131313;
+    }
     .card-header{
         background-color: #131313 !important;
     }
-
+    .fc-unthemed .fc-content,
+    .fc-unthemed .fc-divider,
+    .fc-unthemed .fc-list-heading td,
+    .fc-unthemed .fc-list-view,
+    .fc-unthemed .fc-popover,
+    .fc-unthemed .fc-row,
+    .fc-unthemed tbody,
+    .fc-unthemed td,
+    .fc-unthemed th,
+    .fc-unthemed thead {
+        border-color: rgb(255 255 255 / 12%) !important;
+    }
 </style>
 @section('content')
     <div class="col-md-12 col-lg-12">
