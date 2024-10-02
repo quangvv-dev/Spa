@@ -324,7 +324,7 @@
                     <div class="gradient-btn">
                         <img src="{{asset('layout/images/Storage.png')}}" alt="">
                         <span class="fs-18 show-text text-white">Kho vận</span>
-                        <img class="down" src="{{'layout/images/Down.png'}}" alt="">
+                        <img class="down" src="{{asset('layout/images/Down.png')}}" alt="">
                     </div>
                 </a>
                 <div class="sub-item">
