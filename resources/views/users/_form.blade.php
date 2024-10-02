@@ -11,7 +11,7 @@
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">
-            <div class=" tab-menu-heading">
+            <div class=" tab-menu-heading" style="border: none !important;">
                 <div class="tabs-menu1 ">
                     <!-- Tabs -->
                     <ul class="nav panel-tabs">
