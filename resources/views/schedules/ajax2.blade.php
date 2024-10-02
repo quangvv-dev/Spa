@@ -167,7 +167,7 @@
                         <!-- Modal content-->
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 style="font-weight: 900;color: #0fa2e8;">Cập nhật lịch hẹn</h4>
+                                <span class="linear-text fs-30" style="font-weight: 900;color: #0fa2e8;">Cập nhật lịch hẹn</span>
                                 <button type="button" style="color: black" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
