@@ -454,6 +454,9 @@ label{
  th, button, p, h1, h2, h3, h4, h5 option, span, li{
     font-family: 'Sopher' !important; /* Sử dụng 'sans-serif' như một font fallback */
 }
+ h1, h2, h3, h4, h5{
+ color: #fff !important;
+ }
 td, a, p.word-wrap{
     font-family: 'svn-regular' !important;
 }

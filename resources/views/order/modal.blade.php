@@ -12,7 +12,7 @@
             </div>
             <div class="modal-body">
                 {!! Form::open(array('url' => url('order/'.$order->id.'/show'), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
-                <div class="row">
+                <div class="row" style="background-color: #131313">
                     <div class="col-md-12 no-padd"> <h1 class="tc gray mg0 bold text-center" style="padding: 0px;">{{ number_format($order->the_rest) }}</h1> </div>
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
@@ -50,7 +50,7 @@
                     </div>
                     <div class="col-xs-12 col-md-12">
                         {!! Form::label('description', 'Ghi chú', array('class' => ' required')) !!}
-                        <textarea row="2" class="form-control description" name="description textarea-custom"></textarea>
+                        <textarea row="2" class="form-control description textarea-custom" name="description"></textarea>
                         <span id="wallet-error" class="help-block" style="display: none">Số dư ví không đủ (tối đa {{ number_format(@$order->customer->wallet) }})</span>
                     </div>
                 </div>

@@ -5,15 +5,24 @@
         a.white {
             color: #fff;
         }
+        .table{
+            border: 1px solid #e0e8f5;
+        }
+        p{
+            color: #fff;
+            background: linear-gradient(107.54deg, #FFFFFF 4.13%, #999999 48.62%, #FFFFFF 93.12%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
     </style>
 @endsection
 @section('content')
     <div class="row" style="">
         <div class="col-lg-8 col-lg-offset-1">
             <div class="invoice">
-                <div class="text-center"><strong style="font-size: 20px">ĐƠN HÀNG BÁN</strong></div>
+                <div class="text-center"><strong class="font-sopher fs-20 bold">ĐƠN HÀNG BÁN</strong></div>
                 <div class="row">
-                    <table class="table table-bordered">
+                    <table class="table">
                         <tbody>
                         <tr class="trfirst">
                             <td style="width:50%">
@@ -56,7 +65,7 @@
                         </tr>
                         </tbody>
                     </table>
-                    <table class="table table-bordered mt10">
+                    <table class="table mt10">
                         <tbody>
                         <tr class="bold b-gray">
                             <td class="padding5">STT</td>

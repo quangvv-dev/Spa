@@ -14,7 +14,7 @@
             </div>
             <div class="modal-body">
                 {!! Form::open(array('method' => 'put', 'id'=>'historyUpdateOrrder')) !!}
-                <div class="row">
+                <div class="row" style="background-color: #131313">
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('user_id') ? 'has-error' : '' }}">
                             {!! Form::label('user_id', 'Kỹ thuật viên chính', array('class' => ' required')) !!}
