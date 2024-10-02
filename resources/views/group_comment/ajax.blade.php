@@ -26,7 +26,7 @@
                 </div>
                 <div class="color-dark time font-svn-small">{{$item->created_at}}</div>
             </div>
-            <div class="mt-8 fs-16 d-flex align-items-center gap-8" style="padding-left: 48px;">
+            <div class="fs-16 d-flex align-items-center gap-8" style="padding-left: 48px;">
                 @if(isset($item->call))
                     <label class="bold">File ghi âm:  </label>
                     <audio controls class="audio-border">

@@ -295,3 +295,8 @@ select.form-control:not([size]):not([multiple]) {
     font-size: 14px;
     font-weight: 500;
 }
+td.text-center.name-customer {
+    min-width: 200px;
+    white-space: normal;
+    text-overflow: ellipsis;
+}

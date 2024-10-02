@@ -268,7 +268,7 @@
             overflow-y: auto;
         }
         .content__right .content__right__body .item{
-            padding: 24px;
+            padding: 16px;
             border-bottom:1px solid #2e2e2e;
             position: relative;
         }
