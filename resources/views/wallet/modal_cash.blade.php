@@ -19,7 +19,7 @@
 
             <!-- Modal footer -->
             <div class="modal-footer">
-                <button type="submit" class="btn btn-success">Tạo đơn nạp</button>
+                <button type="submit" class="btn btn-primary">Tạo đơn nạp</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
             </div>
 

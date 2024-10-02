@@ -84,7 +84,7 @@
                                 </div>
                                 <input type="hidden" name="type" value="2">
                             </div>
-                            <button type="submit" class="btn btn-success">Lưu</button>
+                            <button type="submit" class="btn btn-primary">Lưu</button>
                             <a href="{{route('promotions.index')}}" class="btn btn-danger">Trở lại</a>
                             {{ Form::close() }}
 

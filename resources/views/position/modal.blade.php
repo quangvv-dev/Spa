@@ -15,7 +15,7 @@
                         {!! Form::text('name', null, array('class' => 'form-control','required'=>true)) !!}
                     </div>
                     <div class="col-md-12" style="padding-top: 10px">
-                        <button type="submit" class="btn btn-success">Lưu</button>
+                        <button type="submit" class="btn btn-primary">Lưu</button>
                     </div>
                 </div>
                 {{ Form::close() }}
@@ -45,7 +45,7 @@
                         {!! Form::text('name', null, array('class' => 'form-control','required'=>true,'id'=>'update_name')) !!}
                     </div>
                     <div class="col-md-12" style="padding-top: 10px">
-                        <button type="submit" class="btn btn-success">Lưu</button>
+                        <button type="submit" class="btn btn-primary">Lưu</button>
                     </div>
                 </div>
                 {{ Form::close() }}

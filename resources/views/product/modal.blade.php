@@ -17,7 +17,7 @@
                         </label>
                     </div>
                     <div class="col-md-12" style="padding-top: 10px">
-                        <button type="submit" class="btn btn-success">Lưu</button>
+                        <button type="submit" class="btn btn-primary">Lưu</button>
                     </div>
                 </div>
                 {{ Form::close() }}

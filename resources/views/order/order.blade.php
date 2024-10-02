@@ -175,7 +175,7 @@
                             class="white">Thanh toán</a></button>
                 </div>
                 <div class="btn-group dropup fl task_footer_box">
-                    <button class="btn btn-success ml5 printOrder" data-number="2"><a class="white"
+                    <button class="btn btn-primary ml5 printOrder" data-number="2"><a class="white"
                                                                                       href="/order-pdf/{{$order->id}}"><i
                                 class="fa fa-print"></i>&nbsp;In</a>
                     </button>

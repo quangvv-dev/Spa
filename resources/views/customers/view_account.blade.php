@@ -706,7 +706,7 @@
                                                     <a href="javascript:void(0)" data-value=""
                                                        class="type-order btn btn-warning">Tất cả</a>
                                                     <a href="javascript:void(0)" data-value="1"
-                                                       class="type-order btn btn-success">Dịch vụ</a>
+                                                       class="type-order btn btn-primary">Dịch vụ</a>
                                                     <a href="javascript:void(0)" data-value="2"
                                                        class="type-order btn btn-danger">Sản phẩm</a>
                                                     <a href="javascript:void(0)" data-value="3"

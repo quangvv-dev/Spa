@@ -48,7 +48,7 @@
                         <input id="reportrange" type="text" class="form-control square">
                     </div>
                     <div class="col-md-12" style="padding-top: 10px">
-                        <button type="submit" class="btn btn-success">Tải xuống</button>
+                        <button type="submit" class="btn btn-primary">Tải xuống</button>
                     </div>
                 </div>
                 {{ Form::close() }}

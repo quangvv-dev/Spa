@@ -222,7 +222,7 @@
                 </div>
             </div>
             <div class="col" style="margin-bottom: 10px;">
-                <button type="submit" class="btn btn-success" id="btn-submit-customer">Lưu</button>
+                <button type="submit" class="btn btn-primary" id="btn-submit-customer">Lưu</button>
                 <a href="{{route('customers.index')}}" class="btn btn-danger">Trở lại</a>
             </div>
             {{ Form::close() }}

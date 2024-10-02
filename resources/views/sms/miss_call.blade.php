@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div class="col bot" style="margin-top: 5px">
-                    <button type="submit" class="btn btn-success">Lưu</button>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
                 </div>
             </div>
             {{--<div class="col-md-4 col-xs-12">--}}

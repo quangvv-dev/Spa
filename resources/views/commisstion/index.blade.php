@@ -63,7 +63,7 @@
             </div>
 
             <div class="col bot">
-                <button type="submit" class="btn btn-success">Lưu</button>
+                <button type="submit" class="btn btn-primary">Lưu</button>
                 <a href="{{url('list-orders')}}" class="btn btn-danger">Về danh sách đơn hàng</a>
             </div>
             {{ Form::close() }}

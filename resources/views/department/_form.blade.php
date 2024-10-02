@@ -33,13 +33,13 @@
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group {{ $errors->has('parent_id') ? 'has-error' : '' }}">
                         {!! Form::label('description','Mô tả', array('class' => 'required')) !!}
-                        {!! Form::textArea('description',null, array('class' => 'form-control')) !!}
+                        {!! Form::textArea('description',null, array('class' => 'form-control textarea-custom')) !!}
                         <span class="help-block">{{ $errors->first('parent_id', ':message') }}</span>
                     </div>
                 </div>
             </div>
             <div class="col bot">
-                <button type="submit" class="btn btn-success">Lưu</button>
+                <button type="submit" class="btn btn-primary">Lưu</button>
                 <a href="{{route('department.index')}}" class="btn btn-danger">Về danh sách</a>
             </div>
             {{ Form::close() }}

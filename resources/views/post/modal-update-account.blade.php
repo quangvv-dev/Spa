@@ -21,7 +21,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
-                <button type="submit" class="btn btn-success update-multiple-account-manager">Lưu</button>
+                <button type="submit" class="btn btn-primary update-multiple-account-manager">Lưu</button>
             </div>
         </div>
     </div>

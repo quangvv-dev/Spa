@@ -42,7 +42,7 @@
                         {!! Form::textarea('description', null, array('class' => 'form-control textarea-custom','id'=>'description','rows' => 6)) !!}
                     </div>
                     <div class="col-md-12" style="padding-top: 10px">
-                        <button type="submit" class="btn btn-success">Lưu</button>
+                        <button type="submit" class="btn btn-primary">Lưu</button>
                     </div>
                     <!-- Modal footer -->
                 </div>

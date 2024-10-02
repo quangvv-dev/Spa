@@ -221,7 +221,7 @@
                                         <span class="help-block">{{ $errors->first('note', ':message') }}</span>
                                     </div>
                                     <div class="col-md-12" style="padding-top: 10px">
-                                        <button type="button" class="btn btn-success" id="update_schedule">Lưu
+                                        <button type="button" class="btn btn-primary" id="update_schedule">Lưu
                                         </button>
                                         <a class="btn btn-secondary btn-flat delete" data-url=""
                                            href="javascript:"><i class="fa fa-arrow-"></i>Xoá lịch hẹn</a>

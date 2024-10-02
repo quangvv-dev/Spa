@@ -271,7 +271,7 @@
                 <input type="hidden" value="0" name="discount">
                 <input type="hidden" value="0" name="voucher_id">
                 <div class="col bot" style="margin-top: 10px;">
-                    <button type="submit" class="btn btn-success save">Lưu</button>
+                    <button type="submit" class="btn btn-primary save">Lưu</button>
                     <a href="{{route('order.list')}}" class="btn btn-danger back">Huỷ</a>
                 </div>
             </div>

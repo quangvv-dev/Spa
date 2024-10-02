@@ -170,7 +170,7 @@
                                             </table>
                                         </div>
                                         <div class="col bot" style="margin-top: 5px">
-                                            <button type="submit" class="btn btn-success" id="click-sent">Lưu
+                                            <button type="submit" class="btn btn-primary" id="click-sent">Lưu
                                             </button>
                                         </div>
                                     </div>

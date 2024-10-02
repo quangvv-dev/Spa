@@ -50,7 +50,7 @@
                         <span class="help-block">{{ $errors->first('note', ':message') }}</span>
                     </div>
                     <div class="col-md-12" style="padding-top: 10px">
-                        <button type="submit" class="btn btn-success">Lưu</button>
+                        <button type="submit" class="btn btn-primary">Lưu</button>
                     </div>
                 </div>
                 {{ Form::close() }}
@@ -118,7 +118,7 @@
                         <span class="help-block">{{ $errors->first('note', ':message') }}</span>
                     </div>
                     <div class="col-md-12" style="padding-top: 10px">
-                        <button type="button" class="btn btn-success" id="save_schedules">Lưu</button>
+                        <button type="button" class="btn btn-primary" id="save_schedules">Lưu</button>
                     </div>
                 </div>
                 {{ Form::close() }}

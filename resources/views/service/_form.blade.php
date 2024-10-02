@@ -91,7 +91,7 @@
                 </div>
             </div>
             <div class="col bot">
-                <button type="submit" class="btn btn-success">Lưu</button>
+                <button type="submit" class="btn btn-primary">Lưu</button>
                 <a href="{{url(request()->segment(1)) }}" class="btn btn-danger">Về danh sách</a>
             </div>
         </div>

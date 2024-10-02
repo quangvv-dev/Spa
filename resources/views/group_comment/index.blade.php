@@ -21,7 +21,7 @@
             </div>
             <br>
             <div class="col-md-12">
-                <button style="float: right" type="submit" class="btn btn-success">Gửi</button>
+                <button style="float: right" type="submit" class="btn btn-primary">Gửi</button>
             </div>
             {{ Form::close() }}
 

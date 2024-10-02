@@ -35,7 +35,7 @@
                 </div>
             </div>
             <div class="col bot">
-                <button type="submit" class="btn btn-success">Lưu</button>
+                <button type="submit" class="btn btn-primary">Lưu</button>
                 <a href="{{route('package.index')}}" class="btn btn-danger">Về danh sách</a>
             </div>
             {{ Form::close() }}

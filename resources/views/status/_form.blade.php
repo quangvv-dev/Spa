@@ -53,7 +53,7 @@
                 </div>
             </div>
             <div class="col" style="margin-bottom: 10px;">
-                <button type="submit" class="btn btn-success">Lưu</button>
+                <button type="submit" class="btn btn-primary">Lưu</button>
                 <a href="{{route('status.index')}}" class="btn btn-danger">Về danh sách</a>
             </div>
 
