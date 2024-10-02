@@ -79,7 +79,7 @@
         @endphp
         @foreach(@$statuses as $k => $item)
 
-            <div class="smiley pointer account_relation status" data-name="{{$item->id}}">
+            <div class="smiley pointer account_relation status" data-name="{{$item->id}}" style="font-family: svn-regular !important">
 {{--                <img src="{{asset('layout/images/Smiley.png')}}" alt="">--}}
                 <span style="color: {{$item->color ?:''}}">{{ $item->name }} ({{ @$item->customers_count }})</span>
             </div>
