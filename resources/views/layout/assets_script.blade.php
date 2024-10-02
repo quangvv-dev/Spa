@@ -59,7 +59,7 @@
 
 @if(in_array(auth()->user()->department_id,[\App\Constants\DepartmentConstant::CSKH,\App\Constants\DepartmentConstant::TELESALES,
 \App\Constants\DepartmentConstant::WAITER,\App\Constants\DepartmentConstant::ADMIN]))
-    <script type="text/javascript" src="{{'js/jquery.toast.min.js'}}"></script>
+    <script type="text/javascript" src="{{asset('js/jquery.toast.min.js')}}"></script>
     <script type="module">
         // Import the functions you need from the SDKs you need
         import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
