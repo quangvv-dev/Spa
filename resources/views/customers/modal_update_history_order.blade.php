@@ -1,6 +1,9 @@
 <style>
     .select2-results__option {
-        color: #0a0c0d !important;
+        color: #fff !important;
+    }
+    .select2-container--bootstrap .select2-results__option[aria-selected=true] {
+        background-color: #dd5555 !important;
     }
 </style>
 <div class="modal fade modal-custom" id="updateHistoryOrderModal" role="dialog" aria-hidden="true">

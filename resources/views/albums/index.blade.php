@@ -32,7 +32,7 @@
 
     <div class="col-md-12 col-lg-12">
         <div class="card">
-            <div class="card-header">
+            <div class="card-header" style="background-color: #131313">
                 <h3 class="card-title linear-text">ALBUMS</h3></br>
             </div>
 
