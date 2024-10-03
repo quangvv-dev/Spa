@@ -121,43 +121,43 @@
         }
         setInterval(callAjax, 60000);
 
-        $('.notification').click(function () {
-            $.ajax({
-                type: 'GET',
-                url: '/ajax/notifications',
-                // timeout: 60000,//60 second timeout
-                data: {
-                    user_id:{{\Illuminate\Support\Facades\Auth::user()->id}}
-                },
-                success: function (data) {
-                    if (data) {
-                        var row = $('body').find('.content-notify');
-                        var html = '';
-                        $.each(data, function (i, v) {
-                            var obj = v.data;
+        {{--$('.notification').click(function () {--}}
+        {{--    $.ajax({--}}
+        {{--        type: 'GET',--}}
+        {{--        url: '/ajax/notifications',--}}
+        {{--        // timeout: 60000,//60 second timeout--}}
+        {{--        data: {--}}
+        {{--            user_id:{{\Illuminate\Support\Facades\Auth::user()->id}}--}}
+        {{--        },--}}
+        {{--        success: function (data) {--}}
+        {{--            if (data) {--}}
+        {{--                var row = $('body').find('.content-notify');--}}
+        {{--                var html = '';--}}
+        {{--                $.each(data, function (i, v) {--}}
+        {{--                    var obj = v.data;--}}
 
-                            if(v.type == 3){
-                                var type = '/thu-chi?id='+ obj.pay_id;
-                            } else {
-                                var type = '/tasks/' + obj.task_id + '/edit';
-                            }
+        {{--                    if(v.type == 3){--}}
+        {{--                        var type = '/thu-chi?id='+ obj.pay_id;--}}
+        {{--                    } else {--}}
+        {{--                        var type = '/tasks/' + obj.task_id + '/edit';--}}
+        {{--                    }--}}
 
-                            if (v.status == {{\App\Constants\NotificationConstant::UNREAD}}) {
-                                var color = '#edf2fa';
-                                var boder = 'red';
-                            }
-                            if (v.status == {{\App\Constants\NotificationConstant::READ}}) {
-                                var color = '#ffffff';
-                                var boder = 'green';
-                            }
+        {{--                    if (v.status == {{\App\Constants\NotificationConstant::UNREAD}}) {--}}
+        {{--                        var color = '#edf2fa';--}}
+        {{--                        var boder = 'red';--}}
+        {{--                    }--}}
+        {{--                    if (v.status == {{\App\Constants\NotificationConstant::READ}}) {--}}
+        {{--                        var color = '#ffffff';--}}
+        {{--                        var boder = 'green';--}}
+        {{--                    }--}}
 
-                            html += '<a class="dropdown-item d-flex pb-3 tag-click" href="javascript:void(0)" data-id="' + v.id + '" data-url="' + type + '" style="background:' + color + '"><div class="text-notification">' + v.title + '<div class="small text-muted">' + v.created_at + '</div></div></a>';
-                            row.html(html);
-                        });
-                    }
-                }
-            })
-        })
+        {{--                    html += '<a class="dropdown-item d-flex pb-3 tag-click" href="javascript:void(0)" data-id="' + v.id + '" data-url="' + type + '" style="background:' + color + '"><div class="text-notification">' + v.title + '<div class="small text-muted">' + v.created_at + '</div></div></a>';--}}
+        {{--                    row.html(html);--}}
+        {{--                });--}}
+        {{--            }--}}
+        {{--        }--}}
+        {{--    })--}}
+        {{--})--}}
 
         $('body').delegate('.tag-click', 'click', function () {
             var id = $(this).data('id');
