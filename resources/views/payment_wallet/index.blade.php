@@ -11,6 +11,14 @@
         td.mb5{
             padding: 3px;
         }
+        .table{
+            border: 1px solid #e0e8f5;
+        }
+        p{
+            color: #fff;
+            background: linear-gradient(107.54deg, #FFFFFF 4.13%, #999999 48.62%, #FFFFFF 93.12%);
+            -webkit-background-clip: text;
+        }
     </style>
 @endsection
 @section('content')
