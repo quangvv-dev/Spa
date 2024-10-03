@@ -468,6 +468,10 @@ td.in-range.available {
  h1, h2, h3, h4, h5{
  color: #fff !important;
  }
+.sweet-alert{
+    background-color: #131313 !important;
+    border: solid 1px #97cbf1b8;
+}
 td, a, p.word-wrap{
     font-family: 'svn-regular' !important;
 }
