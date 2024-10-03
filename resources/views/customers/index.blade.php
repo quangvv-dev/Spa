@@ -334,7 +334,8 @@
                 });
             });
 
-            $(document).on('click', '.chat-save', function () {
+            $(document).on('click', '.chat-save', function (e) {
+                e.preventDefault();
                 let customer_id = $(this).data('customer-chat-id');
                 let messages = $('.message').val();
                 $('.message').val('');
@@ -357,7 +358,6 @@
                         <div class="mt-1">` + data.group_comment.messages + `</div> </div>`
                     $('.chat-ajax').prepend(html);
                 });
-
             });
 
             $(document).on('click', '.btn-edit-comment', function (e) {
