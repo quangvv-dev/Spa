@@ -208,8 +208,7 @@
     <script type="text/javascript" src="{{asset('js/crypto.min.js')}}"></script>
     <script type="text/javascript">
         $("#search").focus();
-        {{--var caller_number = '{{\Illuminate\Support\Facades\Auth::user()->caller_number}}';--}}
-        {{--var pitelP = '{{\Illuminate\Support\Facades\Auth::user()->pitel_password}}';--}}
+
         // PItel
         (function (a,b) {
             var s = document.createElement('script');
@@ -222,14 +221,32 @@
         })('d1ca84ac-2d98-4faa-92d4-699a6ce14eb7', ()=>{
             console.log('Pitel SDK Loaded');
         });
-        // setTimeout(function(){
+        setTimeout(function(){
+            let caller_number = '{{\Illuminate\Support\Facades\Auth::user()->caller_number}}';
+            let pitelP = '{{\Illuminate\Support\Facades\Auth::user()->pitel_password}}';
+            let sdkOptions = {
+                enableWidget: true,
+                sipOnly: true,
+                sipDomain: 'gtg.vn',
+                wsServer: "wss://cgvcall.mobilesip.vn:7444",
+                sipPassword: pitelP
+            }
+            let pitelSDK = new PitelSDK('gtg.vn', 'xxx', caller_number, {}, sdkOptions)// số máy nhân viên
+            //.pp-phone
+            // Gọi hàm khi nhấn nút
+            $('#callButton').on('click', function() {
+                pitelSDK.call('0975091435', {
+                    extraHeaders: ['x-PROCESS-ID: 123']
+                });
+                console.log('Call initiated to 0363751167');
+            });
             // document.getElementById('callButton').addEventListener('click', function() {
             //     pitelSDK.call('0975091435', { // số điện thoại
             //         extraHeaders: ['x-PROCESS-ID: 123']
             //     });
             //     console.log('Call initiated to 0363751167');
             // });
-        // }, 2000);
+        }, 2000);
         // PItel
         $(function () {
             $(document).on('click', '.view_modal', function (e) {
