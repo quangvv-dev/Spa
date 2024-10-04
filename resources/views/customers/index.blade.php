@@ -207,7 +207,6 @@
 @section('_script')
     <script type="text/javascript" src="{{asset('js/crypto.min.js')}}"></script>
     <script type="text/javascript">
-
         // PItel
         (function (a,b) {
             var s = document.createElement('script');
@@ -231,13 +230,13 @@
                 sipPassword: pitelP
             }
             var pitelSDK = new PitelSDK('gtg.vn', 'xxx', caller_number, {}, sdkOptions)// số máy nhân viên
-        }, 2000);
-        $(document).on('click', '#callButton', function (e) {
-            pitelSDK.call('0975091435', { // số điện thoại
-                extraHeaders: ['x-PROCESS-ID: 123']
+            $(document).on('click', '#callButton', function (e) {
+                pitelSDK.call('0975091435', { // số điện thoại
+                    extraHeaders: ['x-PROCESS-ID: 123']
+                });
+                console.log('Call initiated to 0363751167');
             });
-            console.log('Call initiated to 0363751167');
-        });
+        }, 2000);
         // PItel
         $("#search").focus();
         $(function () {
