@@ -369,32 +369,32 @@
         $(window).resize(onscroll);
     });
     $('html, body').animate({scrollTop: '0px'}, 300);
-    (function (a,b) {
-        var s = document.createElement('script');
-        s.type = 'text/javascript';
-        s.async = true;
-        s.onload = ()=>{PitelSDK.k=a;b()};
-        s.src = '{{asset('layout/js/sdk-1.1.5.min.js')}}';
-        var x = document.getElementsByTagName('script')[0];
-        x.parentNode.insertBefore(s, x);
-    })('d1ca84ac-2d98-4faa-92d4-699a6ce14eb7', ()=>{
-        console.log('Pitel SDK Loaded');
-    });
-    let sdkOptions = {
-        enableWidget: true,
-        sipOnly: true,
-        sipDomain: 'gtg.vn',
-        wsServer: "wss://cgvcall.mobilesip.vn:7444",
-        sipPassword: '{{\Illuminate\Support\Facades\Auth::user()->pitel_password}}'
-    }
-    let pitelSDK = new PitelSDK('gtg.vn', 'xxx', '{{\Illuminate\Support\Facades\Auth::user()->caller_number}}', {}, sdkOptions)// số máy nhân viên
-    //.pp-phone
-    // Gọi hàm khi nhấn nút
-    $('#callButton').on('click', function() {
-        pitelSDK.call('0975091435', {
-            extraHeaders: ['x-PROCESS-ID: 123']
-        });
-        console.log('Call initiated to 0363751167');
-    });
+    {{--(function (a,b) {--}}
+    {{--    var s = document.createElement('script');--}}
+    {{--    s.type = 'text/javascript';--}}
+    {{--    s.async = true;--}}
+    {{--    s.onload = ()=>{PitelSDK.k=a;b()};--}}
+    {{--    s.src = '{{asset('layout/js/sdk-1.1.5.min.js')}}';--}}
+    {{--    var x = document.getElementsByTagName('script')[0];--}}
+    {{--    x.parentNode.insertBefore(s, x);--}}
+    {{--})('d1ca84ac-2d98-4faa-92d4-699a6ce14eb7', ()=>{--}}
+    {{--    console.log('Pitel SDK Loaded');--}}
+    {{--});--}}
+    {{--let sdkOptions = {--}}
+    {{--    enableWidget: true,--}}
+    {{--    sipOnly: true,--}}
+    {{--    sipDomain: 'gtg.vn',--}}
+    {{--    wsServer: "wss://cgvcall.mobilesip.vn:7444",--}}
+    {{--    sipPassword: '{{\Illuminate\Support\Facades\Auth::user()->pitel_password}}'--}}
+    {{--}--}}
+    {{--let pitelSDK = new PitelSDK('gtg.vn', 'xxx', '{{\Illuminate\Support\Facades\Auth::user()->caller_number}}', {}, sdkOptions)// số máy nhân viên--}}
+    {{--//.pp-phone--}}
+    {{--// Gọi hàm khi nhấn nút--}}
+    {{--$('#callButton').on('click', function() {--}}
+    {{--    pitelSDK.call('0975091435', {--}}
+    {{--        extraHeaders: ['x-PROCESS-ID: 123']--}}
+    {{--    });--}}
+    {{--    console.log('Call initiated to 0363751167');--}}
+    {{--});--}}
 
 </script>
