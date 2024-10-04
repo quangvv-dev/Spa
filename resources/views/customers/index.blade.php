@@ -207,6 +207,7 @@
 @section('_script')
     <script type="text/javascript" src="{{asset('js/crypto.min.js')}}"></script>
     <script type="text/javascript">
+
         // PItel
         (function (a,b) {
             var s = document.createElement('script');
@@ -229,8 +230,11 @@
                 wsServer: "wss://cgvcall.mobilesip.vn:7444",
                 sipPassword: pitelP
             }
-            var pitelSDK = new PitelSDK('gtg.vn', 'xxx', caller_number, {}, sdkOptions)// số máy nhân viên
-            $('body').on('click', '#callButton', function (e) {
+            let pitelSDK = new PitelSDK('gtg.vn', 'xxx', caller_number, {}, sdkOptions)// số máy nhân viên
+            //.pp-phone
+            // Gọi hàm khi nhấn nút
+            document.getElementById('callButton').addEventListener('click', function() {
+                alert(123);
                 pitelSDK.call('0975091435', { // số điện thoại
                     extraHeaders: ['x-PROCESS-ID: 123']
                 });
