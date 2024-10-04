@@ -233,7 +233,7 @@
             let pitelSDK = new PitelSDK('gtg.vn', 'xxx', caller_number, {}, sdkOptions)// số máy nhân viên
             //.pp-phone
             // Gọi hàm khi nhấn nút
-            $(document).on('click', '.view_modal', function (e) {
+            $(document).on('click', '.callButton', function (e) {
                 pitelSDK.call('0975091435', { // số điện thoại
                     extraHeaders: ['x-PROCESS-ID: 123']
                 });
