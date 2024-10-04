@@ -225,10 +225,10 @@
                         <a href="javascript:void(0)" class="color-primary phone-customer">{{ str_limit($customer->phone,7,'xxx') }}
                         </a>
 {{--                        <a href=""><i style="color: red !important" class="{!! $customer->is_duplicate == 1 ? "fa fa fa-copy" :'' !!}"></i></a>--}}
-                        <span><i id="callButton" class="fas fa-phone" data-id="{{$customer->call_back}}" style="cursor: pointer; !important;"></i></span>
-{{--                        @if(!empty($customer->call_back))--}}
-{{--                            <span><i id="callButton" class="fas fa-phone call-back" data-id="{{$customer->call_back}}" style="cursor: pointer;color: red !important;"></i></span>--}}
-{{--                        @endif--}}
+{{--                        <span><i id="callButton" class="fas fa-phone" data-id="{{$customer->call_back}}" style="cursor: pointer; !important;"></i></span>--}}
+                        @if(!empty($customer->call_back))
+                            <span><i id="callButton" class="fas fa-phone call-back" data-id="{{$customer->call_back}}" style="cursor: pointer;color: red !important;"></i></span>
+                        @endif
                     </td>
                 @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::MARKETING)
                         <td class="text-center {{in_array(4,$user_filter_grid) ? '':'display-none'}}" style="position: relative;max-width: 146px">
