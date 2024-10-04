@@ -369,7 +369,17 @@
         $(window).resize(onscroll);
     });
     $('html, body').animate({scrollTop: '0px'}, 300);
-
+    (function (a,b) {
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.async = true;
+        s.onload = ()=>{PitelSDK.k=a;b()};
+        s.src = '{{asset('layout/js/sdk-1.1.5.min.js')}}';
+        var x = document.getElementsByTagName('script')[0];
+        x.parentNode.insertBefore(s, x);
+    })('d1ca84ac-2d98-4faa-92d4-699a6ce14eb7', ()=>{
+        console.log('Pitel SDK Loaded');
+    });
     let sdkOptions = {
         enableWidget: true,
         sipOnly: true,
