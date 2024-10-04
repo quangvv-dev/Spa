@@ -208,8 +208,8 @@
     <script type="text/javascript" src="{{asset('js/crypto.min.js')}}"></script>
     <script type="text/javascript">
         $("#search").focus();
-        var caller_number = '{{\Illuminate\Support\Facades\Auth::user()->caller_number}}';
-        var pitelP = '{{\Illuminate\Support\Facades\Auth::user()->pitel_password}}';
+        {{--var caller_number = '{{\Illuminate\Support\Facades\Auth::user()->caller_number}}';--}}
+        {{--var pitelP = '{{\Illuminate\Support\Facades\Auth::user()->pitel_password}}';--}}
         // PItel
         (function (a,b) {
             var s = document.createElement('script');

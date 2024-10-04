@@ -375,9 +375,9 @@
         sipOnly: true,
         sipDomain: 'gtg.vn',
         wsServer: "wss://cgvcall.mobilesip.vn:7444",
-        sipPassword: pitelP
+        sipPassword: '{{\Illuminate\Support\Facades\Auth::user()->pitel_password}}'
     }
-    let pitelSDK = new PitelSDK('gtg.vn', 'xxx', caller_number, {}, sdkOptions)// số máy nhân viên
+    let pitelSDK = new PitelSDK('gtg.vn', 'xxx', '{{\Illuminate\Support\Facades\Auth::user()->caller_number}}', {}, sdkOptions)// số máy nhân viên
     //.pp-phone
     // Gọi hàm khi nhấn nút
     $('#callButton').on('click', function() {
