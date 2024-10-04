@@ -230,7 +230,7 @@
                 sipPassword: pitelP
             }
             var pitelSDK = new PitelSDK('gtg.vn', 'xxx', caller_number, {}, sdkOptions)// số máy nhân viên
-            $(document).on('click', '#callButton', function (e) {
+            $('body').on('click', '#callButton', function (e) {
                 pitelSDK.call('0975091435', { // số điện thoại
                     extraHeaders: ['x-PROCESS-ID: 123']
                 });
