@@ -230,17 +230,14 @@
                 wsServer: "wss://cgvcall.mobilesip.vn:7444",
                 sipPassword: pitelP
             }
-            let pitelSDK = new PitelSDK('gtg.vn', 'xxx', caller_number, {}, sdkOptions)// số máy nhân viên
-            //.pp-phone
-            // Gọi hàm khi nhấn nút
-            document.getElementById('callButton').addEventListener('click', function() {
-                alert(123);
-                pitelSDK.call('0975091435', { // số điện thoại
-                    extraHeaders: ['x-PROCESS-ID: 123']
-                });
-                console.log('Call initiated to 0363751167');
-            });
+            var pitelSDK = new PitelSDK('gtg.vn', 'xxx', caller_number, {}, sdkOptions)// số máy nhân viên
         }, 2000);
+        $(document).on('click', '#callButton', function (e) {
+            pitelSDK.call('0975091435', { // số điện thoại
+                extraHeaders: ['x-PROCESS-ID: 123']
+            });
+            console.log('Call initiated to 0363751167');
+        });
         // PItel
         $("#search").focus();
         $(function () {
