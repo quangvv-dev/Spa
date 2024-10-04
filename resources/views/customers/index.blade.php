@@ -226,7 +226,7 @@
             let sdkOptions = {
                 enableWidget: true,
                 sipOnly: true,
-                sipDomain: 'demo.cgvtelecom.vn:5060',
+                sipDomain: 'gtg.vn',
                 wsServer: "wss://cgvcall.mobilesip.vn:7444",
                 sipPassword: pitelP
             }
