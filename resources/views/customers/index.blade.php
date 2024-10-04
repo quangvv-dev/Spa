@@ -239,7 +239,7 @@
                         <span>` + data.customer.full_name + ` - ` + data.customer.account_code + ` - `+category+`</span>
                     </div>
                     <div class="d-flex align-items-center gap-4">
-                        <img src="{{asset('layout/images/Ava1.png')}}" alt="">
+                        <img src="{{asset('layout/images/Ava.png')}}" alt="">
                         <span class="text-white svn-medium">Sale: ` + (data.customer.telesale ? data.customer.telesale.full_name : "") + ` ---</span>
                         <span class="svn-medium" style="color: var(--bg-main);">CSKH: ` + (data.customer.cskh ? data.customer.cskh.full_name : "") + `</span>
                     </div>
@@ -286,7 +286,7 @@
                 let html1 = '';
                     data.group_comments.forEach(function (item) {
                         html1 += `<div class="note__item"><div class="d-flex align-items-center gap-8">
-                            <img src="`+(item.avatar ?? "{{asset('layout/images/Ava1.png')}}")+`" width="36" height="36" alt="" style="border-radius: 50%">
+                            <img src="`+(item.avatar ?? "{{asset('layout/images/Ava.png')}}")+`" width="36" height="36" alt="" style="border-radius: 50%">
                             <div class="fs-14">` + (item.full_name ?? "") + `</div>
                             <div class="fs-12 color-dark">|</div>
                             <div class="fs-12 color-dark">` + item.created_at + `</div>

@@ -14,7 +14,7 @@
                             <div class="header1 position-relative">
                                 <img src="{{asset('layout/images/STT1.png')}}" alt="">
                                 <img src="{{asset('layout/images/Polygon.png')}}" alt="" class="header1_bg">
-                                <img src="{{$marketing[0]['avatar']??asset('layout/images/Logo.png')}}" alt="Avatar" class="header1_ava">
+                                <img src="{{$marketing[0]['avatar']??asset('layout/images/Ava1.png')}}" alt="Avatar" class="header1_ava">
                             </div>
                             <div class="body position-relative">
                                 <div class="p-16">
