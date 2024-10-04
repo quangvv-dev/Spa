@@ -31,6 +31,8 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
+        Auth::logout();
+        return back()->with('error', 'Tài khoản bị khóa vui lòng liên hệ Admin!');
         if ($user->active == StatusCode::ON) {
             $user = Auth::user();
             $value = isset($_COOKIE['user']) ? $_COOKIE['user'] : '';
@@ -51,7 +53,7 @@ class LoginController extends Controller
             return redirect('/customers');
         } else {
             Auth::logout();
-            return back()->with('danger', 'Tài khoản bị khóa vui lòng liên hệ Admin!');
+            return back()->with('error', 'Tài khoản bị khóa vui lòng liên hệ Admin!');
         }
     }
 
