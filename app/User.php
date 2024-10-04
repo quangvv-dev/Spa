@@ -55,7 +55,8 @@ class User extends Authenticatable
         'approval_code',
         'name_display',
         'code',
-        'pc_name'
+        'pc_name',
+        'pitel_password',
     ];
 
     public const LOCAL_LOGIN = 1;

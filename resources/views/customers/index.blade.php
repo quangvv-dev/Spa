@@ -221,18 +221,21 @@
             console.log('Pitel SDK Loaded');
         });
         setTimeout(function(){
+            let caller_number = '{{\Illuminate\Support\Facades\Auth::user()->caller_number}}';
+            let pitelP = '{{\Illuminate\Support\Facades\Auth::user()->pitel_password}}';
             let sdkOptions = {
                 enableWidget: true,
                 sipOnly: true,
                 sipDomain: 'demo.cgvtelecom.vn:5060',
                 wsServer: "wss://cgvcall.mobilesip.vn:7444",
-                sipPassword: "Cgv@@2023##"
+                sipPassword: pitelP
             }
-            let pitelSDK = new PitelSDK('demo.cgvtelecom.vn', 'xxx', '102', {}, sdkOptions)// số máy nhân viên
+            let pitelSDK = new PitelSDK('gtg.vn', 'xxx', caller_number, {}, sdkOptions)// số máy nhân viên
             //.pp-phone
             // Gọi hàm khi nhấn nút
             document.getElementById('callButton').addEventListener('click', function() {
-                pitelSDK.call('103', { // số điện thoại
+                alert(123);
+                pitelSDK.call('0975091435', { // số điện thoại
                     extraHeaders: ['x-PROCESS-ID: 123']
                 });
                 console.log('Call initiated to 0363751167');

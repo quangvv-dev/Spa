@@ -518,6 +518,29 @@ margin-right: 0 !important;
     border-radius: 24px;
 }
 /*end quang css*/
+.pp-phone {
+    display: none !important;
+}
+
+.pp-callee-info {
+    display: none !important;
+}
+
+#pwBackground {
+    /*top: 10px;*/
+    left: 0px !important;
+    bottom: unset;
+}
+
+#ppContainer {
+    position: fixed;
+    left: 0px !important;
+    /*top: 70px;*/
+    bottom: unset;
+    width: 250px;
+    height: 380px;
+    z-index: 99999;
+}
 .ajs-warning.ajs-visible {
     color: #131313 !important;
 }
