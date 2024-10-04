@@ -233,13 +233,19 @@
             let pitelSDK = new PitelSDK('gtg.vn', 'xxx', caller_number, {}, sdkOptions)// số máy nhân viên
             //.pp-phone
             // Gọi hàm khi nhấn nút
-            document.getElementById('callButton').addEventListener('click', function() {
-                alert(123);
+            $(document).on('click', '.view_modal', function (e) {
                 pitelSDK.call('0975091435', { // số điện thoại
                     extraHeaders: ['x-PROCESS-ID: 123']
                 });
                 console.log('Call initiated to 0363751167');
             });
+            // document.getElementById('callButton').addEventListener('click', function() {
+            //     alert(123);
+            //     pitelSDK.call('0975091435', { // số điện thoại
+            //         extraHeaders: ['x-PROCESS-ID: 123']
+            //     });
+            //     console.log('Call initiated to 0363751167');
+            // });
         }, 2000);
         // PItel
         $("#search").focus();
