@@ -46,7 +46,7 @@
                                 <div class="header1 position-relative">
                                     <img src="{{asset('layout/images/STT2.png')}}" alt="">
                                     <img src="{{asset('layout/images/Polygon.png')}}" alt="" class="header1_bg">
-                                    <img src="{{$sale[1]['avatar']??asset('layout/images/Logo.png')}}" alt="Avatar" class="header1_ava">
+                                    <img src="{{$sale[1]['avatar']??asset('layout/images/Ava1.png')}}" alt="Avatar" class="header1_ava">
                                 </div>
                                 <div class="body position-relative">
                                     <div class="p-16">
@@ -77,7 +77,7 @@
                                 <div class="header1 position-relative">
                                     <img src="{{asset('layout/images/STT3.png')}}" alt="">
                                     <img src="{{asset('layout/images/Line.png')}}" alt="" class="header1_bg">
-                                    <img src="https://www.w3schools.com/tags/img_girl.jpg" alt="Avatar" class="header1_ava">
+                                    <img src="{{$sale[2]['avatar']??asset('layout/images/Ava1.png')}}" alt="Avatar" class="header1_ava">
                                 </div>
                                 <div class="body position-relative">
                                     <div class="p-16">
