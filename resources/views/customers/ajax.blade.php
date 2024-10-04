@@ -370,8 +370,6 @@
     });
     $('html, body').animate({scrollTop: '0px'}, 300);
 
-    let caller_number = '{{\Illuminate\Support\Facades\Auth::user()->caller_number}}';
-    let pitelP = '{{\Illuminate\Support\Facades\Auth::user()->pitel_password}}';
     let sdkOptions = {
         enableWidget: true,
         sipOnly: true,
