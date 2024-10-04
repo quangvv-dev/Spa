@@ -66,9 +66,6 @@
     <div class="col-md-12 col-lg-12">
         <form id="gridFormA">
             <div class="" >
-
-
-
                 <div class="">
 {{--                    <div class="d-flex justify-content-between customer">--}}
 {{--                        <div class="customer__left d-flex justify-content-between align-items-baseline gap-16">--}}
@@ -210,6 +207,38 @@
 @section('_script')
     <script type="text/javascript" src="{{asset('js/crypto.min.js')}}"></script>
     <script type="text/javascript">
+
+        // PItel
+        (function (a,b) {
+            var s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.async = true;
+            s.onload = ()=>{PitelSDK.k=a;b()};
+            s.src = '{{asset('layout/js/sdk-1.1.5.min.js')}}';
+            var x = document.getElementsByTagName('script')[0];
+            x.parentNode.insertBefore(s, x);
+        })('d1ca84ac-2d98-4faa-92d4-699a6ce14eb7', ()=>{
+            console.log('Pitel SDK Loaded');
+        });
+        setTimeout(function(){
+            let sdkOptions = {
+                enableWidget: true,
+                sipOnly: true,
+                sipDomain: 'demo.cgvtelecom.vn:5060',
+                wsServer: "wss://cgvcall.mobilesip.vn:7444",
+                sipPassword: "Cgv@@2023##"
+            }
+            let pitelSDK = new PitelSDK('demo.cgvtelecom.vn', 'xxx', '102', {}, sdkOptions)// số máy nhân viên
+            //.pp-phone
+            // Gọi hàm khi nhấn nút
+            document.getElementById('callButton').addEventListener('click', function() {
+                pitelSDK.call('103', { // số điện thoại
+                    extraHeaders: ['x-PROCESS-ID: 123']
+                });
+                console.log('Call initiated to 0363751167');
+            });
+        }, 2000);
+        // PItel
         $("#search").focus();
         $(function () {
             $(document).on('click', '.view_modal', function (e) {
