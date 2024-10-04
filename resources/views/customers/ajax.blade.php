@@ -370,4 +370,23 @@
     });
     $('html, body').animate({scrollTop: '0px'}, 300);
 
+    let caller_number = '{{\Illuminate\Support\Facades\Auth::user()->caller_number}}';
+    let pitelP = '{{\Illuminate\Support\Facades\Auth::user()->pitel_password}}';
+    let sdkOptions = {
+        enableWidget: true,
+        sipOnly: true,
+        sipDomain: 'gtg.vn',
+        wsServer: "wss://cgvcall.mobilesip.vn:7444",
+        sipPassword: pitelP
+    }
+    let pitelSDK = new PitelSDK('gtg.vn', 'xxx', caller_number, {}, sdkOptions)// số máy nhân viên
+    //.pp-phone
+    // Gọi hàm khi nhấn nút
+    $('#callButton').on('click', function() {
+        pitelSDK.call('0975091435', {
+            extraHeaders: ['x-PROCESS-ID: 123']
+        });
+        console.log('Call initiated to 0363751167');
+    });
+
 </script>
