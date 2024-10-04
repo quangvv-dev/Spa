@@ -518,6 +518,9 @@ margin-right: 0 !important;
     border-radius: 24px;
 }
 /*end quang css*/
+.ajs-warning.ajs-visible {
+    color: #131313 !important;
+}
 .btn-default {
     color: #fff;
 }
