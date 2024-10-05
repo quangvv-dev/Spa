@@ -664,8 +664,8 @@
                                                     Trao đổi
                                                 </div>
                                                 <div class="p-24 position-relative">
-                                                    {!! Form::open(array('url' => url('group_comments/'.request()->segment(count(request()->segments())) ), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
-                                                    <input type="text" name="messages" placeholder="Nhập tin nhắn....." style="background: #2e2e2e;padding: 24px 16px;width: 100%;color: #fff">
+                                                    {!! Form::open(array('url' => url('group_comments/'.request()->segment(count(request()->segments())) ), 'method' => 'post', 'files'=> true,'id'=>'formComment')) !!}
+                                                    <textarea type="text" name="messages" placeholder="Nhập tin nhắn....." style="background: #2e2e2e;padding: 24px 16px;width: 100%;color: #fff;border-radius: 5px"></textarea>
                                                     <img id="blah" src="#" class="d-none" width="42" height="42" style="position: absolute; top: 38px; right: 115px;object-fit: cover;"/>
 
                                                     <div class="send position-absolute" style="top: 43px;right: 40px;">
@@ -683,7 +683,7 @@
                                                                         </span>
                                                                         <input type="file" name="image_contact" accept="image/*" class="btn-default upload"/>
                                                                     </button>
-                                                                    <button type="submit" class="btn p-0">
+                                                                    <button type="button" id="save__chat" class="btn p-0">
                                                                         <img src="{{asset('layout/images/Send.png')}}" class="pointer" alt="" type="submit">
                                                                     </button>
                                                                 </div>
@@ -803,7 +803,9 @@
     <script src="{{asset('assets/plugins/simple-lightbox/simple-lightbox.min.js?v2.8.0')}}"></script>
 
     <script type="text/javascript">
-
+        $('#save__chat').on('click', function () {
+            $('#formComment').submit();
+        });
         $('.autocomplete-textarea').textcomplete([{
             match: /(^|\s)@(\w*(?:\s*\w*))$/,
 

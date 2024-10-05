@@ -208,7 +208,6 @@
     <script type="text/javascript" src="{{asset('js/crypto.min.js')}}"></script>
     <script type="text/javascript">
         $("#search").focus();
-
         // PItel
         {{--(function (a,b) {--}}
         {{--    var s = document.createElement('script');--}}

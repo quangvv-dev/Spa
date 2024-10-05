@@ -166,9 +166,8 @@
         </div>
     </div>
 </div>
-<div class="table-responsive fixed-scrollbar" style="font-size: 12px">
-
-    <div class="content__table">
+<div class="table-responsive" style="font-size: 12px">
+    <div class="content__table fixed-scrollbar">
         <table class="table card-table table-striped table-bordered table-vcenter text-nowrap" style="width: 100%">
         <thead class="text-white">
         <tr>
@@ -190,7 +189,7 @@
             <th class="text-white text-center">Chỉnh sửa</th>
         </tr>
         </thead>
-        <tbody style="background: white;">
+        <tbody>
         @if (count($customers))
             @if(count($customers) <7)
                 <tr>
@@ -277,14 +276,13 @@
         @endif
         </tbody>
     </table>
-    </div>
-
-    <div class="pull-left">
-        <div class="page-info">
-            {{ 'Tổng số ' . $customers->total() . ' khách hàng ' . (request()->search ? 'found' : '') }}
-        </div>
-        <div class="pull-right">
-            {{ $customers->appends(['search' => request()->search ])->links() }}
+        <div class="pull-left">
+            <div class="page-info">
+                {{ 'Tổng số ' . $customers->total() . ' khách hàng ' . (request()->search ? 'found' : '') }}
+            </div>
+            <div class="pull-right">
+                {{ $customers->appends(['search' => request()->search ])->links() }}
+            </div>
         </div>
     </div>
 </div>
