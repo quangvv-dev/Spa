@@ -220,8 +220,8 @@
                             <img width="25" height="25" src="{{asset('assets/images/zalo_icon.png')}}">
                         </a>
                     </td>
-                    <td class="text-center {{in_array(3,$user_filter_grid) ? '':'display-none'}}" data-phone="{{$customer->phone}}" data-customer-id="{{ $customer->id }}">
-                        <a href="javascript:void(0)" class="color-primary phone-customer">{{ str_limit($customer->phone,7,'xxx') }}
+                    <td class="text-center {{in_array(3,$user_filter_grid) ? '':'display-none'}}">
+                        <a href="javascript:void(0)" class="color-primary phone-customer" data-customer-id="{{ $customer->id }}" data-phone="{{$customer->phone}}">{{ str_limit($customer->phone,7,'xxx') }}
                         </a>
 {{--                        <a href=""><i style="color: red !important" class="{!! $customer->is_duplicate == 1 ? "fa fa fa-copy" :'' !!}"></i></a>--}}
 {{--                        <span><i id="callButton" class="fas fa-phone" data-id="{{$customer->call_back}}" style="cursor: pointer; !important;"></i></span>--}}
