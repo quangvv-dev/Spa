@@ -389,7 +389,7 @@ body {
 .content__table {
     width: 100%;
     overflow-x: auto;
-    /*overflow-y: hidden;*/
+    overflow-y: hidden;
     position: relative;
 }
 
