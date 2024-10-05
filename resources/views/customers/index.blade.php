@@ -208,45 +208,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script type="text/javascript">
         $("#search").focus();
-        // PItel
-        {{--(function (a,b) {--}}
-        {{--    var s = document.createElement('script');--}}
-        {{--    s.type = 'text/javascript';--}}
-        {{--    s.async = true;--}}
-        {{--    s.onload = ()=>{PitelSDK.k=a;b()};--}}
-        {{--    s.src = '{{asset('layout/js/sdk-1.1.5.min.js')}}';--}}
-        {{--    var x = document.getElementsByTagName('script')[0];--}}
-        {{--    x.parentNode.insertBefore(s, x);--}}
-        {{--})('d1ca84ac-2d98-4faa-92d4-699a6ce14eb7', ()=>{--}}
-        {{--    console.log('Pitel SDK Loaded');--}}
-        {{--});--}}
-        {{--setTimeout(function(){--}}
-        {{--    let caller_number = '{{\Illuminate\Support\Facades\Auth::user()->caller_number}}';--}}
-        {{--    let pitelP = '{{\Illuminate\Support\Facades\Auth::user()->pitel_password}}';--}}
-        {{--    let sdkOptions = {--}}
-        {{--        enableWidget: true,--}}
-        {{--        sipOnly: true,--}}
-        {{--        sipDomain: 'gtg.vn',--}}
-        {{--        wsServer: "wss://cgvcall.mobilesip.vn:7444",--}}
-        {{--        sipPassword: pitelP--}}
-        {{--    }--}}
-        {{--    let pitelSDK = new PitelSDK('gtg.vn', 'xxx', caller_number, {}, sdkOptions)// số máy nhân viên--}}
-        {{--    //.pp-phone--}}
-        {{--    // Gọi hàm khi nhấn nút--}}
-        {{--    $('#callButton').on('click', function() {--}}
-        {{--        pitelSDK.call('0975091435', {--}}
-        {{--            extraHeaders: ['x-PROCESS-ID: 123']--}}
-        {{--        });--}}
-        {{--        console.log('Call initiated to 0363751167');--}}
-        {{--    });--}}
-        {{--    // document.getElementById('callButton').addEventListener('click', function() {--}}
-        {{--    //     pitelSDK.call('0975091435', { // số điện thoại--}}
-        {{--    //         extraHeaders: ['x-PROCESS-ID: 123']--}}
-        {{--    //     });--}}
-        {{--    //     console.log('Call initiated to 0363751167');--}}
-        {{--    // });--}}
-        {{--}, 2000);--}}
-        // PItel
         $(function () {
             $(document).on('click', '.view_modal', function (e) {
                 e.preventDefault();

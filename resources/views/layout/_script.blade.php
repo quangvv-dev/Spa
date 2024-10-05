@@ -5,12 +5,50 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        (function (a,b) {
+            var s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.async = true;
+            s.onload = ()=>{PitelSDK.k=a;b()};
+            s.src = '{{asset('layout/js/sdk-1.1.5.min.js')}}';
+            var x = document.getElementsByTagName('script')[0];
+            x.parentNode.insertBefore(s, x);
+        })('d1ca84ac-2d98-4faa-92d4-699a6ce14eb7', ()=>{
+            console.log('Pitel SDK Loaded');
+        });
+        setTimeout(function(){
+            let caller_number = '{{\Illuminate\Support\Facades\Auth::user()->caller_number}}';
+            let pitelP = '{{\Illuminate\Support\Facades\Auth::user()->pitel_password}}';
+            let sdkOptions = {
+                enableWidget: true,
+                sipOnly: true,
+                sipDomain: 'gtg.vn',
+                wsServer: "wss://cgvcall.mobilesip.vn:7444",
+                sipPassword: pitelP
+            }
+            let pitelSDK = new PitelSDK('gtg.vn', 'xxx', caller_number, {}, sdkOptions)// số máy nhân viên
+            //.pp-phone
+            // Gọi hàm khi nhấn nút
+            $(document).on('click','#callButton',function () {
+                pitelSDK.call($(this).data('phone'), {
+                    extraHeaders: ['x-PROCESS-ID: 123']
+                });
+                console.log('Call initiated to ' + $(this).data('phone'));
+            });
+            // document.getElementById('callButton').addEventListener('click', function() {
+            //     pitelSDK.call('0975091435', { // số điện thoại
+            //         extraHeaders: ['x-PROCESS-ID: 123']
+            //     });
+            //     console.log('Call initiated to 0363751167');
+            // });
+        }, 2000);
 
         $("#gridForm").submit(function (e, page) {
             $('#registration-form').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
             $.get($(this).attr('action'), $(this).serialize(), function (data) {
                 $('#registration-form').html(data);
             });
+
             return false;
         });
         $('.angleDoubleUp').on('click', function () {
@@ -55,23 +93,6 @@
         function playAudio() {
             x.play();
         }
-
-        {{--$.ajax({--}}
-        {{--    type: 'GET',--}}
-        {{--    url: '/ajax/count-notifications',--}}
-        {{--    data: {--}}
-        {{--        user_id:{{\Illuminate\Support\Facades\Auth::user()->id}}--}}
-        {{--    },--}}
-        {{--    success: function (data) {--}}
-        {{--        if (data) {--}}
-        {{--            var row = $('body').find('.badge.badge-danger.badge-pill');--}}
-        {{--            var row2 = $('body').find('.dropdown-item.text-center.text-dark');--}}
-        {{--            row.html(data);--}}
-        {{--            row2.html(data + ' thông báo mới');--}}
-        {{--            $('#check_notify').val(data);--}}
-        {{--        }--}}
-        {{--    }--}}
-        {{--})--}}
 
         $('body').delegate('.detail-timeline', 'click', function () {
             var id = $(this).data('id');
