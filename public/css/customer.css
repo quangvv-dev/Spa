@@ -250,6 +250,7 @@ body {
 
 .table-responsive {
     overflow-y: scroll;
+    max-height:80vh;
 }
 
 @media only screen and (max-width: 1920px) {
