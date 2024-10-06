@@ -594,7 +594,7 @@
 
                     <div class="border padding mt10 ml2">
                         <div class="infor-top-ct">
-                            <span class="uppercase mb10 fs-16 linear-text bold mg0 " style="margin-bottom: 10px!important;">Thông tin khách hàng</span>
+                            <div class="uppercase mb10 fs-16 linear-text bold mg0 " style="margin-bottom: 10px!important;">Thông tin khách hàng</div>
                             <div class="mb10 clearfix fs-14"><p class="bold pr5 fl fs-16">Chi nhánh:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->branch->name }}</p>
                             </div>
