@@ -13,7 +13,7 @@
             s.src = '{{asset('layout/js/sdk-1.1.5.min.js')}}';
             var x = document.getElementsByTagName('script')[0];
             x.parentNode.insertBefore(s, x);
-        })('d1ca84ac-2d98-4faa-92d4-699a6ce14eb7', ()=>{
+        })('4187f03f-a78e-4040-8c4b-b17eaeaaa60f', ()=>{
             console.log('Pitel SDK Loaded');
         });
         setTimeout(function(){
@@ -33,14 +33,7 @@
                 pitelSDK.call($(this).data('phone'), {
                     extraHeaders: ['x-PROCESS-ID: 123']
                 });
-                console.log('Call initiated to ' + $(this).data('phone'));
             });
-            // document.getElementById('callButton').addEventListener('click', function() {
-            //     pitelSDK.call('0975091435', { // số điện thoại
-            //         extraHeaders: ['x-PROCESS-ID: 123']
-            //     });
-            //     console.log('Call initiated to 0363751167');
-            // });
         }, 2000);
 
         $("#gridForm").submit(function (e, page) {
