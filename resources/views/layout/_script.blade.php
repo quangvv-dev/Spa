@@ -30,7 +30,9 @@
             //.pp-phone
             // Gọi hàm khi nhấn nút
             $(document).on('click','#callButton',function () {
-                pitelSDK.call($(this).data('phone'), {
+                let phone = $(this).data('phone');
+                phone = phone.split(' ').join('');
+                pitelSDK.call(phone, {
                     extraHeaders: ['x-PROCESS-ID: 123']
                 });
             });
