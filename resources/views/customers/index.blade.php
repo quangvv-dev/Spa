@@ -98,12 +98,14 @@
                     const statusLine = lines[0];
                     const statusCode = parseInt(statusLine.split(' ')[1]);
                     if(statusCode > 400){
-                        if(statusCode === 486){
+                        if (statusCode === 486) {
                             alertify.error('Máy bận !')
-                        }else if(statusCode === 401){
-                            alertify.warning('Thiết lập kết nối ... ('+statusCode+')')
+                        } else if (statusCode === 401) {
+                            alertify.warning('Thiết lập kết nối ... (' + statusCode + ')')
+                        } else if (statusCode === 407) {
+                            alertify.success('Đang xác thực cuộc gọi... (' + statusCode + ')')
                         } else {
-                            alertify.error(sipStatusMessages[statusCode]+' ('+statusCode+')')
+                            alertify.error(sipStatusMessages[statusCode] ?? 'Error:' + ' (' + statusCode + ')')
                         }
                     }
                 });
