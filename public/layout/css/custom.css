@@ -473,7 +473,7 @@ td.in-range.available {
     border: solid 1px #97cbf1b8;
 }
 td, a, p.word-wrap{
-    font-family: 'svn-regular' !important;
+    /*font-family: 'svn-regular' !important;*/
 }
 .radius-50{
     border-radius: 50%;
