@@ -55,6 +55,7 @@
                         if(statusCode === 486){
                             alertify.error('Máy bận !')
                         }else {
+                            console.log('Error code: '+statusCode);
                             alertify.error('Khách hàng không nghe máy ! ('+statusCode+')')
                         }
                     }
