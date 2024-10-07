@@ -1039,6 +1039,8 @@
                     alertify.warning('Tài khoản chưa có mã tổng đài !',10000);
                     return false;
                 }
+                let phone = $(this).data('phone');
+                phone = phone.split(' ').join('')
                 $.ajax({
                     url: 'https://api.mobilesip.vn/v1/click2call/async',
                     type: 'GET',
@@ -1047,7 +1049,7 @@
                     },
                     data: {
                         'ext':ext,
-                        'phone':encryptedPhoneNumber($(this).data('phone')),
+                        'phone':encryptedPhoneNumber(phone),
                         'is_encode':true,
                         'encrypt_method':'aes'
                     },
