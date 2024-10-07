@@ -29,9 +29,11 @@
                     const statusCode = parseInt(statusLine.split(' ')[1]);
 
                     if (statusCode >= 400 && statusCode < 600) {
-                        console.log('statusCodes:', statusCode);
-                        console.log('SIP Error:', statusLine);
-                        console.log('Full SIP message:', event.data);
+                        if(statusCode === 486){
+                            alertify.error('Máy bận !')
+                        }else {
+                            alertify.error('Khách hàng không nghe máy !')
+                        }
                     }
                 });
 
