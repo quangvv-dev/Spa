@@ -10,7 +10,7 @@
             s.type = 'text/javascript';
             s.async = true;
             s.onload = ()=>{PitelSDK.k=a;b()};
-            s.src = '{{asset('layout/js/sdk-1.1.5.min.js')}}';
+            s.src = '{{asset('layout/js/sdk-1.1.6.min.js')}}';
             var x = document.getElementsByTagName('script')[0];
             x.parentNode.insertBefore(s, x);
         })('4187f03f-a78e-4040-8c4b-b17eaeaaa60f', ()=>{
@@ -56,7 +56,8 @@
                 let phone = $(this).data('phone');
                 phone = phone.split(' ').join('');
                 pitelSDK.call(phone, {
-                    extraHeaders: ['x-PROCESS-ID: 123']
+                    extraHeaders: ['x-PROCESS-ID: 123'],
+                    earlyMedia: true
                 });
             });
         }, 2000);
