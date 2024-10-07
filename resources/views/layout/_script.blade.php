@@ -32,6 +32,7 @@
             $(document).on('click','#callButton',function () {
                 let phone = $(this).data('phone');
                 phone = phone.split(' ').join('');
+                console.log('phoneFormat',phone);
                 pitelSDK.call(phone, {
                     extraHeaders: ['x-PROCESS-ID: 123']
                 });
