@@ -80,7 +80,7 @@
                 });
         }
 
-        playSound();
+        // playSound();
         requestMicrophoneAccess();
 
 
