@@ -280,9 +280,9 @@
 .max-width-700 {
     max-width: 700px !important;
 }
-thead{
+.sticky{
     position: sticky;
-    top: 58px;
+    top: 51px;
 }
 
 
