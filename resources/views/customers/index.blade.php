@@ -69,7 +69,7 @@
                     console.log('Microphone đã được kết nối');
                 })
                 .catch(function (err) {
-                    alertify.warning('Microphone không tìm thấy');
+                    alertify.warning('Chưa kết nối Microphone !');
                 });
         }
 
