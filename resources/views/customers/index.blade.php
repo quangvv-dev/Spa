@@ -98,12 +98,10 @@
                     if(statusCode > 401){
                         if (statusCode === 486) {
                             alertify.error('Máy bận !')
-                        } else if (statusCode === 401) {
-                            alertify.warning('Thiết lập kết nối ... (' + statusCode + ')')
                         } else if (statusCode === 407) {
-                            alertify.success('Đang xác thực cuộc gọi... (' + statusCode + ')')
+                            alertify.success('Đang kết nối cuộc gọi... (407)')
                         } else {
-                            alertify.error(sipStatusMessages[statusCode] ?? 'Error:' + ' (' + statusCode + ')')
+                            alertify.error((sipStatusMessages[statusCode] ?? 'Error:') + ' (' + statusCode + ')')
                         }
                     }
                 });
@@ -123,7 +121,6 @@
                 sipPassword: pitelP
             }
             let pitelSDK = new PitelSDK('gtg.vn', 'xxx', caller_number, {}, sdkOptions)// số máy nhân viên
-            //.pp-phone
             // Gọi hàm khi nhấn nút
             requestMicrophoneAccess();
             $(document).on('click','#callButton',function () {
@@ -154,10 +151,6 @@
                                 <img src="{{asset('layout/images/MagnifyingGlass.png')}}" alt="" class="pointer">
                                 <input name="search" placeholder="Tìm kiếm" type="text" id="search">
                             </div>
-                            <!-- <select class="select2" name="" id="">
-                                <option value="1">Người phụ trách</option>
-                            </select> -->
-                            {{--<button class="btn btn-outline-default font-svn-lage fs-14 p-12">Người phụ trách</button>--}}
                             <div class="" style="width: 140px;">
                                 <select name="telesales_id" class="select2 telesales font-svn-lage"  id="telesales_id" data-placeholder="Người phụ trách">
                                     <option value="">Người phụ trách</option>
@@ -168,9 +161,6 @@
                                     @endforeach
                                 </select>
                             </div>
-                            {{--<select name="telesales_id" id="telesales_id" class="form-control telesales select2">--}}
-
-
                             <div class="" style="width: 140px;">
                                 <select class="select2 group font-svn-lage" name="group" id="" data-placeholder="Nhóm dịch vụ">
                                     <option value="">Nhóm dịch vụ</option>
@@ -224,16 +214,8 @@
                     <div class="more-menu" style="margin-top: 8px;">
                         @include('customers.dropdownFilter')
                     </div>
-
-                    {{--<div class="display btn-group" id="btn_tool_group" style="display: none;">--}}
                     <div class="" id="btn_tool_group" style="display: none;">
                         <div class="d-flex gap-12 mt-16">
-                            {{--<div class="action pointer">Trạng thái khách hàng</div>--}}
-                            {{--<div class="action pointer">Xoá nhiều</div>--}}
-                            {{--<div class="action pointer">Khôi phục</div>--}}
-                            {{--<div class="action pointer">Destroy (Huỷ data)</div>--}}
-                            {{--<div class="action pointer">Phân chia hàng loạt</div>--}}
-
                             @if(auth()->user()->permission('customer.changeSale'))
                                 <div class="dropdown_action action pointer" id="show_manager_account">Chuyển người phụ trách</div>
                             @endif
@@ -282,7 +264,6 @@
 @section('_script')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script type="text/javascript">
-        $("#search").focus();
         $(function () {
             $(document).on('click', '.view_modal', function (e) {
                 e.preventDefault();
