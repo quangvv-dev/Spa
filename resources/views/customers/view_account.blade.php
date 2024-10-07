@@ -415,7 +415,7 @@
             </div>
             <div class="banner__background">
                 <div class="banner__menu d-flex align-items-center gap-16 fs-16" style="">
-                    <ul class="nav panel-tabs gap-24">
+                    <ul class="nav panel-tabs menu-customer-detail">
                         <li class=""><a href="#tab5" class="banner__menu__item communicate active" data-toggle="tab">Trao đổi</a>
                         </li>
                         <li><a href="#tab7" class="banner__menu__item appointment" id="click_tab_7" data-id="{{$customer->id}}"
