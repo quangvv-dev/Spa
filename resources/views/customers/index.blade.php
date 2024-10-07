@@ -110,7 +110,9 @@
                     if (statusCode >= 400 && statusCode < 600) {
                         if(statusCode === 486){
                             alertify.error('Máy bận !')
-                        }else {
+                        }else if(statusCode === 401){
+                            alertify.warning('Thiết lập kết nối ... ('+statusCode+')')
+                        } else {
                             console.log('Error code: '+statusCode);
                             alertify.error('Khách hàng không nghe máy ! ('+statusCode+')')
                         }
