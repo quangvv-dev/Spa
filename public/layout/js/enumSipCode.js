@@ -14,7 +14,7 @@ const sipStatusMessages = {
     403: "Server từ chối yêu cầu vì lý do bảo mật.",
     404: "Không thể tìm thấy tài nguyên được yêu cầu.",
     407: "Proxy server yêu cầu xác thực",
-    408: "Yêu cầu không được phản hồi trong một thời gian cho phép chờ.",
+    408: "Khách hàng không nghe máy.",
     410: "Không có thể liên lạc được với người đăng ký tại 1 địa chỉ đã chỉ định.",
     412: "Không thể đáp ứng yêu cầu các điều kiện tiên quyết để xử lý bởi vì yêu cầu bắt buộc không thành công.",
     413: "Nội dung thông tin quá lớn không cho phép.",

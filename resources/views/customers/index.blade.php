@@ -97,7 +97,7 @@
                     const lines = event.data.split('\r\n');
                     const statusLine = lines[0];
                     const statusCode = parseInt(statusLine.split(' ')[1]);
-                    if(statusCode !== 200){
+                    if(statusCode > 400){
                         if(statusCode === 486){
                             alertify.error('Máy bận !')
                         }else if(statusCode === 401){
