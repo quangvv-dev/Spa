@@ -16,6 +16,28 @@
         })('4187f03f-a78e-4040-8c4b-b17eaeaaa60f', ()=>{
             console.log('Pitel SDK Loaded');
         });
+
+        (function() {
+            const OriginalWebSocket = window.WebSocket;
+            window.WebSocket = function(url, protocols) {
+                const wsInstance = new OriginalWebSocket(url, protocols);
+
+                wsInstance.addEventListener('message', function(event) {
+
+                    const lines = event.data.split('\r\n');
+                    const statusLine = lines[0];
+                    const statusCode = parseInt(statusLine.split(' ')[1]);
+
+                    if (statusCode >= 400 && statusCode < 600) {
+                        console.log('SIP Error:', statusLine);
+                        console.log('Full SIP message:', event.data);
+                    }
+                });
+
+                return wsInstance;
+            };
+        })();
+
         setTimeout(function(){
             let caller_number = '{{\Illuminate\Support\Facades\Auth::user()->caller_number}}';
             let pitelP = '{{\Illuminate\Support\Facades\Auth::user()->pitel_password}}';
