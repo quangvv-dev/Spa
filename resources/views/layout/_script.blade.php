@@ -5,6 +5,29 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+        function playSound() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            oscillator.type = 'sine';
+            oscillator.frequency.value = 440;
+            oscillator.connect(audioContext.destination);
+            oscillator.start();
+        }
+        function requestMicrophoneAccess() {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(function(stream) {
+                    console.log('Microphone đã được kết nối');
+                })
+                .catch(function(err) {
+                    console.log('Không tìm thấy thiết bị microphone');
+                });
+        }
+
+        playSound();
+        requestMicrophoneAccess();
+
+
         (function (a,b) {
             var s = document.createElement('script');
             s.type = 'text/javascript';
