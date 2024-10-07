@@ -30,6 +30,14 @@ class CustomerObserver
         $this->firebase = $firebaseService;
     }
 
+    public function creating(Customer $customer)
+    {
+        $check = Customer::where('phone', $customer->phone)->exists();
+        if ($check) {
+            return false;
+        }
+    }
+
     /**
      * Handle the call center "created" event.
      *
