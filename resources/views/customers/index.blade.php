@@ -61,28 +61,19 @@
             left: 25px;
         }
     </style>
+    <script type="text/javascript" src="{{asset('layout/js/enumSipCode.js')}}"></script>
     <script>
-        function playSound() {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            oscillator.type = 'sine';
-            oscillator.frequency.value = 440;
-            oscillator.connect(audioContext.destination);
-            oscillator.start();
-        }
         function requestMicrophoneAccess() {
-            navigator.mediaDevices.getUserMedia({ audio: true })
-                .then(function(stream) {
+            navigator.mediaDevices.getUserMedia({audio: true})
+                .then(function (stream) {
                     console.log('Microphone đã được kết nối');
                 })
-                .catch(function(err) {
+                .catch(function (err) {
                     console.log('Không tìm thấy thiết bị microphone');
                 });
         }
 
-        // playSound();
         requestMicrophoneAccess();
-
 
         (function (a,b) {
             var s = document.createElement('script');
@@ -107,15 +98,12 @@
                     const statusLine = lines[0];
                     const statusCode = parseInt(statusLine.split(' ')[1]);
 
-                    if (statusCode >= 400 && statusCode < 600) {
-                        if(statusCode === 486){
-                            alertify.error('Máy bận !')
-                        }else if(statusCode === 401){
-                            alertify.warning('Thiết lập kết nối ... ('+statusCode+')')
-                        } else {
-                            console.log('Error code: '+statusCode);
-                            alertify.error('Khách hàng không nghe máy ! ('+statusCode+')')
-                        }
+                    if(statusCode === 486){
+                        alertify.error('Máy bận !')
+                    }else if(statusCode === 401){
+                        alertify.warning('Thiết lập kết nối ... ('+statusCode+')')
+                    } else {
+                        alertify.error(sipStatusMessages[statusCode]+' ('+statusCode+')')
                     }
                 });
 
