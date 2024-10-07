@@ -73,8 +73,6 @@
                 });
         }
 
-        requestMicrophoneAccess();
-
         (function (a,b) {
             var s = document.createElement('script');
             s.type = 'text/javascript';
@@ -127,6 +125,7 @@
             let pitelSDK = new PitelSDK('gtg.vn', 'xxx', caller_number, {}, sdkOptions)// số máy nhân viên
             //.pp-phone
             // Gọi hàm khi nhấn nút
+            requestMicrophoneAccess();
             $(document).on('click','#callButton',function () {
                 let phone = $(this).data('phone');
                 phone = phone.split(' ').join('');
