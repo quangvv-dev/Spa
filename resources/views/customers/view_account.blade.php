@@ -560,7 +560,8 @@
                 // $('#order_customer').html(data);
             });
         });
-        $(document).on('click', '.order-pagination.pagination a', function () {
+        $(document).on('click', '.order-pagination.pagination a', function (e) {
+            e.preventDefault();
             const page = $(this).text();
             const href = $('div a.page-link').attr('href');
             const member_id = href.match(/\d+/)[0];
