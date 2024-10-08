@@ -560,6 +560,19 @@
                 // $('#order_customer').html(data);
             });
         });
+        $(document).on('click', '.order-pagination.pagination a', function () {
+            const page = $(this).text();
+            const href = $('div a.page-link').attr('href');
+            const member_id = href.match(/\d+/)[0];
+            $('#order_customer').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
+            $.ajax({
+                url: "{{url()->current() }}",
+                method: "get",
+                data: {member_id: member_id,page_order: page}
+            }).done(function (data) {
+                $('#order_customer').html(data);
+            });
+        });
         $(document).on('click', '#click_tab_6', function () {
             const id = $(this).data('id');
             $('#order_customer').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');

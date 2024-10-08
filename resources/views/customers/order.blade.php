@@ -88,7 +88,7 @@
                 {{ 'Tổng số ' . $orders->total(). ' bản ghi ' . (request()->search ? 'found' : '') }}
             </div>
         </div>
-        <div class="pull-right">
+        <div class="pull-right order-pagination">
             {{ $orders->appends(['search' => request()->search ])->links() }}
         </div>
     @endif
