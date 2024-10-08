@@ -564,7 +564,7 @@
             const id = $(this).data('id');
             $('#order_customer').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
             $.ajax({
-                url: "{{url()->current() }}",
+                url: "{{request()->fullUrl() }}",
                 method: "get",
                 data: {member_id: id}
             }).done(function (data) {
