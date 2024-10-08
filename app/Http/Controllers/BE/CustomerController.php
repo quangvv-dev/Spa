@@ -386,7 +386,7 @@ class CustomerController extends Controller
         }
 
         if ($request->member_id || $request->role_type || $request->the_rest || $request->page_order) {
-            $params = $request->only('member_id', 'role_type', 'the_rest');
+            $params = $request->only('member_id', 'role_type', 'the_rest','page');
             if (!empty($request->page_order)) {
                 $params['page'] = $request->page_order;
             }
