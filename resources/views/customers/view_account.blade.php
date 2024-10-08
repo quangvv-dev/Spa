@@ -560,7 +560,7 @@
                 // $('#order_customer').html(data);
             });
         });
-        $(document).on('click', '.order-pagination.pagination a', function (e) {
+        $('.order-pagination').on('click', 'a.page-link', function (e) {
             e.preventDefault();
             const page = $(this).text();
             const href = $('div a.page-link').attr('href');
