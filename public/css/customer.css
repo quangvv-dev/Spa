@@ -255,6 +255,14 @@ body {
 .menu-customer-detail{
     gap: 24px;
 }
+@media only screen and (max-width: 1505px) {
+    .menu-customer-detail{
+        gap: 17px;
+    }
+    .banner__menu {
+        margin-left: 18%;
+    }
+}
 @media only screen and (max-width: 1920px) {
     .table-responsive {
         max-height: 80vh !important;
