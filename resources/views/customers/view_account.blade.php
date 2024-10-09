@@ -114,11 +114,6 @@
             border-radius: 0 0 16px 16px;
         }
 
-        .banner__menu {
-            margin-left: 15%;
-            height: 52px;
-        }
-
         .banner__menu__item {
             background-position-x: 0px;
             padding-left: 27.5px;
