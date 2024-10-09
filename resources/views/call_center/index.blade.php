@@ -55,7 +55,7 @@
 
         @media only screen and (max-width: 1921px) {
             .table-responsive {
-                max-height: 70vh;
+                max-height: 70vh !important;
             }
         }
     </style>
