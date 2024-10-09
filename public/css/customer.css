@@ -255,7 +255,7 @@ body {
 .menu-customer-detail{
     gap: 24px;
 }
-@media only screen and (max-width: 1505px) {
+@media screen and (max-width: 1500px) and (min-width: 1055px) {
     .menu-customer-detail{
         gap: 17px;
     }
