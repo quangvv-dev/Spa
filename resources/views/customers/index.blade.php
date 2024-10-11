@@ -63,6 +63,9 @@
     </style>
     <script type="text/javascript" src="{{asset('layout/js/enumSipCode.js')}}"></script>
     <script>
+        $(document).ready(function() {
+            $("#search").focus();
+        });
         function requestMicrophoneAccess() {
             navigator.mediaDevices.getUserMedia({audio: true})
                 .then(function (stream) {
