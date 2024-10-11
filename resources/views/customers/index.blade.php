@@ -126,11 +126,10 @@
             $(document).on('click','#callButton',function () {
                 let phone = $(this).data('phone');
                 phone = phone.split(' ').join('');
-                console.log(phone);
-                // pitelSDK.call(phone, {
-                //     extraHeaders: ['x-PROCESS-ID: 123'],
-                //     earlyMedia: true
-                // });
+                pitelSDK.call(phone, {
+                    extraHeaders: ['x-PROCESS-ID: 123'],
+                    earlyMedia: true
+                });
             });
         }, 2000);
     </script>
