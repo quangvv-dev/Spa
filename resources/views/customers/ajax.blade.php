@@ -221,12 +221,12 @@
                         </a>
                     </td>
                     <td class="text-center {{in_array(3,$user_filter_grid) ? '':'display-none'}}">
-                        <a href="javascript:void(0)" class="color-primary phone-customer" data-customer-id="{{ $customer->id }}" data-phone="{{$customer->phone}}">{{ str_limit($customer->phone,7,'xxx') }}
+                        <a href="javascript:void(0)" class="color-primary" id="callButton" data-customer-id="{{ $customer->id }}" data-phone="{{$customer->phone}}">{{ str_limit($customer->phone,7,'xxx') }}
                         </a>
 {{--                        <a href=""><i style="color: red !important" class="{!! $customer->is_duplicate == 1 ? "fa fa fa-copy" :'' !!}"></i></a>--}}
 {{--                        <span><i id="callButton" class="fas fa-phone" data-id="{{$customer->call_back}}" style="cursor: pointer; !important;"></i></span>--}}
 {{--                        @if(!empty(\Illuminate\Support\Facades\Auth::user()->id == 1))--}}
-                            <span><i id="callButton" class="fas fa-phone" data-phone="{{$customer->phone}}" style="cursor: pointer"></i></span>
+{{--                            <span><i id="callButton" class="fas fa-phone" data-phone="{{$customer->phone}}" style="cursor: pointer"></i></span>--}}
 {{--                        @endif--}}
                     </td>
                 @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::MARKETING)

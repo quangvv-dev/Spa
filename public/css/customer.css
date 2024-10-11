@@ -285,7 +285,7 @@ body {
 
 @media only screen and (max-width: 1367px) {
     .table-responsive {
-        max-height: 65vh !important;;
+        max-height: 65vh !important;
     }
     .menu-customer-detail{
         gap: 11px;
