@@ -144,7 +144,7 @@ class Customer extends Model
                 $query->where('customers.telesales_id', $conditions['telesales']);
             })->when(isset($conditions['last_time']), function ($query) use ($conditions) {
                 $query->whereBetween('customers.last_time', [
-                    now()->subDays($conditions['last_time'])->startOfDay(), now(),
+                    now()->subDays($conditions['last_time'])->startOfDay(), now()->subDays($conditions['last_time'])->endOfDay(),
                 ]);
             })->when(isset($conditions['branch_id']) && $conditions['branch_id'], function ($query) use ($conditions) {
                 $query->where('customers.branch_id', $conditions['branch_id']);
