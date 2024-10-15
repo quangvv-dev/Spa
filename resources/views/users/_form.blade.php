@@ -118,20 +118,27 @@
                             </div>
                         </div>
                         <div class="col-xs-4 col-md-4">
+                            <div class="form-group required {{ $errors->has('pitel_password') ? 'has-error' : '' }}">
+                                {!! Form::label('', 'Mật khẩu tổng đài') !!}
+                                <input type="password" name="pitel_password" class="form-control" value="{{isset($user)?@$user->pitel_password:''}}">
+                                <span class="help-block">{{ $errors->first('pitel_password', ':message') }}</span>
+                            </div>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
                             <div class="form-group required {{ $errors->has('caller_number') ? 'has-error' : '' }}">
                                 {!! Form::label('', 'Mã NV') !!}
                                 <input type="text" name="code" class="form-control" value="{{isset($user)?@$user->code:''}}">
                                 <span class="help-block">{{ $errors->first('code', ':message') }}</span>
                             </div>
                         </div>
-                        <div class="col-xs-4 col-md-4">
-                            <div class="form-group required {{ $errors->has('approval_code') ? 'has-error' : '' }}">
-                                {!! Form::label('', 'Mã chấm công (nếu có)') !!}
-                                <input type="text" id="approval_code" class="form-control" value="{{isset($user)?@$user->approval_code:''}}"
-                                       name='approval_code'>
-                                <span class="help-block">{{ $errors->first('approval_code', ':message') }}</span>
-                            </div>
-                        </div>
+{{--                        <div class="col-xs-4 col-md-4">--}}
+{{--                            <div class="form-group required {{ $errors->has('approval_code') ? 'has-error' : '' }}">--}}
+{{--                                {!! Form::label('', 'Mã chấm công (nếu có)') !!}--}}
+{{--                                <input type="text" id="approval_code" class="form-control" value="{{isset($user)?@$user->approval_code:''}}"--}}
+{{--                                       name='approval_code'>--}}
+{{--                                <span class="help-block">{{ $errors->first('approval_code', ':message') }}</span>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
                     </div>
                 </div>
 
