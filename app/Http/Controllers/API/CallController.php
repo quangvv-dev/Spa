@@ -71,7 +71,7 @@ class CallController extends BaseApiController
             }
         }
 
-        $isset = CallCenter::where('caller_id', $request->caller_id)->first();
+        $isset = CallCenter::where('caller_id', $input['caller_id'])->first();
         if (empty($isset)) {
             if ($request->call_type != 'INBOUND') {
                 $call_exits = CallCenter::where('dest_number', $input['dest_number'])->exists();
