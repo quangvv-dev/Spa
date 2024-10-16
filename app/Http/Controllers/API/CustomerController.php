@@ -55,9 +55,9 @@ class CustomerController extends BaseApiController
 
         $customers = $customers->take(StatusCode::PAGINATE_1000)->orderByDesc('id')->get();
         if (isset($input['limit'])) {
-            $customers = Functions::customPaginate($customers, $input['page'], $input['limit']);
+            $customers = Functions::customPaginate($customers, $input['page']??1, $input['limit']);
         } else {
-            $customers = Functions::customPaginate($customers, $input['page']);
+            $customers = Functions::customPaginate($customers, $input['page']??1);
         }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', CustomerResource::collection($customers));
     }
