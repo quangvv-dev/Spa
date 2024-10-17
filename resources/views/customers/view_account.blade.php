@@ -1360,8 +1360,7 @@
         //     getMessage(page_id,sender_id,token);
         // })
     </script>
-{{--    <script src="{{asset('js/jquery.qrcode.min.js')}}"></script>--}}
-    <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    <script type="text/javascript" src="{{asset('assets/js/qr-code-styling.min.js')}}"></script>
     <script type="text/javascript">
         $(document).ready(function (){
             const qrCode = new QRCodeStyling({

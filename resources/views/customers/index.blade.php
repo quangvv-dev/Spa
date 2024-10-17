@@ -266,7 +266,7 @@
     </div>
 @endsection
 @section('_script')
-    <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    <script type="text/javascript" src="{{asset('assets/js/qr-code-styling.min.js')}}"></script>
     <script type="text/javascript">
         $(function () {
             $(document).on('click', '.zalo-qr', function (e) {
