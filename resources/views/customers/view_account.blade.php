@@ -404,7 +404,8 @@
                     </div>
                     <div class="right">
                         {{--<img src="{{asset('layout/images/QR.png')}}" alt="" width="65" height="65">--}}
-                        <div id="qrcodeTable" style="width: 65px;height: 65px;"></div>
+                        <div id="qrcodeTable" style="width: 65px;height: 65px;">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -452,59 +453,9 @@
                 </div>
             </div>
         </div>
-
-
-
-
-
-
-
-        <div class="">
-            {{--<div class="card-header">--}}
-                {{--<div class="col-md-3 no-padd font16"><a class="fl mr10 pic">--}}
-                        {{--<img class="avatar" src="{{$customer->avatar?:'/default/noavatar.png'}}"></a>--}}
-                    {{--<span class="bold uppercase ">  &nbsp;{{ $customer->full_name }}  </span>--}}
-                    {{--<div class="display" id="toolbox" style="width: 28px; height: 20px">--}}
-                        {{--<a title="Sửa tài khoản" href="{{ route('customers.edit', $customer->id) }}">--}}
-                            {{--<i class="fas fa-pencil-alt"></i></a>--}}
-                        {{--<a id="btn_del_account" rel="tooltip"--}}
-                           {{--data-placement="bottom"--}}
-                           {{--data-original-title="Xóa" class="ml5">--}}
-                            {{--<i class="gf-icon-hover icon-remove mr5"></i>--}}
-                        {{--</a>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-                {{--<div class="col-md-3 position" rel="tooltip">--}}
-                    {{--<div class="no-padd tc mg0">--}}
-                        {{--<h1 style="font-size:24px;color: #f36a26;" class="bold mg0">{{number_format($customer->wallet)}}--}}
-                            {{--VNĐ</h1>--}}
-                        {{--<p>Số dư ví</p></div>--}}
-                {{--</div>--}}
-                {{--<div class="col-md-1 position" rel="tooltip"></div>--}}
-
-                {{--<div class="col-md-2 no-padd bor-l pl20 mg0 pt10 position hoverlastactive" rel="tooltip"--}}
-                     {{--data-original-title="Click thay đổi người phụ trách" data-placement="bottom">--}}
-                    {{--<div class="show_change_am" style="cursor:pointer">--}}
-                        {{--<div class="avatar">--}}
-                            {{--<img class="avatar"--}}
-                                 {{--src="{{!empty($customer->telesale->avatar)?$customer->telesale->avatar:'/default/noavatar.png'}}">--}}
-                        {{--</div>--}}
-                        {{--<div class="info-avatar"><p class="account_manager_name"><a--}}
-                                    {{--class="gfname">{{ @$customer->telesale->full_name }}</a>--}}
-                            {{--</p>--}}
-                            {{--<p class="gray1 font12">Người phụ trách</p></div>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-                {{--<div class="col-md-1 no-padd tc bor-l mg0"></div>--}}
-                {{--<div class="col-md-2 no-padd tc bor-l mg0"><h1 style="font-size:24px;color: #f36a26"--}}
-                                                               {{--class="bold mg0">{{number_format($customer->orders->sum('gross_revenue'))}}--}}
-                        {{--VNĐ</h1>--}}
-                    {{--<p>Giá trị</p></div>--}}
-            {{--</div>--}}
-            {{--<div style="height:5px" class="color-picker-bg-41"></div>--}}
+    <div class="">
             <div class="d-flex gap-8" style="margin-top: 8px;">
                 <div class="content__left w-232">
-
                     <div class="d-flex align-items-center w-232 p-16" style="gap: 21px;background-image: url({{asset('layout/images/bg_wallet.png')}});height: 61px;border-radius: 16px;">
                         <span class="color-main">Số dư ví</span>
                         <span class="fs-28">{{number_format($customer->wallet)}}</span>
@@ -533,9 +484,9 @@
                                 <div class="col-md-8">
                                     <span class="uppercase pb5 mb10 font12 bold mg0">Mối quan hệ</span>
                                     <div>{{ @$customer->status->name }}</div></div>
-                                <div class="col-md-4 qrcode-container">
-                                    <div id="qrcodeTable"></div>
-                                </div>
+{{--                                <div class="col-md-4 qrcode-container">--}}
+{{--                                    <div id="qrcodeTable"></div>--}}
+{{--                                </div>--}}
                             </div>
                         </div>
                     </div>
@@ -1409,14 +1360,23 @@
         //     getMessage(page_id,sender_id,token);
         // })
     </script>
-    <script src="{{asset('js/jquery.qrcode.min.js')}}"></script>
+{{--    <script src="{{asset('js/jquery.qrcode.min.js')}}"></script>--}}
+    <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
     <script type="text/javascript">
         $(document).ready(function (){
-            jQuery('#qrcodeTable').qrcode({
-                text	: "{{$customer->account_code}}",
-                height:65,
-                width:65
+            const qrCode = new QRCodeStyling({
+                width: 65,
+                height: 65,
+                type: "canvas",
+                data: "{{$customer->account_code}}",
+                dotsOptions: {
+                    type: "rounded"
+                },
+                cornersSquareOptions: {
+                    type: "rounded"
+                },
             });
+            qrCode.append(document.getElementById("qrcodeTable"));
         });
     </script>
     <script>

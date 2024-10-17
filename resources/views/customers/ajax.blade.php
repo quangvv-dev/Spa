@@ -216,7 +216,7 @@
                         </a>
                         <a href="{{ route('customers.show', $customer->id) }}" class="color-primary">{{ $customer->full_name }}</a>
                         <span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>
-                        <a target="_blank" href="https://zalo.me/{{@$customer->phone}}">
+                        <a class="zalo-qr" href="javascript:void(0)" data-phone="{{$customer->phone}}" data-account="{{@$customer->account_code}}">
                             <img width="25" height="25" src="{{asset('assets/images/zalo_icon.png')}}">
                         </a>
                     </td>
