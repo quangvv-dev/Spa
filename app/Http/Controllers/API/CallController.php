@@ -87,20 +87,20 @@ class CallController extends BaseApiController
         $isset = CallCenter::where('caller_id', $input['caller_id'])->first();
         if (empty($isset)) {
             if ($request->call_type != 'INBOUND') {
-                $call_exits = CallCenter::where('dest_number', $input['dest_number'])->exists();
-                if (!$call_exits && !empty(setting('miss_call_sms'))) {
-                    $text = Functions::vi_to_en(setting('miss_call_sms'));
-                    $err = Functions::sendSmsV3($input['dest_number'], @$text);
-                    if (isset($err) && $err) {
-                        HistorySms::insert([
-                            'phone'       => $input['dest_number'],
-                            'campaign_id' => 0,
-                            'message'     => $text,
-                            'created_at'  => Carbon::now('Asia/Ho_Chi_Minh'),
-                            'updated_at'  => Carbon::now('Asia/Ho_Chi_Minh'),
-                        ]);
-                    }
-                }
+//                $call_exits = CallCenter::where('dest_number', $input['dest_number'])->exists();
+//                if (!$call_exits && !empty(setting('miss_call_sms'))) {
+//                    $text = Functions::vi_to_en(setting('miss_call_sms'));
+//                    $err = Functions::sendSmsV3($input['dest_number'], @$text);
+//                    if (isset($err) && $err) {
+//                        HistorySms::insert([
+//                            'phone'       => $input['dest_number'],
+//                            'campaign_id' => 0,
+//                            'message'     => $text,
+//                            'created_at'  => Carbon::now('Asia/Ho_Chi_Minh'),
+//                            'updated_at'  => Carbon::now('Asia/Ho_Chi_Minh'),
+//                        ]);
+//                    }
+//                }
                 CallCenter::create($input);
             } else {
                 return $this->responseApi(ResponseStatusCode::MOVED_PERMANENTLY, 'CRM NOT SAVE INBOUND',
