@@ -71,6 +71,9 @@ class SalesController extends Controller
 
         $users = User::select('id', 'full_name', 'caller_number')->where('department_id', DepartmentConstant::TELESALES)
             ->where('active', StatusCode::ON)
+            ->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                $q->where('branch_id', $request->branch_id);
+            })
             ->when(!empty($members), function ($q) use ($members) {
                 $q->whereIn('id', $members);
             })->get()->map(function ($item) use ($request) {
