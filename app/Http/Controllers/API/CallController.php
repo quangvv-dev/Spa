@@ -48,10 +48,10 @@ class CallController extends BaseApiController
                 'recording_url' => $request->RecordingPath,
             ];
         } elseif (isset($server) && $server == StatusCode::SERVER_CGV_TELECOM) {
-            if (!in_array(strtoupper($request->status), ['ANSWERED', 'BUSY','CANCEL'])) {
-                return $this->responseApi(ResponseStatusCode::MOVED_PERMANENTLY, 'CRM ONLY SAVE ANSWERED & BUSY',
-                    $request->all());
-            }
+//            if (!in_array(strtoupper($request->status), ['ANSWERED', 'BUSY','CANCEL'])) {
+//                return $this->responseApi(ResponseStatusCode::MOVED_PERMANENTLY, 'CRM ONLY SAVE ANSWERED & BUSY',
+//                    $request->all());
+//            }
 //            $status = strtoupper($request->status) == 'ANSWERED' ? 'ANSWERED' : (strtoupper($request->status) == 'BUSY' ? 'MISSED CALL' : 'NOT-AVAILABLE');
 
             switch (strtoupper($request->status)) {
