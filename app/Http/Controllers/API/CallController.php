@@ -58,7 +58,11 @@ class CallController extends BaseApiController
                 case 'ANSWERED':
                     $status = 'ANSWERED';
                     break;
+                case 'PHONE BLOCK':
+                case 'CONGESTION':
+                case 'FAILED':
                 case 'CANCEL':
+                case 'NO ANSWERED':
                 case 'BUSY':
                     $status = 'MISSED CALL';
                     break;
