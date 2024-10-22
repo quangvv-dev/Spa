@@ -56,8 +56,9 @@ class StatusCode
     const ON = 1;
     const OFF = 0;
 
-    const EXCHANGE_POINT = 100000;
-    const EXCHANGE_MONEY = 2000;
+    const EXCHANGE_POINT = 1000000;//default: 100000
+    const EXCHANGE_MONEY = 1;//default: 2000
+
 // trạng thái công việc
     const NEW_TASK = 1;
     const DONE_TASK = 3;

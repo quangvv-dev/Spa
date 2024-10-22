@@ -222,7 +222,7 @@ class OrderService
 
         $order->update([
             'gross_revenue' => $order->gross_revenue - $paymentHistory->price,
-            'the_rest' => $order->the_rest + $paymentHistory->price,
+            'the_rest'      => $order->the_rest + $paymentHistory->price,
         ]);
         if ($paymentHistory->payment_type != PaymentHistory::POINT) {
             $point = $paymentHistory->price / StatusCode::EXCHANGE_POINT * StatusCode::EXCHANGE_MONEY;
