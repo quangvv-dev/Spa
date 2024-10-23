@@ -221,9 +221,14 @@ class CallController extends BaseApiController
         if (empty($user->caller_number)) {
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Tài khoản chưa có mã tổng đài!');
         }
+
+        $customer = Customer::find($request->customer_id);
+        if (empty($customer)) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Khách hàng không tồn tại!');
+        }
         $accessToken = '88d4b615ef0c4afdb3485fce4d90a300-ZDZmZTRkMmUtM2UxOS00ZjMzLWIzOTUtOGEzNmRkMWQ2Mzc5';
         $header = ['Authorization' => 'Bearer ' . $accessToken];
-        $url = 'https://api.mobilesip.vn/v1/click2call/async?ext=' . $user->caller_number . '&phone=' . $this->encryptedPhoneNumber($request->phone) . '&is_encode=true&encrypt_method=aes';
+        $url = 'https://api.mobilesip.vn/v1/click2call/async?ext=' . $user->caller_number . '&phone=' . $this->encryptedPhoneNumber($customer->phone) . '&is_encode=true&encrypt_method=aes';
         try {
             $response = GuzzleHttpCall($url, 'GET', $header);
             return $this->responseApi(ResponseStatusCode::OK, 'Kết nối cuộc gọi thành công!', $response);
