@@ -110,6 +110,7 @@ class ScheduleController extends Controller
             'person_action' => Auth::user()->id,
             'creator_id' => Auth::user()->id,
             'category_id' => isset($category) ? $category->category_id : 0,
+            'type' => $request->type ?? ScheduleConstant::LICH_MOI,
         ]);
         if ($request->note) {
             $note = str_replace("\r\n", ' ', $request->note);
@@ -194,8 +195,12 @@ class ScheduleController extends Controller
             $date = Carbon::createFromFormat('d/m/Y', $request->date)->format('Y-m-d');
         }
         $request->merge(['date' => $date]);
+        $input = $request->except('id', 'format_date');
         $data = Schedule::with('customer')->find($request->id);
-        $data->update($request->except('id', 'format_date'));
+        if (empty(@$input['type']) || $input['type'] == null || $input['type'] == ''|| $input['type'] == 'null'|| $input['type'] == 'NULL') {
+            $input['type'] = $data->type ?? ScheduleConstant::LICH_MOI;
+        }
+        $data->update($input);
 
         if ($request->ajax()) {
             return $data;
