@@ -104,10 +104,14 @@ class SalesController extends Controller
                         'end_date' => $request->end_date,
                     ];
 
-                    $callCenter = CallCenter::search($paramsCenter, 'id')->count();
-                    $item->call_center = $callCenter;
+                    $callCenter = CallCenter::search($paramsCenter, 'id');
+                    $item->call_center = $callCenter->count();
+                    $item->answer_time = $callCenter->sum('answer_time');
+                    $item->call2minute = $callCenter->where('answer_time', '>=', 120)->count();
                 } else {
                     $item->call_center = 0;
+                    $item->answer_time = 0;
+                    $item->call2minute = 0;
                 }
 
                 $schedules = Schedule::select('id')->where('creator_id', $item->id)->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
@@ -138,7 +142,6 @@ class SalesController extends Controller
                 })->sum('price');
                 $item->is_debt = $detail->where('is_debt', StatusCode::ON)->sum('price');
                 $item->customer_new = $data_new->count();
-                $item->duplicate = $data_new->where('is_duplicate', Customer::DUPLICATE)->count();
                 $item->order_new = $order_new->count();
                 $item->revenue_new = $order_new->sum('all_total');
                 $item->payment_new = $item->detail_new - $item->is_debt;

@@ -10,9 +10,9 @@
             <th class="text-center"></th>
             <th class="text-center">Nhân viên</th>
             <th class="text-center">Cuộc gọi</th>
-            <th class="text-center no-wrap">Tổng SĐT</th>
+            <th class="text-center">Thời lượng c.gọi</th>
+            <th class="text-center">Cuộc gọi >2p</th>
             <th class="text-center no-wrap">SĐT mới</th>
-            <th class="text-center no-wrap">SĐT trùng</th>
             <th class="text-center">Lịch hẹn</th>
             <th class="text-center">Khách đến</th>
             <th class="text-center">Khách đến mua</th>
@@ -30,31 +30,7 @@
             <th class="text-center">Doanh thu</th>
             <th class="text-center no-wrap">Thu nợ</th>
             <th class="text-center no-wrap">Thực thu</th>
-
         </tr>
-{{--        <tr class="number_index">--}}
-{{--            <th class="text-center">(1)</th>--}}
-{{--            <th class="text-center">(2)</th>--}}
-{{--            <th class="text-center">(2.1)</th>--}}
-{{--            <th class="text-center">(3)</th>--}}
-{{--            <th class="text-center">(4)</th>--}}
-{{--            <th class="text-center">(5)</th>--}}
-{{--            <th class="text-center">(6)</th>--}}
-{{--            <th class="text-center">(7)</th>--}}
-{{--            <th class="text-center">(8)</th>--}}
-{{--            <th class="text-center">(8.1)</th>--}}
-{{--            <th class="text-center">(5)/(3)</th>--}}
-{{--            <th class="text-center">(5)/(4)</th>--}}
-{{--            <th class="text-center">(6)/(4)</th>--}}
-{{--            <th class="text-center">(7)/(4)</th>--}}
-{{--            <th class="text-center">(8)/(5)</th>--}}
-{{--            <th class="text-center">(8)/(3)</th>--}}
-{{--            <th class="text-center">(12)/(8)</th>--}}
-{{--            <th class="text-center">(9)</th>--}}
-{{--            <th class="text-center">(10)</th>--}}
-{{--            <th class="text-center">(11)</th>--}}
-{{--            <th class="text-center">(12)</th>--}}
-{{--        </tr>--}}
         </thead>
 
         <tbody>
@@ -95,16 +71,17 @@
                     <td class="text-center pdr10">{{$i}}</td>
                     <td class="text-center pdr10">{{$item->full_name}}</td>
                     <td class="text-center pdr10">{{$item->call_center}}</td>
+                    <td class="text-center pdr10">{{$item->answer_time}}</td>
+                    <td class="text-center pdr10">{{$item->call2minute}}</td>
+
                     <td class="text-center pdr10">{{$item->customer_new}}</td>
-                    <td class="text-center pdr10">{{$item->customer_new - $item->duplicate}}</td>
-                    <td class="text-center pdr10">{{$item->duplicate}}</td>
                     <td class="text-center pdr10">{{$item->schedules_new}}</td>
                     <td class="text-center pdr10">{{$item->schedules_den}}</td>
                     <td class="text-center pdr10">{{$item->become_buy}}</td>
                     <td class="text-center pdr10">{{$item->not_buy}}</td>
                     <td class="text-center pdr10">{{$item->order_new}}</td>
+
                     <td class="text-center pdr10">{{!empty($item->schedules_new) && !empty($item->customer_new) ?round(($item->schedules_new/$item->customer_new)*100,1):0}}%</td>
-{{--                    <td class="text-center pdr10">{{!empty($item->schedules_den) && !empty($item->customer_new) ? round($item->schedules_den/$item->customer_new*100,1):0}}%</td>--}}
                     <td class="text-center pdr10">{{!empty($item->schedules_den) && !empty($item->schedules_new) ? round($item->schedules_den/$item->schedules_new*100,1):0}}%</td>
 
                     <td class="text-center pdr10">{{$item->schedules_new> 0 && $item->become_buy >0 ?round(($item->become_buy/$item->schedules_new)*100,1):0}}%</td>
