@@ -374,7 +374,7 @@
                             <div class="fs-12 color-dark">|</div>
                             <div class="fs-12 color-dark">` + item.created_at + `</div>
                         </div>
-                        <div class="mt-1">` + (call == true ? "Lịch sử cuộc gọi": item.messages) + `</div> </div>`;
+                        <div class="mt-1">` + (call == true ? ">>> Lịch sử cuộc gọi <<<": item.messages) + `</div> </div>`;
                         {{--html1 += `<div class="col comment-fast" style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;">--}}
                         {{--        <div class="no-padd col-md-12">--}}
                         {{--            <div class="col-md-11"><p><a href="#" class="bold blue">` + (item.full_name ?? "") + `</a>--}}
