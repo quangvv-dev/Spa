@@ -11,7 +11,7 @@
             <th class="text-center"></th>
             <th class="text-center">Nhân viên</th>
             <th class="text-center">Cuộc gọi</th>
-            <th class="text-center">Thời lượng c.gọi</th>
+            <th class="text-center">Thời lượng c.gọi (phút)</th>
             <th class="text-center">Cuộc gọi >2p</th>
             <th class="text-center no-wrap">SĐT mới</th>
             <th class="text-center">Lịch hẹn</th>
@@ -81,9 +81,9 @@
                 <tr class="">
                     <td class="text-center pdr10">{{$i}}</td>
                     <td class="text-center pdr10">{{$item->full_name}}</td>
-                    <td class="text-center pdr10">{{$item->call_center}}</td>
-                    <td class="text-center pdr10">{{$item->answer_time}}</td>
-                    <td class="text-center pdr10">{{$item->call2minute}}</td>
+                    <td class="text-center pdr10">{{number_format($item->call_center)}}</td>
+                    <td class="text-center pdr10">{{number_format($item->answer_time)}}</td>
+                    <td class="text-center pdr10">{{number_format($item->call2minute)}}</td>
 
                     <td class="text-center pdr10">{{$item->customer_new}}</td>
                     <td class="text-center pdr10">{{$item->schedules_new}}</td>
