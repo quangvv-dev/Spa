@@ -111,7 +111,7 @@ class SalesController extends Controller
 
                     $callCenter = CallCenter::search($paramsCenter, 'id');
                     $item->call_center = $callCenter->count();
-                    $item->answer_time = $callCenter->sum('answer_time');
+                    $item->answer_time = $callCenter->sum('answer_time')/60;
                     $item->call2minute = $callCenter->where('answer_time', '>=', 120)->count();
                 } else {
                     $item->call_center = 0;
