@@ -95,6 +95,11 @@ class SalesController extends Controller
                         $qr->where('telesales_id', $item->id);
                     });
                 $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
+                $order_hot = clone $order_new;
+
+                $order_hot = $order_hot->whereHas('customer', function ($qr) use ($request) {
+                    $qr->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
+                });
 
                 if ($item->caller_number) {
                     $paramsCenter = [
@@ -122,6 +127,14 @@ class SalesController extends Controller
                     });
                 $schedules_den = clone $schedules;
                 $schedules_new = clone $schedules;
+                $schedules_hot = clone $schedules;
+
+                $schedules_new_hot = $schedules_hot->whereHas('customer', function ($qr) use ($request) {
+                    $qr->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
+                });
+                $item->schedules_hot = $schedules_new_hot->count();
+                $item->schedules_hot_den = $schedules_new_hot->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+                $item->schedules_hot_mua = $schedules_new_hot->whereIn('status', [ScheduleConstant::DEN_MUA])->count();
 
                 $item->schedules_den = $schedules_den->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
                     ->whereHas('customer', function ($qr) {
@@ -129,9 +142,11 @@ class SalesController extends Controller
                     })->count();
                 $item->become_buy = $schedules_den->where('status', ScheduleConstant::DEN_MUA)->count();
                 $item->not_buy = $item->schedules_den - $item->become_buy;
+
                 $item->schedules_new = $schedules_new->whereHas('customer', function ($qr) {
                     $qr->where('old_customer', 0);
                 })->count();
+
                 //lich hen
 
                 $request->merge(['telesales' => $item->id]);
@@ -143,6 +158,7 @@ class SalesController extends Controller
                 $item->is_debt = $detail->where('is_debt', StatusCode::ON)->sum('price');
                 $item->customer_new = $data_new->count();
                 $item->order_new = $order_new->count();
+                $item->order_hot = $order_hot->count();
                 $item->revenue_new = $order_new->sum('all_total');
                 $item->payment_new = $item->detail_new - $item->is_debt;
                 return $item;
