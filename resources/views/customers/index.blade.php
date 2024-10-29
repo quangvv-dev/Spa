@@ -367,8 +367,7 @@
 
                 let html1 = '';
                     data.group_comments.forEach(function (item) {
-                        const call = item.call ? true : false;
-                        console.log('CALL',call);
+                        const call = item.call_id ? true : false;
                         html1 += `<div class="note__item"><div class="d-flex align-items-center gap-8">
                             <img src="`+(item.avatar ?? "{{asset('layout/images/Ava.png')}}")+`" width="36" height="36" alt="" style="border-radius: 50%">
                             <div class="fs-14">` + (item.full_name ?? "") + `</div>
