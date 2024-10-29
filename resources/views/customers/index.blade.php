@@ -367,13 +367,15 @@
 
                 let html1 = '';
                     data.group_comments.forEach(function (item) {
+                        const call = item.call ? true : false;
+                        console.log('CALL',call);
                         html1 += `<div class="note__item"><div class="d-flex align-items-center gap-8">
                             <img src="`+(item.avatar ?? "{{asset('layout/images/Ava.png')}}")+`" width="36" height="36" alt="" style="border-radius: 50%">
                             <div class="fs-14">` + (item.full_name ?? "") + `</div>
                             <div class="fs-12 color-dark">|</div>
                             <div class="fs-12 color-dark">` + item.created_at + `</div>
                         </div>
-                        <div class="mt-1">` + item.messages + `</div> </div>`;
+                        <div class="mt-1">` + (call == true ? "Lịch sử cuộc gọi": item.messages) + `</div> </div>`;
                         {{--html1 += `<div class="col comment-fast" style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;">--}}
                         {{--        <div class="no-padd col-md-12">--}}
                         {{--            <div class="col-md-11"><p><a href="#" class="bold blue">` + (item.full_name ?? "") + `</a>--}}
