@@ -3,6 +3,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
 @endsection
+{{--<script type="text/javascript" src="{{asset('layout/js/chart.js')}}"></script>--}}
 @section('content')
     <div class="col-md-12 col-lg-12" style="margin-top: 3%;">
         <div class="card">

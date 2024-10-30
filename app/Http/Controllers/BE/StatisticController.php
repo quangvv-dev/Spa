@@ -271,9 +271,15 @@ class StatisticController extends Controller
             $input['group_branch'] = $group_branch;
         }
 
-        $users = User::select('id', 'full_name', 'phone')->whereIn('role',
-            [UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request, $input) {
-
+        $users = User::select('id', 'full_name', 'phone')->whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])
+            ->where('active', UserConstant::ACTIVE)->get();
+        $name = [];
+        $schedules = [];
+        $schedules_buy = [];
+        $schedules_cancel = [];
+        $schedules_notbuy = [];
+//            ->map(function ($item) use ($request, $input) {
+        foreach ($users as $item) {
             $schedule = Schedule::select('id')->where('person_action', $item->id)->whereBetween('date', [
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                 Functions::yearMonthDay($input['end_date']) . " 23:59:59",
@@ -291,23 +297,29 @@ class StatisticController extends Controller
                     $q->whereIn('branch_id', $input['group_branch']);
                 });
             $task1 = clone $task;
-
-            $item->all_schedules = $schedule->count();
-            $item->schedules_buy = $schedule->where('status', 3)->count();
-            $item->schedules_notbuy = $schedule2->where('status', 4)->count();
-            $item->schedules_cancel = $schedule3->where('status', 5)->count();
-            $item->all_task = $task->count();
-            $item->all_done = $task->where('task_status_id', StatusCode::DONE_TASK)->count();
-            $item->all_failed = $task1->where('task_status_id', StatusCode::FAILED_TASK)->count();
-
-            return $item;
-        })->sortByDesc('all_schedules');
-
+            $name[] = $item->full_name;
+            $schedules[] = $schedule->count();
+            $schedules_buy[] = $schedule->where('status', 3)->count();
+            $schedules_notbuy[] = $schedule2->where('status', 4)->count();
+            $schedules_cancel[] = $schedule3->where('status', 5)->count();
+//            $item->all_task = $task->count();
+//            $item->all_done = $task->where('task_status_id', StatusCode::DONE_TASK)->count();
+//            $item->all_failed = $task1->where('task_status_id', StatusCode::FAILED_TASK)->count();
+        }
+//        })->sortByDesc('all_schedules');
+        $name = array_map(function($item) {
+            return "'$item'";
+        }, $name);
+        $name = implode(',', $name);
+        $schedules = count($schedules)? implode(", ", $schedules) : 0;
+        $schedules_buy = count($schedules_buy)? implode(", ", $schedules_buy) : 0;
+        $schedules_notbuy = count($schedules_notbuy)? implode(", ", $schedules_notbuy) : 0;
+        $schedules_cancel = count($schedules_cancel)? implode(", ", $schedules_cancel) : 0;
         if ($request->ajax()) {
-            return view('statistics.ajax_taskSchedule', compact('users'));
+            return view('statistics.ajax_taskSchedule', compact('name', 'schedules', 'schedules_buy', 'schedules_notbuy', 'schedules_cancel'));
         }
 
-        return view('statistics.task_schedule', compact('users'));
+        return view('statistics.task_schedule', compact('name', 'schedules', 'schedules_buy', 'schedules_notbuy', 'schedules_cancel'));
 
     }
 

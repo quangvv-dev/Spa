@@ -2,6 +2,7 @@
 @section('_style')
     <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
 @endsection
+<script type="text/javascript" src="{{asset('layout/js/chart.js')}}"></script>
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">
@@ -14,7 +15,8 @@
                     <input id="reportrange" type="text" class="form-control square">
                 </div>
                 <div class="col-lg-2 col-md-6">
-                    <button type="submit" class="btn btn-primary"> Tìm kiếm </button>
+                    <button type="submit" class="btn btn-primary"> Tìm kiếm
+                    </button>
                 </div>
                 {{ Form::close() }}
             </div>
