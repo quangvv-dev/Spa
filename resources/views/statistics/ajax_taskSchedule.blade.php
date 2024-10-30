@@ -21,11 +21,49 @@
         <div id="percent"></div>
     </div>
 </div>
+<script type="text/javascript" src="{{asset('layout/js/chart.js')}}"></script>
+<script type="text/javascript">
+    var ctx = document.getElementById('myChart').getContext('2d');
 
-<div class="row row-cards">
-
-</div>
-
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+            datasets: [
+                {
+                    label: 'Price',
+                    data: [150, 200, 180, 220, 300, 250],
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                },
+                {
+                    label: 'Orders',
+                    data: [30, 45, 60, 40, 80, 70],
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
+                },
+                {
+                    label: 'Customers',
+                    data: [25, 35, 50, 60, 70, 65],
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                }
+            ]
+        },
+        options: {
+            indexAxis: 'y',  // This makes the bar chart horizontal
+            responsive: true,
+            scales: {
+                x: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
 <script type="text/javascript" src="{{asset('js/loader.js')}}"></script>
 
 <script>
