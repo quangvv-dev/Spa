@@ -17,7 +17,6 @@
 <script type="text/javascript" src="{{asset('layout/js/chart.js')}}"></script>
 <script type="text/javascript">
     var ctx = document.getElementById('chartSchedule').getContext('2d');
-
     new Chart(ctx, {
         type: 'bar',
         data: {
@@ -53,11 +52,14 @@
         options: {
             indexAxis: 'y',  // This makes the bar chart horizontal
             responsive: true,
+            maintainAspectRatio: false,
             scales: {
                 x: {
                     beginAtZero: true,
+                    suggestedMax: 1000, // maximum value will be 1000.
+                    suggestedMin: 100, // minimum value will be 100.
                 }
-            }
+            },
         }
     });
 </script>
