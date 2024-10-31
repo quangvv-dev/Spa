@@ -52,12 +52,11 @@
         options: {
             indexAxis: 'y',  // This makes the bar chart horizontal
             responsive: true,
-            maintainAspectRatio: false,
             scales: {
                 x: {
                     beginAtZero: true,
-                    suggestedMax: 1000, // maximum value will be 1000.
-                    suggestedMin: 100, // minimum value will be 100.
+                    barThickness:20,
+                    suggestedMax: 60, // minimum value will be 100.
                 }
             },
         }
