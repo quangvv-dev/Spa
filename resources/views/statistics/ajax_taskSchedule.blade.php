@@ -4,8 +4,6 @@
     }
 </style>
 
-
-
 <div class="row row-cards">
     <div class="col-md-12">
         <div class="fs-20 text-center mt-4 linear-text">BIỂU ĐỒ LỊCH HẸN</div>
@@ -57,7 +55,12 @@
             responsive: true,
             scales: {
                 x: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    minBarLength: 20 // Minimum length for each bar
+                },
+                y: {
+                    barThickness: 30, // Fixed thickness for each bar
+                    maxBarThickness: 40
                 }
             }
         }

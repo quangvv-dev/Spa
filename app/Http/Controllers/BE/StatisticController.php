@@ -266,9 +266,12 @@ class StatisticController extends Controller
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
         $input = $request->all();
-        if (isset($input['location_id'])) {
-            $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
-            $input['group_branch'] = $group_branch;
+        $user = Auth::user();
+        if (count($input) == 2) {
+            $input['branch_id'] = $user->branch_id ?? 1;
+        }
+        if (!in_array($user->department_id, [DepartmentConstant::KE_TOAN, DepartmentConstant::MARKETING, DepartmentConstant::TELESALES]) && ($user->department_id != DepartmentConstant::BAN_GIAM_DOC || ($user->department_id == DepartmentConstant::BAN_GIAM_DOC && $user->branch_id != null))) {
+            $input['branch_id'] = $user->branch_id;
         }
 
         $users = User::select('id', 'full_name', 'phone')->whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])
@@ -281,7 +284,6 @@ class StatisticController extends Controller
         $all_task = [];
         $all_done = [];
         $all_failed = [];
-//            ->map(function ($item) use ($request, $input) {
         foreach ($users as $item) {
             $schedule = Schedule::select('id')->where('person_action', $item->id)->whereBetween('date', [
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",

@@ -3,7 +3,6 @@
     <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
 @endsection
-{{--<script type="text/javascript" src="{{asset('layout/js/chart.js')}}"></script>--}}
 @section('content')
     <div class="col-md-12 col-lg-12" style="margin-top: 3%;">
         <div class="card">
@@ -17,7 +16,7 @@
                         <input id="reportrange" type="text" class="form-control square">
                     </div>
                     <div class="col-lg-3 col-md-3">
-                        {!! Form::select('location_id', $location, null, array('class' => 'form-control location select-gear', 'placeholder' => 'Cụm khu vực')) !!}
+                        {!! Form::select('branch_id', $branchs, 1, array('class' => 'form-control location select-gear', 'placeholder' => '--Chi nhánh--')) !!}
                     </div>
                     <div class="col-lg-2 col-md-6">
                         <button type="submit" class="btn btn-primary"> Tìm kiếm
