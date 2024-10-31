@@ -2,22 +2,17 @@
     .font-30 {
         font-size: 20px;
     }
-
-    .h4.text-center {
-        color: cornflowerblue;
-        font-weight: 600;
-        margin-top: 10px;
-    }
 </style>
 
 
-<div class="h4 text-center">BIỂU ĐỒ</div>
 
 <div class="row row-cards">
     <div class="col-md-12">
+        <div class="fs-20 text-center mt-4 linear-text">BIỂU ĐỒ LỊCH HẸN</div>
         <canvas id="chartSchedule"></canvas>
     </div>
     <div class="col-md-12">
+        <div class="fs-20 text-center mt-4 linear-text">BIỂU ĐỒ CÔNG VIỆC</div>
         <canvas id="chartTask"></canvas>
     </div>
 </div>
