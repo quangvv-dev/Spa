@@ -9,10 +9,10 @@
         <div class="fs-20 text-center mt-4 linear-text">BIỂU ĐỒ LỊCH HẸN</div>
         <canvas id="chartSchedule"></canvas>
     </div>
-    <div class="col-md-12">
-        <div class="fs-20 text-center mt-4 linear-text">BIỂU ĐỒ CÔNG VIỆC</div>
-        <canvas id="chartTask"></canvas>
-    </div>
+{{--    <div class="col-md-12">--}}
+{{--        <div class="fs-20 text-center mt-4 linear-text">BIỂU ĐỒ CÔNG VIỆC</div>--}}
+{{--        <canvas id="chartTask"></canvas>--}}
+{{--    </div>--}}
 </div>
 <script type="text/javascript" src="{{asset('layout/js/chart.js')}}"></script>
 <script type="text/javascript">
@@ -61,43 +61,43 @@
         }
     });
 </script>
-<script type="text/javascript">
-    var ctx = document.getElementById('chartTask').getContext('2d');
+{{--<script type="text/javascript">--}}
+{{--    var ctx = document.getElementById('chartTask').getContext('2d');--}}
 
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: [{!! $name_schedules !!}],
-            datasets: [
+{{--    new Chart(ctx, {--}}
+{{--        type: 'bar',--}}
+{{--        data: {--}}
+{{--            labels: [{!! $name_schedules !!}],--}}
+{{--            datasets: [--}}
 
-                {
-                    label: 'Tổng công việc',
-                    data: [{{$all_task}}],
-                    backgroundColor: '#00AEFF',
-                    borderWidth: 1,
-                },
-                {
-                    label: 'Hoàn thành',
-                    data: [{{$all_done}}],
-                    backgroundColor: '#2bfc6d',
-                    borderWidth: 1,
-                },
-                {
-                    label: 'Quá hạn',
-                    data: [{{$all_failed}}],
-                    backgroundColor: '#ff9643',
-                    borderWidth: 1,
-                }
-            ]
-        },
-        options: {
-            indexAxis: 'y',  // This makes the bar chart horizontal
-            responsive: true,
-            scales: {
-                x: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-</script>
+{{--                {--}}
+{{--                    label: 'Tổng công việc',--}}
+{{--                    data: [{{$all_task}}],--}}
+{{--                    backgroundColor: '#00AEFF',--}}
+{{--                    borderWidth: 1,--}}
+{{--                },--}}
+{{--                {--}}
+{{--                    label: 'Hoàn thành',--}}
+{{--                    data: [{{$all_done}}],--}}
+{{--                    backgroundColor: '#2bfc6d',--}}
+{{--                    borderWidth: 1,--}}
+{{--                },--}}
+{{--                {--}}
+{{--                    label: 'Quá hạn',--}}
+{{--                    data: [{{$all_failed}}],--}}
+{{--                    backgroundColor: '#ff9643',--}}
+{{--                    borderWidth: 1,--}}
+{{--                }--}}
+{{--            ]--}}
+{{--        },--}}
+{{--        options: {--}}
+{{--            indexAxis: 'y',  // This makes the bar chart horizontal--}}
+{{--            responsive: true,--}}
+{{--            scales: {--}}
+{{--                x: {--}}
+{{--                    beginAtZero: true--}}
+{{--                }--}}
+{{--            }--}}
+{{--        }--}}
+{{--    });--}}
+{{--</script>--}}

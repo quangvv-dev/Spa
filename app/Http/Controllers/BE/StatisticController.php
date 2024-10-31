@@ -277,14 +277,14 @@ class StatisticController extends Controller
         $users = User::select('id', 'full_name', 'phone')->whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])
             ->where('active', UserConstant::ACTIVE)->get();
         $name = [];
-        $name_schedules = [];
+//        $name_schedules = [];
         $schedules = [];
         $schedules_buy = [];
         $schedules_cancel = [];
         $schedules_notbuy = [];
-        $all_task = [];
-        $all_done = [];
-        $all_failed = [];
+//        $all_task = [];
+//        $all_done = [];
+//        $all_failed = [];
         foreach ($users as $item) {
             $schedule = Schedule::select('id')->where('person_action', $item->id)->whereBetween('date', [
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",
@@ -295,14 +295,13 @@ class StatisticController extends Controller
                 });
             $schedule2 = clone $schedule;
             $schedule3 = clone $schedule;
-            $task = Task::select('id')->where('user_id', $item->id)->whereBetween('date_from', [
-                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-            ])
-                ->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
-                    $q->whereIn('branch_id', $input['group_branch']);
-                });
-            $task1 = clone $task;
+//            $task = Task::select('id')->where('user_id', $item->id)->whereBetween('date_from', [
+//                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+//                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+//            ])->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+//                    $q->whereIn('branch_id', $input['group_branch']);
+//                });
+//            $task1 = clone $task;
             if ($schedule->count() > 0){
                 $name[] = $item->full_name;
                 $schedules[] = $schedule->count();
@@ -311,36 +310,36 @@ class StatisticController extends Controller
                 $schedules_cancel[] = $schedule3->where('status', 5)->count();
             }
 
-            if ($task->count() > 0){
-                $name_schedules[] = $item->full_name;
-                $all_task[] = $task->count();
-                $all_done[] = $task->where('task_status_id', StatusCode::DONE_TASK)->count();
-                $all_failed[] = $task1->where('task_status_id', StatusCode::FAILED_TASK)->count();
-            }
+//            if ($task->count() > 0){
+//                $name_schedules[] = $item->full_name;
+//                $all_task[] = $task->count();
+//                $all_done[] = $task->where('task_status_id', StatusCode::DONE_TASK)->count();
+//                $all_failed[] = $task1->where('task_status_id', StatusCode::FAILED_TASK)->count();
+//            }
         }
         $name = array_map(function($item) {
             return "'$item'";
         }, $name);
         $name = implode(',', $name);
 
-        $name_schedules = array_map(function($item) {
-            return "'$item'";
-        }, $name_schedules);
-        $name_schedules = implode(',', $name_schedules);
+//        $name_schedules = array_map(function($item) {
+//            return "'$item'";
+//        }, $name_schedules);
+//        $name_schedules = implode(',', $name_schedules);
 
         $schedules = count($schedules)? implode(", ", $schedules) : 0;
         $schedules_buy = count($schedules_buy)? implode(", ", $schedules_buy) : 0;
         $schedules_notbuy = count($schedules_notbuy)? implode(", ", $schedules_notbuy) : 0;
         $schedules_cancel = count($schedules_cancel)? implode(", ", $schedules_cancel) : 0;
-        $all_task = count($all_task)? implode(", ", $all_task) : 0;
-        $all_done = count($all_done)? implode(", ", $all_done) : 0;
-        $all_failed = count($all_failed)? implode(", ", $all_failed) : 0;
+//        $all_task = count($all_task)? implode(", ", $all_task) : 0;
+//        $all_done = count($all_done)? implode(", ", $all_done) : 0;
+//        $all_failed = count($all_failed)? implode(", ", $all_failed) : 0;
 
         if ($request->ajax()) {
-            return view('statistics.ajax_taskSchedule', compact('name', 'schedules', 'schedules_buy', 'schedules_notbuy', 'schedules_cancel', 'all_task', 'all_done', 'all_failed', 'name_schedules'));
+            return view('statistics.ajax_taskSchedule', compact('name', 'schedules', 'schedules_buy', 'schedules_notbuy', 'schedules_cancel'));
         }
 
-        return view('statistics.task_schedule', compact('name', 'schedules', 'schedules_buy', 'schedules_notbuy', 'schedules_cancel', 'all_task', 'all_done', 'all_failed', 'name_schedules'));
+        return view('statistics.task_schedule', compact('name', 'schedules', 'schedules_buy', 'schedules_notbuy', 'schedules_cancel'));
 
     }
 
