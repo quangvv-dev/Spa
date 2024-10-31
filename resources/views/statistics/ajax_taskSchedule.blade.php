@@ -56,11 +56,6 @@
             scales: {
                 x: {
                     beginAtZero: true,
-                    minBarLength: 20 // Minimum length for each bar
-                },
-                y: {
-                    barThickness: 30, // Fixed thickness for each bar
-                    maxBarThickness: 40
                 }
             }
         }
@@ -72,7 +67,7 @@
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: [{!! $name !!}],
+            labels: [{!! $name_schedules !!}],
             datasets: [
 
                 {

@@ -56,7 +56,6 @@
                 $('#start-date').val('').change();
                 $('#end-date').val('').change();
             }
-            // console.log(e.target.id);
 
             let target = $(e.target).parent();
             const data_time = $(target).find('.choose_time').data('time');
