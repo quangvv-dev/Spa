@@ -51,12 +51,11 @@
         },
         options: {
             indexAxis: 'y',  // This makes the bar chart horizontal
-            responsive: true,
+            // responsive: true,
             scales: {
                 x: {
                     beginAtZero: true,
-                    barThickness:20,
-                    suggestedMax: 60, // minimum value will be 100.
+                    barThickness:60,
                 }
             },
         }
