@@ -278,6 +278,9 @@ class StatisticController extends Controller
         $schedules_buy = [];
         $schedules_cancel = [];
         $schedules_notbuy = [];
+        $all_task = [];
+        $all_done = [];
+        $all_failed = [];
 //            ->map(function ($item) use ($request, $input) {
         foreach ($users as $item) {
             $schedule = Schedule::select('id')->where('person_action', $item->id)->whereBetween('date', [
@@ -302,11 +305,10 @@ class StatisticController extends Controller
             $schedules_buy[] = $schedule->where('status', 3)->count();
             $schedules_notbuy[] = $schedule2->where('status', 4)->count();
             $schedules_cancel[] = $schedule3->where('status', 5)->count();
-//            $item->all_task = $task->count();
-//            $item->all_done = $task->where('task_status_id', StatusCode::DONE_TASK)->count();
-//            $item->all_failed = $task1->where('task_status_id', StatusCode::FAILED_TASK)->count();
+            $all_task[] = $task->count();
+            $all_done[] = $task->where('task_status_id', StatusCode::DONE_TASK)->count();
+            $all_failed[] = $task1->where('task_status_id', StatusCode::FAILED_TASK)->count();
         }
-//        })->sortByDesc('all_schedules');
         $name = array_map(function($item) {
             return "'$item'";
         }, $name);
@@ -315,11 +317,14 @@ class StatisticController extends Controller
         $schedules_buy = count($schedules_buy)? implode(", ", $schedules_buy) : 0;
         $schedules_notbuy = count($schedules_notbuy)? implode(", ", $schedules_notbuy) : 0;
         $schedules_cancel = count($schedules_cancel)? implode(", ", $schedules_cancel) : 0;
+        $all_task = count($all_task)? implode(", ", $all_task) : 0;
+        $all_done = count($all_done)? implode(", ", $all_done) : 0;
+        $all_failed = count($all_failed)? implode(", ", $all_failed) : 0;
         if ($request->ajax()) {
-            return view('statistics.ajax_taskSchedule', compact('name', 'schedules', 'schedules_buy', 'schedules_notbuy', 'schedules_cancel'));
+            return view('statistics.ajax_taskSchedule', compact('name', 'schedules', 'schedules_buy', 'schedules_notbuy', 'schedules_cancel', 'all_task', 'all_done', 'all_failed'));
         }
 
-        return view('statistics.task_schedule', compact('name', 'schedules', 'schedules_buy', 'schedules_notbuy', 'schedules_cancel'));
+        return view('statistics.task_schedule', compact('name', 'schedules', 'schedules_buy', 'schedules_notbuy', 'schedules_cancel', 'all_task', 'all_done', 'all_failed'));
 
     }
 
