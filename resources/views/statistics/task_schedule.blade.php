@@ -7,7 +7,7 @@
     <div class="col-md-12 col-lg-12" style="margin-top: 3%;">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title linear-text fs-24 col-md-7">Thống kê công việc & lịch hẹn</h3>
+                <h3 class="card-title linear-text fs-24 col-md-5">Thống kê công việc & lịch hẹn</h3>
                 <div class="col-md-7">
                     {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'row', 'id'=> 'gridForm','role'=>'form')) !!}
                     <div class="col-md-4">
@@ -17,6 +17,9 @@
                     </div>
                     <div class="col-lg-3 col-md-3">
                         {!! Form::select('branch_id', $branchs, 1, array('class' => 'form-control location select-gear', 'placeholder' => '--Chi nhánh--')) !!}
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        {!! Form::select('type_filter', [0 => 'Tổng lịch hẹn',\App\Constants\ScheduleConstant::DEN_MUA => 'Lịch tới mua',\App\Constants\ScheduleConstant::CHUA_MUA => 'Lịch tới k.mua',\App\Constants\ScheduleConstant::HUY => 'Lịch hủy'], 0, array('class' => 'form-control location select-gear', 'placeholder' => '--Kiểu lọc--')) !!}
                     </div>
                     <div class="col-lg-2 col-md-6">
                         <button type="submit" class="btn btn-primary"> Tìm kiếm

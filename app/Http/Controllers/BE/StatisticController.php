@@ -265,7 +265,8 @@ class StatisticController extends Controller
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
-        $input = $request->all();
+        $input = $request->except('type_filter');
+        $type_filter = @$request->type_filter;
         $user = Auth::user();
         if (count($input) == 2) {
             $input['branch_id'] = $user->branch_id ?? 1;
@@ -336,10 +337,10 @@ class StatisticController extends Controller
 //        $all_failed = count($all_failed)? implode(", ", $all_failed) : 0;
 
         if ($request->ajax()) {
-            return view('statistics.ajax_taskSchedule', compact('name', 'schedules', 'schedules_buy', 'schedules_notbuy', 'schedules_cancel'));
+            return view('statistics.ajax_taskSchedule', compact('name', 'schedules', 'schedules_buy', 'schedules_notbuy', 'schedules_cancel','type_filter'));
         }
 
-        return view('statistics.task_schedule', compact('name', 'schedules', 'schedules_buy', 'schedules_notbuy', 'schedules_cancel'));
+        return view('statistics.task_schedule', compact('name', 'schedules', 'schedules_buy', 'schedules_notbuy', 'schedules_cancel','type_filter'));
 
     }
 

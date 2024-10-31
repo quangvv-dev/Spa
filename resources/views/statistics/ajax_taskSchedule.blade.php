@@ -22,36 +22,40 @@
         data: {
             labels: [{!! $name !!}],
             datasets: [
-
-                {
-                    label: 'Tổng lịch hẹn',
-                    data: [{{$schedules}}],
-                    backgroundColor: '#00AEFF',
-                    borderWidth: 1,
-                },
+                @if($type_filter == \App\Constants\ScheduleConstant::DEN_MUA)
                 {
                     label: 'Lịch tới mua',
                     data: [{{$schedules_buy}}],
                     backgroundColor: '#2bfc6d',
                     borderWidth: 1,
                 },
+                @elseif($type_filter == \App\Constants\ScheduleConstant::CHUA_MUA)
                 {
                     label: 'Lịch tới k.mua',
                     data: [{{$schedules_notbuy}}],
                     backgroundColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 1,
                 },
+                @elseif($type_filter == \App\Constants\ScheduleConstant::HUY)
                 {
                     label: 'Lịch hủy',
                     data: [{{$schedules_cancel}}],
                     backgroundColor: '#ccc',
                     borderWidth: 1,
+                },
+                @else
+                {
+                    label: 'Tổng lịch hẹn',
+                    data: [{{$schedules}}],
+                    backgroundColor: '#00AEFF',
+                    borderWidth: 1,
                 }
+                @endif
             ]
         },
         options: {
             indexAxis: 'y',  // This makes the bar chart horizontal
-            // responsive: true,
+            responsive: true,
             scales: {
                 x: {
                     beginAtZero: true,
