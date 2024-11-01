@@ -129,6 +129,7 @@ class SalesController extends Controller
                 $schedules_new = clone $schedules;
                 $schedules_hot = clone $schedules;
 
+                $item->schedules_new = $schedules_new->count();
                 $schedules_new_hot = $schedules_hot->whereHas('customer', function ($qr) use ($request) {
                     $qr->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
                 });
@@ -142,10 +143,6 @@ class SalesController extends Controller
                     })->count();
                 $item->become_buy = $schedules_den->where('status', ScheduleConstant::DEN_MUA)->count();
                 $item->not_buy = $item->schedules_den - $item->become_buy;
-
-                $item->schedules_new = $schedules_new->whereHas('customer', function ($qr) {
-                    $qr->where('old_customer', 0);
-                })->count();
 
                 //lich hen
 
