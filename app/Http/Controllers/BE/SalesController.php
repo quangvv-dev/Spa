@@ -119,7 +119,7 @@ class SalesController extends Controller
                     $item->call2minute = 0;
                 }
 
-                $schedules = Schedule::select('id')->where('creator_id', $item->id)->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+                $schedules = Schedule::select('id')->where('creator_id', $item->id)->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                     ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
                         $q->whereIn('branch_id', $request->group_branch);
                     })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
