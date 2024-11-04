@@ -119,17 +119,19 @@ class SalesController extends Controller
                     $item->call2minute = 0;
                 }
 
-                $schedules = Schedule::select('id')->where('creator_id', $item->id)->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+                $schedulesAll = Schedule::select('id')->where('creator_id', $item->id)
                     ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
                         $q->whereIn('branch_id', $request->group_branch);
                     })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
                         $q->where('branch_id', $request->branch_id);
                     });
-                $schedules_den = clone $schedules;
-                $schedules_new = clone $schedules;
+                $schedules = clone $schedulesAll;
+                $schedules = $schedules->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
+
+                $schedules_den = $schedulesAll->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
                 $schedules_hot = clone $schedules;
 
-                $item->schedules_new = $schedules_new->count();
+                $item->schedules_new = $schedules_hot->count();// lịch được tạo trong time lọc
                 $schedules_new_hot = $schedules_hot->whereHas('customer', function ($qr) use ($request) {
                     $qr->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
                 });
