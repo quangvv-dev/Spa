@@ -282,8 +282,10 @@ class SalesController extends Controller
                     $q->whereIn('branch_id', $request->group_branch);
                 });
             $schedules_new = $schedules->whereIn('user_id', $data_new);
+
             $item->schedules_new = $schedules_new->count();//lich hen
-            $item->become = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();//lich hen
+
+            $item->become = $schedules_new->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();//lich hen
 
             $detail = OrderDetail::select('order_id', \DB::raw('SUM(total_price) AS all_total'), \DB::raw('COUNT(order_id) AS COUNTS'))->whereIn('booking_id', $booking)
                 ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
