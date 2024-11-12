@@ -119,19 +119,17 @@ class SalesController extends Controller
                     $item->call2minute = 0;
                 }
 
-                $schedulesAll = Schedule::select('id')->where('creator_id', $item->id)
+                $schedules = Schedule::select('id')->where('creator_id', $item->id)->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                     ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
                         $q->whereIn('branch_id', $request->group_branch);
                     })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
                         $q->where('branch_id', $request->branch_id);
                     });
-                $schedules = clone $schedulesAll;
-                $schedules = $schedules->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
-
-                $schedules_den = $schedulesAll->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
+                $schedules_den = clone $schedules;
+                $schedules_new = clone $schedules;
                 $schedules_hot = clone $schedules;
 
-                $item->schedules_new = $schedules_hot->count();// lịch được tạo trong time lọc
+                $item->schedules_new = $schedules_new->count();
                 $schedules_new_hot = $schedules_hot->whereHas('customer', function ($qr) use ($request) {
                     $qr->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
                 });
@@ -140,9 +138,10 @@ class SalesController extends Controller
                 $item->schedules_hot_mua = $schedules_new_hot->whereIn('status', [ScheduleConstant::DEN_MUA])->count();
 
                 $item->schedules_den = $schedules_den->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
-                    ->whereHas('customer', function ($qr) {
-                        $qr->where('old_customer', 0);
-                    })->count();
+//                    ->whereHas('customer', function ($qr) {
+//                        $qr->where('old_customer', 0);
+//                    })
+                    ->count();
                 $item->become_buy = $schedules_den->where('status', ScheduleConstant::DEN_MUA)->count();
                 $item->not_buy = $item->schedules_den - $item->become_buy;
 
@@ -282,10 +281,8 @@ class SalesController extends Controller
                     $q->whereIn('branch_id', $request->group_branch);
                 });
             $schedules_new = $schedules->whereIn('user_id', $data_new);
-
             $item->schedules_new = $schedules_new->count();//lich hen
-
-            $item->become = $schedules_new->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();//lich hen
+            $item->become = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();//lich hen
 
             $detail = OrderDetail::select('order_id', \DB::raw('SUM(total_price) AS all_total'), \DB::raw('COUNT(order_id) AS COUNTS'))->whereIn('booking_id', $booking)
                 ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
