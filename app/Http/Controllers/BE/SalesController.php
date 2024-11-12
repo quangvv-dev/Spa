@@ -138,9 +138,9 @@ class SalesController extends Controller
                 $item->schedules_hot_mua = $schedules_new_hot->whereIn('status', [ScheduleConstant::DEN_MUA])->count();
 
                 $item->schedules_den = $schedules_den->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
-//                    ->whereHas('customer', function ($qr) {
-//                        $qr->where('old_customer', 0);
-//                    })
+                    ->whereHas('customer', function ($qr) {
+                        $qr->where('old_customer', 0);// ẩn đi là chỉ số chung ra đúng
+                    })
                     ->count();
                 $item->become_buy = $schedules_den->where('status', ScheduleConstant::DEN_MUA)->count();
                 $item->not_buy = $item->schedules_den - $item->become_buy;
