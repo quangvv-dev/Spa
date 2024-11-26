@@ -295,3 +295,26 @@ select.form-control:not([size]):not([multiple]) {
     font-size: 14px;
     font-weight: 500;
 }
+.pp-phone {
+    display: none !important;
+}
+
+.pp-callee-info {
+    display: none !important;
+}
+
+#pwBackground {
+    /*top: 10px;*/
+    left: 0px !important;
+    bottom: unset;
+}
+
+#ppContainer {
+    position: fixed;
+    left: 0px !important;
+    /*top: 70px;*/
+    bottom: unset;
+    width: 250px;
+    height: 380px;
+    z-index: 99999;
+}

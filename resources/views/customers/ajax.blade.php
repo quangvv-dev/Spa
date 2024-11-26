@@ -244,10 +244,11 @@
                     <td class="text-center phone-customer {{in_array(3,$user_filter_grid) ? '':'display-none'}}" data-customer-id="{{ $customer->id }}">
                         <a href="callto:{{ $customer->phone }}">{{auth()->user()->permission('phone.open')? $customer->phone: str_limit($customer->phone,7,'xxx') }}
                         </a>
-                        <a href=""><i style="color: red !important" class="{!! $customer->is_duplicate == 1 ? "fa fa fa-copy" :'' !!}"></i></a>
-                        @if(!empty($customer->call_back))
-                            <span><i class="fas fa-phone call-back" data-id="{{$customer->call_back}}" style="cursor: pointer;color: red !important;"></i></span>
-                        @endif
+                        <span><i id="callButton" class="fas fa-phone" data-phone="{{$customer->phone}}" style="cursor: pointer"></i></span>
+{{--                        <a href=""><i style="color: red !important" class="{!! $customer->is_duplicate == 1 ? "fa fa fa-copy" :'' !!}"></i></a>--}}
+{{--                        @if(!empty($customer->call_back))--}}
+{{--                            <span><i class="fas fa-phone call-back" data-id="{{$customer->call_back}}" style="cursor: pointer;color: red !important;"></i></span>--}}
+{{--                        @endif--}}
                     </td>
                 @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::MARKETING)
                         <td class="text-center {{in_array(4,$user_filter_grid) ? '':'display-none'}}" style="position: relative;max-width: 146px">

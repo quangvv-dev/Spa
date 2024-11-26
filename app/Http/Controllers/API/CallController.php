@@ -27,12 +27,51 @@ class CallController extends BaseApiController
      */
     public function hangUp(Request $request)
     {
-        if ($request->api_key != md5('quangphuong9685@gmail.com')) {
+        if ($request->api_key != md5('quangphuong9685@gmail.com') && $request->header('authorization') != md5('quangphuong9685@gmail.com')) {
             return $this->responseApi(ResponseStatusCode::UNAUTHORIZED, 'API KEY WRONG');
         }
         $server = setting('server_call_center');
         if (isset($server) && $server == StatusCode::SERVER_GTC_TELECOM) {
-            $input = self::gtgTelecomData($request);
+            $status = $request->CallStatus == 'Answered' ? 'ANSWERED' : 'MISSED CALL';
+            $direction = $request->Direction == 'Outgoing' ? 'INBOUND' : 'MISSED CALL';
+            $input = [
+                'caller_id'     => $request->CallId,
+                'call_type'     => $direction,
+                'start_time'    => $request->CallDate . ' ' . $request->CallDateTimeStart,
+                'caller_number' => $request->ExtensionNumber,
+                'dest_number'   => str_replace('+84', '0', $request->PhoneNumber),
+                'answer_time'   => $request->Duration,
+                'call_status'   => $status,
+                'recording_url' => $request->RecordingPath,
+            ];
+        } elseif (isset($server) && $server == StatusCode::SERVER_CGV_TELECOM) {
+
+            switch (strtoupper($request->status)) {
+                case 'ANSWERED':
+                    $status = 'ANSWERED';
+                    break;
+                case 'PHONE BLOCK':
+                case 'CONGESTION':
+                case 'FAILED':
+                case 'CANCEL':
+                case 'NO ANSWERED':
+                case 'BUSY':
+                    $status = 'MISSED CALL';
+                    break;
+                default:
+                    $status = 'NOT-AVAILABLE';
+            }
+
+            $input = [
+                'caller_id'     => $request->call_id,
+                'call_type'     => strtoupper($request->direction),
+                'start_time'    => $request->time_started,
+                'caller_number' => $request->from_number,
+                'dest_number'   => $request->to_number,
+                'answer_time'   => $request->billsec??$request->duration,
+                'call_status'   => $status,
+                'recording_url' => $request->recording_url,
+            ];
         } else {
             $input = $request->only('caller_number', 'answer_time', 'dest_number', 'call_status', 'recording_url',
                 'caller_id', 'call_type', 'start_time');
@@ -41,26 +80,13 @@ class CallController extends BaseApiController
             }
         }
 
-        $isset = CallCenter::where('caller_id', $request->caller_id)->first();
+        $isset = CallCenter::where('caller_id', $input['caller_id'])->first();
         if (empty($isset)) {
             if ($request->call_type != 'INBOUND') {
-                $call_exits = CallCenter::where('dest_number', $input['dest_number'])->exists();
-                if (!$call_exits && !empty(setting('miss_call_sms'))) {
-                    $text = Functions::vi_to_en(setting('miss_call_sms'));
-                    $err = Functions::sendSmsV3($input['dest_number'], @$text);
-                    if (isset($err) && $err) {
-                        HistorySms::insert([
-                            'phone' => $input['dest_number'],
-                            'campaign_id' => 0,
-                            'message' => $text,
-                            'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
-                            'updated_at' => Carbon::now('Asia/Ho_Chi_Minh'),
-                        ]);
-                    }
-                }
                 CallCenter::create($input);
             } else {
-                return $this->responseApi(ResponseStatusCode::MOVED_PERMANENTLY, 'CRM NOT SAVE INBOUND', $request->all());
+                return $this->responseApi(ResponseStatusCode::MOVED_PERMANENTLY, 'CRM NOT SAVE INBOUND',
+                    $request->all());
             }
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $request->all());
 

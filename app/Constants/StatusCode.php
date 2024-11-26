@@ -74,4 +74,6 @@ class StatusCode
     // Server Call Center
     const SERVER_3CX = 1;
     const SERVER_GTC_TELECOM = 2;
+
+    const SERVER_CGV_TELECOM = 3;
 }

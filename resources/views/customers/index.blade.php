@@ -61,6 +61,10 @@
             $("#search").focus();
         });
         function requestMicrophoneAccess() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alertify.error('Trình duyệt của bạn không hỗ trợ microphone. !');
+                return;
+            }
             navigator.mediaDevices.getUserMedia({audio: true})
                 .then(function (stream) {
                     console.log('Microphone đã được kết nối');
@@ -86,7 +90,6 @@
             const OriginalWebSocket = window.WebSocket;
             window.WebSocket = function(url, protocols) {
                 const wsInstance = new OriginalWebSocket(url, protocols);
-
                 wsInstance.addEventListener('message', function(event) {
 
                     const lines = event.data.split('\r\n');
@@ -123,6 +126,7 @@
             $(document).on('click','#callButton',function () {
                 let phone = $(this).data('phone');
                 phone = phone.split(' ').join('');
+                console.log(phone,'phone');
                 pitelSDK.call(phone, {
                     extraHeaders: ['x-PROCESS-ID: 123'],
                     earlyMedia: true
