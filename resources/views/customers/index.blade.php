@@ -1030,22 +1030,22 @@
                     $(target).find(".name-customer").append(html);
                 });
             });
-            $(document).on('dblclick', '.phone-customer', function (e) {
-                let target = $(e.target).parent();
-                $(target).find('.phone-customer').empty();
-                let id = $(this).data('customer-id');
-                let html = '';
-
-                $.ajax({
-                    url: "ajax/customers/" + id,
-                    method: "get",
-                    data: {id: id}
-                }).done(function (data) {
-
-                    html += `<textarea data-id=` + data.id + ` class="phone-result" style="width: auto; height: 58px; font-size: 14px; overflow-y: hidden;"> ` + data.phone + `</textarea>`;
-                    $(target).find(".phone-customer").append(html);
-                });
-            });
+            // $(document).on('dblclick', '.phone-customer', function (e) {
+            //     let target = $(e.target).parent();
+            //     $(target).find('.phone-customer').empty();
+            //     let id = $(this).data('customer-id');
+            //     let html = '';
+            //
+            //     $.ajax({
+            //         url: "ajax/customers/" + id,
+            //         method: "get",
+            //         data: {id: id}
+            //     }).done(function (data) {
+            //
+            //         html += `<textarea data-id=` + data.id + ` class="phone-result" style="width: auto; height: 58px; font-size: 14px; overflow-y: hidden;"> ` + data.phone + `</textarea>`;
+            //         $(target).find(".phone-customer").append(html);
+            //     });
+            // });
 
             $(document).on('focusout', '.handsontableInput', function (e) {
                 let target = $(e.target).parent();
