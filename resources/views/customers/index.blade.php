@@ -113,14 +113,16 @@
         setTimeout(function(){
             let caller_number = '{{\Illuminate\Support\Facades\Auth::user()->caller_number}}';
             let pitelP = '{{\Illuminate\Support\Facades\Auth::user()->pitel_password}}';
+
             let sdkOptions = {
                 enableWidget: true,
                 sipOnly: true,
-                sipDomain: 'gtg.vn',
+                sipDomain: 'tintam.vn:50061',
                 wsServer: "wss://cgvcall.mobilesip.vn:7444",
                 sipPassword: pitelP
             }
-            let pitelSDK = new PitelSDK('gtg.vn', 'xxx', caller_number, {}, sdkOptions)// số máy nhân viên
+            let pitelSDK = new PitelSDK('tintam.vn', 'xxx', caller_number, {}, sdkOptions) // số máy nhân viên
+
             // Gọi hàm khi nhấn nút
             requestMicrophoneAccess();
             $(document).on('click','#callButton',function () {
