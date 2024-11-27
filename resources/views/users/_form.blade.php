@@ -11,7 +11,7 @@
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">
-            <div class=" tab-menu-heading">
+            <div class=" tab-menu-heading" style="border: none !important;">
                 <div class="tabs-menu1 ">
                     <!-- Tabs -->
                     <ul class="nav panel-tabs">
@@ -19,9 +19,9 @@
                             <a href="" class="nav-link active" >Thông tin tài khoản</a>
                         </li>
                         @if(isset($user))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{url('personal/salary/'.$user->id)}}">Bảng lương</a>
-                                </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{url('personal/salary/'.$user->id)}}">Bảng lương</a>
+                            </li>
                             @if (auth()->user()->permission('personal.index'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{url('personal/'.$user->id)}}">Hồ sơ</a>
@@ -35,7 +35,7 @@
                 </div>
             </div>
 
-        @if (isset($user))
+            @if (isset($user))
                 {!! Form::model($user, array('url' => url('users/'.$user->id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
             @else
                 {!! Form::open(array('url' => route('users.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
@@ -69,7 +69,7 @@
                             <option value="">Tất cả chi nhánh</option>
                             @forelse($branchs as $k => $item)
                                 <option
-                                        {{@$user->branch_id==$k?'selected':''}} value="{{$k}}">{{$item}}
+                                    {{@$user->branch_id==$k?'selected':''}} value="{{$k}}">{{$item}}
                                 </option>
                             @empty
                             @endforelse
@@ -78,11 +78,11 @@
                     </div>
                 </div>
                 {{--<div class="col-xs-12 col-md-6">--}}
-                    {{--<div class="form-group required {{ $errors->has('email') ? 'has-error' : '' }}">--}}
-                        {{--{!! Form::label('email', 'Email', array('class' => ' required')) !!}--}}
-                        {{--{!! Form::email('email', null, array('id' => 'email', 'class' => 'form-control')) !!}--}}
-                        {{--<span class="help-block">{{ $errors->first('email', ':message') }}</span>--}}
-                    {{--</div>--}}
+                {{--<div class="form-group required {{ $errors->has('email') ? 'has-error' : '' }}">--}}
+                {{--{!! Form::label('email', 'Email', array('class' => ' required')) !!}--}}
+                {{--{!! Form::email('email', null, array('id' => 'email', 'class' => 'form-control')) !!}--}}
+                {{--<span class="help-block">{{ $errors->first('email', ':message') }}</span>--}}
+                {{--</div>--}}
                 {{--</div>--}}
 
                 <div class="col-xs-12 col-md-6">
@@ -112,8 +112,16 @@
                         <div class="col-xs-4 col-md-4">
                             <div class="form-group required {{ $errors->has('caller_number') ? 'has-error' : '' }}">
                                 {!! Form::label('', 'Mã máy tổng đài (nếu có)') !!}
-                                <input type="text" id="phone_center" class="form-control" value="{{isset($user)?@$user->caller_number:''}}" name=caller_number>
+                                <input type="text" id="phone_center" class="form-control" value="{{isset($user)?@$user->caller_number:''}}"
+                                    {{\Illuminate\Support\Facades\Auth::user()->department_id!=\App\Constants\UserConstant::ADMIN ?'disabled':'name=caller_number'}} >
                                 <span class="help-block">{{ $errors->first('caller_number', ':message') }}</span>
+                            </div>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                            <div class="form-group required {{ $errors->has('pitel_password') ? 'has-error' : '' }}">
+                                {!! Form::label('', 'Mật khẩu tổng đài') !!}
+                                <input type="password" name="pitel_password" class="form-control" value="{{isset($user)?@$user->pitel_password:''}}">
+                                <span class="help-block">{{ $errors->first('pitel_password', ':message') }}</span>
                             </div>
                         </div>
                         <div class="col-xs-4 col-md-4">
@@ -123,14 +131,14 @@
                                 <span class="help-block">{{ $errors->first('code', ':message') }}</span>
                             </div>
                         </div>
-                        <div class="col-xs-4 col-md-4">
-                            <div class="form-group required {{ $errors->has('approval_code') ? 'has-error' : '' }}">
-                                {!! Form::label('', 'Mã chấm công (nếu có)') !!}
-                                <input type="text" id="approval_code" class="form-control" value="{{isset($user)?@$user->approval_code:''}}"
-                                       name='approval_code'>
-                                <span class="help-block">{{ $errors->first('approval_code', ':message') }}</span>
-                            </div>
-                        </div>
+                        {{--                        <div class="col-xs-4 col-md-4">--}}
+                        {{--                            <div class="form-group required {{ $errors->has('approval_code') ? 'has-error' : '' }}">--}}
+                        {{--                                {!! Form::label('', 'Mã chấm công (nếu có)') !!}--}}
+                        {{--                                <input type="text" id="approval_code" class="form-control" value="{{isset($user)?@$user->approval_code:''}}"--}}
+                        {{--                                       name='approval_code'>--}}
+                        {{--                                <span class="help-block">{{ $errors->first('approval_code', ':message') }}</span>--}}
+                        {{--                            </div>--}}
+                        {{--                        </div>--}}
                     </div>
                 </div>
 
@@ -169,7 +177,7 @@
                             <option value="">Chọn cụm</option>
                             @forelse($location as $k => $item)
                                 <option
-                                        {{@$user->branch_id==$k?'selected':''}} value="{{$k}}">{{$item}}
+                                    {{@$user->branch_id==$k?'selected':''}} value="{{$k}}">{{$item}}
                                 </option>
                             @empty
                             @endforelse
@@ -201,7 +209,7 @@
 
             </div>
             <div class="col" style="margin-bottom: 10px;">
-                <button type="submit" class="btn btn-success">Lưu</button>
+                <button type="submit" class="btn btn-primary">Lưu</button>
                 <a href="{{route('users.index')}}" class="btn btn-danger">Trở lại</a>
             </div>
 

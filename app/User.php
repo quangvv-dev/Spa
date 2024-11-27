@@ -55,6 +55,7 @@ class User extends Authenticatable
         'approval_code',
         'name_display',
         'code',
+        'pitel_password'
     ];
 
     /**
