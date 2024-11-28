@@ -230,8 +230,8 @@
                         </a>
                         <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
                         <span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>
-                        <a target="_blank" href="https://zalo.me/{{@$customer->phone}}">
-                            <img width="15" height="15" src="{{asset('assets/images/zalo_icon.png')}}">
+                        <a class="zalo-qr" href="javascript:void(0)" data-phone="{{$customer->phone}}" data-account="{{@$customer->account_code}}">
+                            <img width="20" height="20" src="{{asset('assets/images/zalo_icon.png')}}">
                         </a>
                         @if(@$customer->facebook)
                             <a target="_blank" href="{{@$customer->facebook}}">

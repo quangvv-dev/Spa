@@ -217,6 +217,7 @@
             @include('customers.modal-update-account-manager')
             @include('customers.modal-branch')
             @include('kanban_board.modal')
+            @include('customers._include.modal_qr')
             <input type="hidden" id="status">
             <input type="hidden" id="invalid_account">
             <input type="hidden" id="group">
@@ -230,10 +231,39 @@
     </div>
 @endsection
 @section('_script')
+    <script type="text/javascript" src="{{asset('assets/js/qr-code-styling.min.js')}}"></script>
     <script type="text/javascript">
-
         $("#search").focus();
         $(function () {
+            $(document).on('click', '.zalo-qr', function (e) {
+                e.preventDefault();
+                $('#qrcodeTable').find('canvas').remove();
+                const text = "https://zalo.me/"+$(this).data('phone');
+                const account = "Khách hàng:"+$(this).data('account');
+                $('.title-code').html(account);
+                const qrCode = new QRCodeStyling({
+                    width: 200,
+                    height: 200,
+                    type: "canvas",
+                    data: text,
+                    image: "{{asset('assets/images/zalo-qr.png')}}",
+                    dotsOptions: {
+                        type: "rounded"
+                    },
+                    cornersSquareOptions: {
+                        type: "rounded"
+                    },
+                    imageOptions: {
+                        hideBackgroundDots: true,
+                    },
+                    backgroundOptions: {
+                        round: 0,
+                        color: "#ffffff"
+                    }
+                });
+                qrCode.append(document.getElementById("qrcodeTable"));
+                $('#modal_qrcode').modal('show');
+            });
             $(document).on('click', '.view_modal', function (e) {
                 e.preventDefault();
 
