@@ -117,7 +117,7 @@
             let sdkOptions = {
                 enableWidget: true,
                 sipOnly: true,
-                sipDomain: 'tintam.vn',
+                sipDomain: 'ext@tintam.vn',
                 wsServer: "wss://cgvcall.mobilesip.vn:7444",
                 sipPassword: pitelP
             }
