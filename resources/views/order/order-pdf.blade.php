@@ -68,7 +68,7 @@
                     </tr>
                     <tr class="font12">
                         <td class="padding5">Khách hàng : {{ @$order->customer->full_name }}</td>
-                        <td class="padding5">SĐT: {{ @$order->customer->phone }}</td>
+                        <td class="padding5">MãKH: {{ @$order->customer->account_code }}</td>
                     </tr>
                     </tbody>
                 </table>
