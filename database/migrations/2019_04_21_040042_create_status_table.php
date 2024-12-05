@@ -15,9 +15,10 @@ class CreateStatusTable extends Migration
     {
         Schema::create('status', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('code');
-            $table->integer('type');
+            $table->string('name');//ten trang thai
+            $table->string('code'); //ma trang thai
+            $table->string('color')->nullable(); //mau background trang thai
+            $table->integer('type');//loai trang thai
         });
     }
 

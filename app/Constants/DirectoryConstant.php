@@ -28,4 +28,9 @@ class DirectoryConstant
      * @var string
      */
     const USER_IMAGE = '/images/users/';
+    const PERSONAL_IMAGE = '/images/users/personal/';
+
+    const DOCUMENT_FILE = '/documents';
+    const COMMENT_IMAGE = '/images/comment-images/';
+    const CATEGORY_IMAGE = '/images/categories/';
 }

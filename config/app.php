@@ -70,7 +70,33 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Ho_Chi_Minh',
+
+    /*
+	|--------------------------------------------------------------------------
+	| VNPAY
+	|--------------------------------------------------------------------------
+	|
+    |
+	|
+	*/
+    'VNP_HASH_SECRET' => env('VNP_HASHSECRET', 'EYNZLCMUOZSLXLELATOJMFADBNHWCOSF'),
+    'VNP_TMN_CODE' => env('VNP_TMN_CODE', '7GAY9V0X'),
+    'VNP_URL' => env('VNP_URL', 'http://sandbox.vnpayment.vn/paymentv2/vpcpay.html'),
+    'VNP_RETURN_URL' => env('VNP_RETURN_URL', 'https://thammyroyal.adamtech.vn/vnpay'),
+
+    'ZALOPAY_APP_ID' => env('ZALOPAY_APP_ID', 2554),
+    'ZALOPAY_KEY1' => env('ZALOPAY_APP_ID', 'sdngKKJmqEMzvh5QQcdD2A9XBSKUNaYn'),
+    'ZALOPAY_KEY2' => env('ZALOPAY_APP_ID', 'trMrHtvjo6myautxDUiAcYsVtaeQ8nhf'),
+
+    'SERVER_KEY_FIREBASE' => env('SERVER_KEY_FIREBASE', 'AAAAEW-inhE:APA91bGs0Q22Q6edvM83RJ8Dlqt9EZ32mA-EvIDHpdKG_VHNel-32-vd2Xqz-pf_8ata2f3oWSngnSuB9DZtEY8JORGOhxKbrmtTZGwcpxobkk1XfoD4AoBDE4zd2pmE0dAN_tdilv0K'),
+
+//    'VNP_HASH_SECRET' => env('VNP_HASHSECRET','EYNZLCMUOZSLXLELATOJMFADBNHWCOSF'),
+//    'VNP_TMN_CODE' => env('VNP_TMN_CODE','7GAY9V0X'),
+//    //    'VNP_HASH_SECRET' => env('VNP_HASHSECRET','LUPRRUNBMGQGSMFGSTLEBQYHIUFLZRLU'),
+//    //    'VNP_TMN_CODE' => env('VNP_TMN_CODE','BFZRN5IK'),
+//    'VNP_URL' => env('VNP_URL','http://sandbox.vnpayment.vn/paymentv2/vpcpay.html'),
+//    'VNP_RETURN_URL' => env('VNP_RETURN_URL','https://training.adamtech.vn/vnpay'),
 
     /*
     |--------------------------------------------------------------------------
@@ -96,7 +122,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'vi',
 
     /*
     |--------------------------------------------------------------------------
@@ -164,12 +190,15 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
+        Laravel\Socialite\SocialiteServiceProvider::class,
 
         /*
          * Package Service Providers...
          */
         Tungltdev\LaravelSettings\SettingsServiceProvider::class,
-        Tungltdev\JWT\JwtAuthTokenProvider::class,
+        Tungltdev\LARAVEL\JWT\JwtAuthTokenProvider::class,
+//        Brokenice\LaravelMysqlPartition\PartitionServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -178,6 +207,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Berkayk\OneSignal\OneSignalServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class
 
     ],
 
@@ -230,9 +261,14 @@ return [
         'Validator'    => Illuminate\Support\Facades\Validator::class,
         'View'         => Illuminate\Support\Facades\View::class,
 
-        'Settings'     => Tungltdev\LaravelSettings\Facades\Settings::class,
-        'Form'         => Collective\Html\FormFacade::class,
-        'Html'         => Collective\Html\HtmlFacade::class,
+        'Settings'  => Tungltdev\LaravelSettings\Facades\Settings::class,
+        'Form'      => Collective\Html\FormFacade::class,
+        'Html'      => Collective\Html\HtmlFacade::class,
+        'Excel'     => Maatwebsite\Excel\Facades\Excel::class,
+        'Setting'   => anlutro\LaravelSettings\Facade::class,
+        'OneSignal' => Berkayk\OneSignal\OneSignalFacade::class,
+        'Image'     => Intervention\Image\Facades\Image::class,
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
     ],
 

@@ -60,6 +60,19 @@ class Filesystem
     {
         return $this->saveUploadedFile($input, DirectoryConstant::USER_IMAGE);
     }
+    public function uploadImageCustom($input,$folders)
+    {
+        return $this->saveUploadedFile($input, $folders);
+    }
+
+    public function uploadDocumentFile($input)
+    {
+        return $this->saveUploadedFile($input, DirectoryConstant::DOCUMENT_FILE);
+    }
+    public function uploadCommentImage($input)
+    {
+        return $this->saveUploadedFile($input, DirectoryConstant::COMMENT_IMAGE);
+    }
 
     /**
      * @param \Illuminate\Http\uploadVideo|array $input

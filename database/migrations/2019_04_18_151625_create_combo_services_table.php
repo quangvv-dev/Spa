@@ -15,7 +15,7 @@ class CreateComboServicesTable extends Migration
     {
         Schema::create('combo_services', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('service_id'); // mang id
+            $table->text('service_id')->comment('mảng id service'); // mang id
             $table->integer('price'); // mang id
             $table->text('description'); // mang id
             $table->timestamps();

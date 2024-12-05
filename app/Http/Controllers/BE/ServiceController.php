@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\StatusCode;
 use App\Models\Category;
 use App\Models\Services as Service;
+use App\Models\Trademark;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Helpers\Functions;
+use Illuminate\Support\Facades\Response;
 
 class ServiceController extends Controller
 {
@@ -15,30 +18,45 @@ class ServiceController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('permission:services.list', ['only' => ['index']]);
+        $this->middleware('permission:services.edit', ['only' => ['edit']]);
+        $this->middleware('permission:services.add', ['only' => ['create']]);
+        $this->middleware('permission:services.delete', ['only' => ['destroy']]);
+
         $this->list[0] = ('category.parent');
-        $categories = Category::orderBy('id', 'desc')->get()->pluck('name', 'id')->prepend('--Chọn--', '')->toArray();
+        $categories = Category::where('type', StatusCode::SERVICE)->orderBy('id', 'desc')->pluck('name', 'id')->prepend('--Chọn--', '')->toArray();
+        $trademarks = Trademark::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
         view()->share([
             'category_pluck' => $categories,
+            'trademarks' => $trademarks,
         ]);
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     * @throws \Throwable
      */
     public function index(Request $request)
     {
-        $docs = Service::orderBy('id', 'desc');
-        if ($request->search) {
-            $user = $docs->where('name', 'like', '%' . $request->search . '%')
-                ->orwhere('code', 'like', '%' . $request->search . '%')
-                ->orwhere('trademark', 'like', '%' . $request->search . '%')
-                ->orwhere('enable', 'like', '%' . $request->search . '%');
-        }
-        $docs = $docs->paginate(10);
+        $input = $request->all();
+        $docs = Service::where('type', StatusCode::SERVICE)->orderByDesc('images')->orderBy('id', 'desc')
+            ->when(isset($input['category_id']) && $input['category_id'], function ($q) use ($input) {
+                $q->where('category_id', $input['category_id']);
+            })->when(isset($input['search']) && $input['search'], function ($q) use ($input) {
+                $q->where('name', 'like', '%' . $input['search'] . '%')
+                    ->orwhere('code', 'like', '%' . $input['search'] . '%')
+                    ->orwhere('trademark', 'like', '%' . $input['search'] . '%')
+                    ->orwhere('enable', 'like', '%' . $input['search'] . '%');
+            });
+        $docs = $docs->paginate(StatusCode::PAGINATE_10);
         $title = 'Quản lý dịch vụ';
-        return view('service.index', compact('title', 'docs'));
+        if ($request->ajax()) {
+            return Response::json(view('service.ajax', compact('input', 'docs', 'title'))->render());
+        }
+        return view('service.index', compact('input', 'title', 'docs'));
     }
 
     /**
@@ -48,7 +66,7 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        $title = 'Thêm trạng thái';
+        $title = 'Thêm dịch vụ';
         return view('service._form', compact('title'));
     }
 
@@ -105,7 +123,7 @@ class ServiceController extends Controller
     public function edit(Service $service)
     {
         $doc = $service;
-        $title = 'Cập nhật trạng thái';
+        $title = 'Cập nhật dịch vụ';
         return view('service._form', compact('title', 'doc'));
     }
 
@@ -113,15 +131,15 @@ class ServiceController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Service $service)
     {
         $request->merge([
-            'price_buy'       => $request->price_buy ? str_replace(',', '', $request->price_buy) : 0,
-            'price_sell'      => $request->price_sell ? str_replace(',', '', $request->price_sell) : 0,
+            'price_buy' => $request->price_buy ? str_replace(',', '', $request->price_buy) : 0,
+            'price_sell' => $request->price_sell ? str_replace(',', '', $request->price_sell) : 0,
             'promotion_price' => $request->promotion_price ? str_replace(',', '', $request->promotion_price) : 0,
         ]);
         $image = Functions::checkUploadImage($request, $service, 'services');
@@ -139,7 +157,6 @@ class ServiceController extends Controller
      */
     public function destroy(Request $request, Service $service)
     {
-//        dd($service);
         if ($service->images) {
             foreach ($service->images as $k => $v) {
                 Functions::unlinkUpload('services', @$v);

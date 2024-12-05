@@ -5,44 +5,43 @@ namespace App\Http\Controllers\BE;
 use App\Components\Filesystem\Filesystem;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
-use App\Helpers\Functions;
 use App\Http\Requests\UserRequest;
-use App\Models\Category;
-use App\Models\Status;
+use App\Models\Branch;
+use App\Models\Department;
+use App\Models\Location;
+use App\Models\Role;
+use App\Models\TeamMember;
+use App\Services\UserService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
+
 class UserController extends Controller
 {
-    /**
-     * @var Filesystem
-     */
-    private $fileUpload;
+    private $userService;
 
     /**
      * UserController constructor.
      *
      * @param Filesystem $fileUpload
      */
-    public function __construct(Filesystem $fileUpload)
+    public function __construct(UserService $userService)
     {
-        $this->fileUpload = $fileUpload;
-        $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray();//mối quan hệ
-        $group = Category::pluck('name', 'id')->toArray();//nhóm KH
-        $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
-        $branch = Status::where('type', StatusCode::BRANCH)->pluck('name', 'id')->toArray();// chi nhánh
-        $marketingUsers = User::where('role', UserConstant::MARKETING)->pluck('full_name', 'id')->toArray();
-        $telesales = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
-        view()->share([
-            'status'         => $status,
-            'group'          => $group,
-            'source'         => $source,
-            'branch'         => $branch,
-            'telesales'      => $telesales,
-            'marketingUsers' => $marketingUsers,
+        $this->middleware('permission:users.list', ['only' => ['index']]);
+        $this->middleware('permission:users.edit', ['only' => ['edit']]);
+        $this->middleware('permission:users.add', ['only' => ['create']]);
+        $this->middleware('permission:users.delete', ['only' => ['destroy']]);
+
+        $this->userService = $userService;
+        $branchs = Branch::search()->pluck('name', 'id');
+        $location = Location::select('id', 'name')->pluck('name', 'id')->toArray();
+
+        \View::share([
+            'branchs' => $branchs,
+            'location' => $location
         ]);
     }
 
@@ -50,42 +49,28 @@ class UserController extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     * @throws \Throwable
      */
     public function index(Request $request)
     {
-        $users = User::with('status', 'marketing');
-        $title = 'Quản lý người dùng';
-        if (Auth::user()->role == UserConstant::MARKETING || Auth::user()->role == UserConstant::TELESALES) {
-            $users = $users->where('role', UserConstant::CUSTOMER)->where('mkt_id',Auth::user()->id);
-            $title = "Tạo khách hàng mới";
-        } elseif (Auth::user()->role == UserConstant::WAITER) {
-            $users = $users->where('role', UserConstant::CUSTOMER);
-        } else {
-            $users = $users->where('role', '<>', UserConstant::ADMIN);
+        $department = Department::select('id', 'name')->pluck('name', 'id')->toArray();
+        $input = $request->all();
+        $branch_id = Auth::user()->branch_id;
+        if (!empty($branch_id)) {
+            $input['branch_id'] = $branch_id;
         }
-
-        $search = $request->search;
-        if ($search) {
-            $users = $users->where(function ($query) use ($search) {
-                $query->where('full_name', 'like', '%' . $search . '%')
-                    ->orWhere('phone', 'like', '%' . $search . '%');
-            });
-        }
-        $status = $request->status;
-        if ($status) {
-            $users->where('status_id', $status);
-        }
-
-        $users = $users->latest('id')->paginate(10);
-
+        $users = User::search($input);
+        $users2 = clone $users;
+        $statistics = [
+            'all' => $users->count(),
+            'active' => $users2->where('active', UserConstant::ACTIVE)->count(),
+        ];
+        $users = $users->paginate(StatusCode::PAGINATE_10);
         if ($request->ajax()) {
-            return Response::json(view('users.ajax', compact('users', 'title'))->render());
+            return Response::json(view('users.ajax', compact('department', 'users', 'statistics'))->render());
         }
-
-
-        return view('users.index', compact('users', 'title'));
+        return view('users.index', compact('department', 'users', 'statistics'));
     }
 
     /**
@@ -96,40 +81,22 @@ class UserController extends Controller
     public function create()
     {
         $title = 'Thêm người dùng';
-        return view('users._form', compact('title'));
+        $departments = Department::pluck('name', 'id');
+        return view('users._form', compact('title', 'departments'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param User                     $user
-     *
-     * @return \Illuminate\Http\Response
+     * @param UserRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(UserRequest $request)
     {
-        @$date = Functions::yearMonthDay($request->birthday);
         $input = $request->except('image');
-        $marketingUser = Auth::user()->id;
-        $input['active'] = UserConstant::ACTIVE;
-        $input['birthday'] = isset($date) && $date ? $date : '';
-        $input['password'] = bcrypt($request->password);
+        $input['image'] = $request->image;
 
-        if ($request->image) {
-            $input['avatar'] = $this->fileUpload->uploadUserImage($request->image);
-        }
-
-        if ($request->role == null) {
-            $input['role'] = UserConstant::CUSTOMER;
-        }
-        $dataUser = User::create($input);
-        if ($request->mkt_id == null && Auth::user()->role == UserConstant::MARKETING) {
-            $dataUser->update([
-                'mkt_id' => $marketingUser,
-            ]);
-        }
-
+        $this->userService->create($input);
         return redirect('users')->with('status', 'Tạo người dùng thành công');
     }
 
@@ -154,42 +121,37 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $user['birthday'] = Functions::dayMonthYear($user->birthday);
         $title = 'Sửa người dùng';
-        return view('users._form', compact('user', 'title'));
+        $departments = Department::pluck('name', 'id');
+        $role = Role::where('department_id', $user->department_id)->get();
+
+        return view('users._form', compact('user', 'title', 'departments', 'role'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param User                     $user
-     *
-     * @return \Illuminate\Http\Response
+     * @param UserRequest $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(UserRequest $request, User $user)
+    public function update(UserRequest $request, $id)
     {
-        $input = $request->except('image');
-        @$date = Functions::yearMonthDay($request->birthday);
-        $input['birthday'] = isset($date) && $date ? $date : '';
-        $input['password'] = bcrypt($request->password);
+        $input = $request->except('image', 'confirm_password');
+        $input['image'] = $request->image;
+        $input['password'] = $request->password;
 
-        if ($request->image) {
-            $input['avatar'] = $this->fileUpload->uploadUserImage($request->image);
-        }
-
-        $user->update($input);
+        $this->userService->update($input, $id);
 
         return redirect(route('users.index'))->with('status', 'Cập nhật người dùng thành công');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete
      *
      * @param Request $request
-     * @param User    $user
-     *
-     * @return void
+     * @param User $user
+     * @throws \Exception
      */
     public function destroy(Request $request, User $user)
     {
@@ -197,6 +159,12 @@ class UserController extends Controller
         $request->session()->flash('error', 'Xóa người dùng thành công!');
     }
 
+    /**
+     * Check trùng data
+     *
+     * @param Request $request
+     * @return string
+     */
     public function checkUnique(Request $request)
     {
         $phone = $request->phone;
@@ -206,31 +174,52 @@ class UserController extends Controller
         })->when($email, function ($query, $email) {
             $query->where('email', $email);
         })->first();
+
         if ($result) {
             return $result->id == $request->id ? 'true' : 'false';
         }
         return 'true';
     }
 
-    public function getEditProfile($id)
+    /**
+     * get list user role sale
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAllUserDepartmentNotTeam(Request $request)
     {
-        $title = 'Cập nhật thông tin';
-        $user = User::findOrFail($id);
-        return view('profiles._form', compact('user', 'title'));
+        $team_member = TeamMember::all()->pluck('user_id')->toArray();
+        $user = User::where('department_id', $request->department)->whereNotIn('id', $team_member)->where('active', StatusCode::ON)->get();
+        return response()->json([
+            'user' => $user
+        ]);
     }
 
-    public function postEditProfile($id, UserRequest $request)
+
+    /**
+     * get danh sách user trong team chọn và user chưa có trong team nào.
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAllUserDepartmentTeam(Request $request)
     {
-        $user = User::findOrFail($id);
-        $input = $request->except('image');
-        $input['password'] = bcrypt($request->password);
+        $user_team_member_id = TeamMember::where('team_id', $request->team_id)->pluck('user_id')->toArray();
+        $user_team = User::whereIn('id', $user_team_member_id)->where('active', StatusCode::ON)->get();
+        $team_member = TeamMember::all()->pluck('user_id')->toArray();
+        $user = User::where('department_id', $request->department)->whereNotIn('id', $team_member)->where('active', StatusCode::ON)->get();
+        $user = $user->merge($user_team);
+        return response()->json([
+            'user' => $user
+        ]);
+    }
 
-        if ($request->image) {
-            $input['avatar'] = $this->fileUpload->uploadUserImage($request->image);
-        }
-
-        $user->update($input);
-
-        return redirect('/')->with('status', 'Cập nhật thông tin thành công');
+    public function activeUser(Request $request, $id)
+    {
+        User::find($id)->update($request->only('active'));
+        return response()->json([
+            'code' => 200
+        ]);
     }
 }

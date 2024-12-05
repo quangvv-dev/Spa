@@ -12,11 +12,12 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
-    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+    <meta property="og:image" content="{{!empty(setting('logo_website')) ? setting('logo_website'):'/assets/images/brand/logo.png'}}"/>
+    <link rel="icon" href="{{!empty(setting('logo_website')) ? setting('logo_website'):'/assets/images/brand/logo.png'}}" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" href="{{!empty(setting('logo_website')) ? setting('logo_website'):'/assets/images/brand/logo.png'}}" />
 
     <!-- Title -->
-    <title>Hệ Thống Spa Linh anh, chuyên nghiệp, uy tín...</title>
+    <title>{{!empty(setting('title_website'))?setting('title_website'):'Hệ Thống Royal Spa'}}</title>
 
     <!--Font Awesome-->
     <link href="assets/plugins/fontawesome-free/css/all.css" rel="stylesheet">
@@ -40,24 +41,21 @@
 <body class="login-img bg-gradient">
 <!-- Header Background Animation-->
 <div id="particles-js"  class=""></div>
-<div id="global-loader" ><div class="showbox"><div class="lds-ring"><div></div><div></div><div></div><div></div></div></div></div>
 <div class="page">
     <div class="page-single">
         <div class="container">
             <div class="row">
                 <div class="col col-login mx-auto">
-{{--                    <div class="text-center mb-6 ">--}}
-{{--                        <img src="assets/images/brand/logo_login.png" class="h-6" alt="">--}}
-{{--                    </div>--}}
+
                     @if ($errors->has('phone') || $errors->has('password'))
                         <div class="alert alert-danger" role="alert" style="font-size: 14px">
                             {{ $errors->first() }}
                         </div>
                     @endif
                     <form class="card" method="POST" action="{{ url('login') }}">
-                        {{ csrf_field() }}
+                        @csrf
                         <div class="card-body p-6">
-                            <img src="assets/images/brand/logo_login.png" class="h-6" alt="">
+                            <img src="{{!empty(setting('logo_website')) ? setting('logo_website'):'/assets/images/brand/logo.png'}}" class="h-6" alt="">
 
                             <div class="card-title text-center">Đăng nhập vào hệ thống</div>
                             <div class="form-group {{ $errors->has('phone') ? ' has-error' : '' }}">
