@@ -205,12 +205,12 @@ class ChatController extends Controller
         $comment = Comment::where('page_id', $request->page_id)->where('post_id', $request->post_id)
             ->where('FB_ID', $request->FB_ID)->first();
 
-        $data_content = array([
+        $data_content = [[
             'created_time' => date('Y-m-d H:i:s'),
             'message' => $request->snippet,
             'comment_id' => $request->comment_id,
             'parent_id' => $request->parent_id
-        ]);
+        ]];
         if ($comment) {
             $data_push = json_decode($comment->content);
             if ($request->snippet != $comment->snippet) {
