@@ -19,4 +19,16 @@ class UserConstant
     const WAITER = 4;//ROLE LỄ TÂN
     const TECHNICIANS = 5;//ROLE KỸ THUẬT VIÊN
     const CUSTOMER = 6;//ROLE KHÁCH HÀNG
+    const CSKH = 7;//TƯ VẤN VIÊN CSKH
+    const TP_SALE = 8;//TƯ VẤN VIÊN CSKH
+    const TP_MKT = 9;//TƯ VẤN VIÊN CSKH
+    const QLCN = 10;//Quản lý chi nhánh
+    const TP_CSKH = 12;//TƯ VẤN VIÊN CSKH
+
+
+    const IS_LEADER = 1;//TRƯỞNG PHÒNG
+    const EMPLOYEE = 0;//NHÂN VIÊN
+
+    const PHONG_CSKH = 4; //Phòng ban CSKH
+    const PHONG_TVV = 7; //Phòng ban Tư vấn viên
 }

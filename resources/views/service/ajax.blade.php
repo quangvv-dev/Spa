@@ -4,9 +4,8 @@
         <tr>
             <th class="text-white">STT</th>
             <th class="text-white">Ảnh</th>
-            <th class="text-white text-center">Tên dịch vụ</th>
-            <th class="text-white text-center">Mã dịch vụ</th>
-{{--            <th class="text-white text-center">Mô tả ngắn</th>--}}
+            <th class="text-white text-center">Tên</th>
+            <th class="text-white text-center">Mã</th>
             <th class="text-white text-center">Nhà cung cấp</th>
             <th class="text-white text-center">Thuộc danh mục</th>
             <th class="text-white text-center">Trạng thái</th>
@@ -21,12 +20,11 @@
                     <th scope="row">
                         <img src="{{App\Helpers\Functions::getImageModels($s,'services','images')}}" class="rounded-circle" height="60" width="60" />
                     </th>
-                    <td class="text-center">{{$s->name}}</td>
-                    <td class="text-center">{{$s->code}}</td>
-{{--                    <td class="text-center">{{$s->description}}</td>--}}
-                    <td class="text-center">{{$s->trademark}}</td>
-                    <td class="text-center">{{$s->category->name}}</td>
-                    <td class="text-center">{{$s->active_text}}</td>
+                    <td class="text-center">{{@$s->name}}</td>
+                    <td class="text-center">{{@$s->code}}</td>
+                    <td class="text-center">{{@$s->trademarks->name}}</td>
+                    <td class="text-center">{{@$s->category->name}}</td>
+                    <td class="text-center">{{@$s->active_text}}</td>
                     <td class="text-center">
                         <a class="btn" href="{{ url('services/' . $s->id . '/edit') }}"><i
                                     class="fas fa-edit"></i></a>
@@ -48,6 +46,6 @@
         </div>
     </div>
     <div class="pull-right">
-        {{ $docs->appends(['search' => request()->search ])->links() }}
+        {{ $docs->appends(['category_id' => @$input['category_id'],'search' => @$input['search'] ])->links() }}
     </div>
 </div>

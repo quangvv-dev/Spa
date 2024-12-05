@@ -1,0 +1,16 @@
+.tableFixHead thead th {
+    position: sticky;
+    top: 0;
+    color: #fff;
+    vertical-align: middle;
+    white-space: normal;
+    z-index: 1;
+}
+
+.page-header {
+    margin: 1.5rem 0 0.5rem;
+}
+
+.display-none{
+    display: none;
+}
