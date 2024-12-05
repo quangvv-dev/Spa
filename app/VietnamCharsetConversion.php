@@ -2,8 +2,8 @@
 
 namespace App;
 class VietnamCharsetConversion {
-    private $charmap = Array(
-        'unicode' => Array(
+    private $charmap = [
+        'unicode' => [
             'ạ','ã','ả','á','à',
             'Ạ','Ã','Ả','Á','À',
             'ặ','ẵ','ẳ','ắ','ằ','ă',
@@ -29,8 +29,8 @@ class VietnamCharsetConversion {
             'Ự','Ữ','Ử','Ứ','Ừ','Ư',
             'ỵ','ỹ','ỷ','ý','ỳ',
             'Ỵ','Ỹ','Ỷ','Ý','Ỳ'
-        ),
-        'virq' => Array(
+        ],
+        'virq' => [
             'a.','a~','a?',"a'",'a`',
             'A.','A~','A?',"A'",'A`',
             'a(.','a(~','a(?',"a('",'a(`','a(',
@@ -56,8 +56,8 @@ class VietnamCharsetConversion {
             'U+.','U+~',"U+?","U+'",'U+`','U+',
             'y.','y~',"y?","y'",'y`',
             'Y.','Y~',"Y?","Y'",'Y`'
-        ),
-        'vnet' => Array(
+        ],
+        'vnet' => [
             'aò','aÞ','aÒ','aì','aÌ',
             'Aò','AÞ','AÒ','Aì','AÌ',
             'ãò','ãÞ','ãÒ','ãì','ãÌ','ã',
@@ -83,8 +83,8 @@ class VietnamCharsetConversion {
             'Ýò','ÝÞ','ÝÒ','Ýì','ÝÌ','Ý',
             'yò','yÞ','yÒ','yì','yÌ',
             'Yò','YÞ','YÒ','Yì','YÌ'
-        ),
-        'vni' => Array(
+        ],
+        'vni' => [
             'aï','aõ','aû','aù','aø',
             'AÏ','AÕ','AÛ','AÙ','AØ',
             'aë','aü','aú','aé','aè','aê',
@@ -110,8 +110,8 @@ class VietnamCharsetConversion {
             'ÖÏ','ÖÕ','ÖÛ','ÖÙ','ÖØ','Ö',
             'î','yõ','yû','yù','yø',
             'Î','YÕ','YÛ','YÙ','YØ'
-        ),
-        'ascii' => Array(
+        ],
+        'ascii' => [
             'a','a','a','a','a',
             'A','A','A','A','A',
             'a','a','a','a','a','a',
@@ -137,8 +137,8 @@ class VietnamCharsetConversion {
             'U','U','U','U','U','U',
             'y','y','y','y','y',
             'Y','Y','Y','Y','Y'
-        )
-    );
+        ]
+    ];
     private $input;
     function __construct($input = NULL) {
         $this->input = $input;
@@ -148,14 +148,14 @@ class VietnamCharsetConversion {
         if($input == NULL){
             $input = $this->input;
         }
-        $map = array();
+        $map = [];
         foreach($this->charmap[$from] as $key=>$value){
             $map[$value] = $this->charmap[$to][$key];
         }
         if($to == 'unicode' || $to == 'ascii') {
             $input = str_replace(
-                array("I'M","I'm","'ve","'ll","n't","'VE","'LL","N'T","'RE","'re"),
-                array("I___M", "I___m","___ve","___ll","n___t","___VE","___LL","N___T","___RE","___re"),
+                ["I'M","I'm","'ve","'ll","n't","'VE","'LL","N'T","'RE","'re"],
+                ["I___M", "I___m","___ve","___ll","n___t","___VE","___LL","N___T","___RE","___re"],
                 $input
             );
             $input = strtr($input,$map);
