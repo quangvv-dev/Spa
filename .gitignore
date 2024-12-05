@@ -9,6 +9,7 @@
 /.vscode
 /.vagrant
 .env
+.composer*
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml

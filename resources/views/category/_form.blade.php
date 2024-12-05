@@ -1,4 +1,5 @@
 @extends('layout.app')
+<link href="{{ asset(('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.css')) }}" rel="stylesheet"/>
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">
@@ -30,9 +31,38 @@
                 @endif
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group {{ $errors->has('parent_id') ? 'has-error' : '' }}">
-                        {!! Form::label('parent_id','Danh mục cha', array('class' => 'required')) !!}
+                        {!! Form::label('parent_id','Danh mục cha') !!}
                         {!! Form::select('parent_id',$category_pluck, @$doc->parent_id, array('class' => 'form-control select2')) !!}
                         <span class="help-block">{{ $errors->first('parent_id', ':message') }}</span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-md-6">
+                    <div class="form-group required {{ $errors->has('price') ? 'has-error' : '' }}">
+                        {!! Form::label('price', 'Giá công KTV') !!}
+                        {!! Form::text('price',@number_format($doc->price), array('class' => 'form-control price', 'required' => true)) !!}
+                        <span class="help-block">{{ $errors->first('price', ':message') }}</span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-md-6">
+                    <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
+                        {!! Form::label('avatar', 'Ảnh thumbnail') !!}
+                        <div class="fileupload fileupload-{{isset($doc) ? 'exists' : 'new' }}"
+                             data-provides="fileupload">
+                            <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px">
+                                @if (isset($doc))
+                                    <img src="{{ $doc->image }}" alt="image"/>
+                                @endif
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-default btn-file">
+                                    <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Chọn ảnh</span>
+                                    <span class="fileupload-exists"><i class="fa fa-undo"></i> Thay đổi</span>
+                                    <input type="file" name="image" accept="image/*" class="btn-default upload"/>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -46,7 +76,16 @@
     </div>
 @endsection
 @section('_script')
+    <script src="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.js') }}"></script>
+
+    <script src="{{ asset('js/format-number.js') }}"></script>
     <script>
+        $('body').on('keyup', '.price', function (e) {
+            let price = $(this).val();
+            price = formatNumber(price);
+            $(this).val(price);
+        })
+
         $(document).ready(function () {
             $('form#fvalidate').validate({
                 rules: {

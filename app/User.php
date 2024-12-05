@@ -2,8 +2,18 @@
 
 namespace App;
 
+use App\Constants\StatusCode;
 use App\Constants\UserConstant;
-use App\Models\Status;
+use App\Models\Branch;
+use App\Models\ChamCong;
+use App\Models\Department;
+use App\Models\DonTu;
+use App\Models\Location;
+use App\Models\PersonalImage;
+use App\Models\Role;
+use App\Models\Team;
+use App\Models\UserPersonal;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,6 +21,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Notifiable;
+    use SoftDeletes;
 
     protected $table = 'users';
     /**
@@ -32,7 +43,19 @@ class User extends Authenticatable
         'password',
         'group_id',
         'source_id',
+        'telesales_id',
+        'department_id',
         'branch_id',
+        'address',
+        'account_code',
+        'description',
+        'facebook',
+        'caller_number',
+        'location_id',
+        'approval_code',
+        'name_display',
+        'code',
+        'pitel_password'
     ];
 
     /**
@@ -54,15 +77,25 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function status()
+    public static function search($param)
     {
-        return $this->belongsTo(Status::class, 'status_id', 'id');
+        $data = self::when(isset($param['search']), function ($query) use ($param) {
+            $query->where('full_name', 'like', '%' . $param['search'] . '%')
+                ->orWhere('phone', 'like', '%' . $param['search'] . '%');
+        })->when(isset($param['branch_id']) && $param['branch_id'], function ($q) use ($param) {
+            $q->where('branch_id', $param['branch_id']);
+        })->when(isset($param['department_id']) && $param['department_id'], function ($q) use ($param) {
+            $q->where('department_id', $param['department_id']);
+        })->when(isset($param['group_branch']) && $param['group_branch'], function ($q) use ($param) {
+            $q->whereIn('branch_id', $param['group_branch']);
+        })->when(isset($param['active']), function ($q) use ($param) {
+            $q->where('active', $param['active']);
+        })
+            ->latest('id');
+
+        return $data;
     }
 
-    public function marketing()
-    {
-        return $this->belongsTo(User::class, 'mkt_id');
-    }
 
     public function getGenderTextAttribute()
     {
@@ -74,46 +107,69 @@ class User extends Authenticatable
         return $this->active == UserConstant::ACTIVE ? 'Hoạt động' : 'Không hoạt động';
     }
 
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_id', 'id');
+    }
+
+    public function personal()
+    {
+        return $this->hasOne(UserPersonal::class);
+    }
+
+    public function personal_image()
+    {
+        return $this->hasMany(PersonalImage::class);
+    }
+
     public function getRoleTextAttribute()
     {
-        if ($this->role == UserConstant::ADMIN) {
-            return 'Admin';
-        }
-
-        if ($this->role == UserConstant::MARKETING) {
-            return 'Marketing';
-        }
-
-        if ($this->role == UserConstant::TELESALES) {
-            return 'Telesales';
-        }
-
-        if ($this->role == UserConstant::WAITER) {
-            return 'Lễ tân';
-        }
-
-        if ($this->role == UserConstant::TECHNICIANS) {
-            return 'Kỹ thuật viên';
-        }
-        if ($this->role == UserConstant::CUSTOMER) {
-            return 'Khách hàng';
-        }
+        $role = Role::select('name')->find($this->role);
+        return isset($role) ? $role->name : '';
     }
 
-    public function getStatisticsUsers()
+    public function roles()
     {
-        return $this->with('marketing')->select('mkt_id', \DB::raw('count(id) as count'))
-            ->whereNotNull('mkt_id')
-            ->groupBy('mkt_id');
+        return $this->belongsTo(Role::class, 'role', 'id');
     }
 
-//    public function getDateAttribute()
-//    {
-//        return \Carbon\Carbon::parse($this->birthday)->format('d-m-y');
-//    }
-//
-//    public function setDateAttribute()
-//    {
-//        return \Carbon\Carbon::parse($this->birthday)->format('Y-m-d');
-//    }
+    public function permission($permission = null)
+    {
+        @$pers = @json_decode($this->roles->permissions, true);
+        if (is_array($pers)) {
+            return in_array($permission, $pers);
+        } else {
+            return 0;
+        }
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id', 'id');
+    }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
+    }
+
+    public function chamCong()
+    {
+        return $this->hasMany(ChamCong::class, 'approval_code', 'approval_code');
+    }
+
+    public function donTu()
+    {
+        return $this->hasMany(DonTu::class);
+    }
+
+    public function isLeader()
+    {
+        return $this->hasOne(Team::class, 'leader_id', 'id');
+    }
+
+    public function isLeaderAdmin() // trưởng phòng do code set
+    {
+        return $this->is_leader == 1;
+    }
 }

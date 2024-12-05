@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Constants;
+
+class BankContants
+{
+    public const bank = [
+        'ICB' => '(970415)VietinBank',
+        'VCB' => '(970436) Vietcombank',
+        'BIDV' => '(970418) BIDV',
+        'VBA' => '(970405) Agribank',
+        'OCB' => '(970448) OCB',
+        'MB' => '(970422) MBBank',
+        'TCB' => '(970407) Techcombank',
+        'ACB' => '(970416) ACB',
+        'VPB' => '(970432) VPBank',
+        'TPB' => '(970423) TPBank',
+        'STB' => '(970403) Sacombank',
+        'HDB' => '(970437) HDBank',
+        'VCCB' => '(970454) VietCapitalBank',
+        'SCB' => '(970429) SCB',
+        'VIB' => '(970441) VIB',
+        'SHB' => '(970443) SHB',
+        'EIB' => '(970431) Eximbank',
+        'MSB' => '(970426) MSB',
+        'CAKE' => '(546034) CAKE',
+        'Ubank' => '(546035) Ubank',
+        'SGICB' => '(970400) SaigonBank',
+        'BAB' => '(970409) BacABank',
+        'PVCB' => '(970412) PVcomBank',
+        'Oceanbank' => '(970414) Oceanbank',
+        'NCB' => '(970419) NCB',
+        'SHBVN' => '(970424) ShinhanBank',
+        'ABB' => '(970425) ABBANK',
+        'VAB' => '(970427) VietABank',
+        'NAB' => '(970428) NamABank',
+        'PGB' => '(970433) VietBank',
+        'BVB' => '(970438) BaoVietBank',
+        'SEAB' => '(970440) SeABank',
+        'COOPBANK' => '(970446) COOPBANK',
+        'LPB' => '(970449) LienVietPostBank',
+        'KLB' => '(970452) KienLongBank',
+        'KBank' => '(668888) KBank',
+        'HSBC' => '(458761) HSBC',
+        'GPB' => '(970408) GPBank',
+        'DOB' => '(970406) DongABank',
+        'DBS' => '(796500) DBSBank',
+        'CIMB' => '(422589) CIMB',
+        'CBB' => '(970444) CBBank',
+        'CITIBANK' => '(533948) Citibank',
+    ];
+}
