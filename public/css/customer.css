@@ -303,18 +303,18 @@ select.form-control:not([size]):not([multiple]) {
     display: none !important;
 }
 
-#pwBackground {
-    /*top: 10px;*/
-    left: 0px !important;
-    bottom: unset;
-}
+/*#pwBackground {*/
+/*    !*top: 10px;*!*/
+/*    left: 0px !important;*/
+/*    bottom: unset;*/
+/*}*/
 
-#ppContainer {
-    position: fixed;
-    left: 0px !important;
-    /*top: 70px;*/
-    bottom: unset;
-    width: 250px;
-    height: 380px;
-    z-index: 99999;
-}
+/*#ppContainer {*/
+/*    position: fixed;*/
+/*    left: 0px !important;*/
+/*    !*top: 70px;*!*/
+/*    bottom: unset;*/
+/*    width: 250px;*/
+/*    height: 380px;*/
+/*    z-index: 99999;*/
+/*}*/
