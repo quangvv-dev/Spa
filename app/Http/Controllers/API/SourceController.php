@@ -41,6 +41,7 @@ class SourceController extends Controller
             $data['source_id'] = 30;
             $data['source_fb'] = $source->id;
             $data['status_id'] = Functions::getStatusWithCode('moi');
+            $data['carepage_id'] = $source->mkt_id;
             $data['mkt_id'] = $source->mkt_id;
             $data['telesales_id'] = count($sales) > 2 ? $sales[$source->position] : $sales[0];
             $data['gender'] = 0;
