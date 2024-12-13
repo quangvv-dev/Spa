@@ -32,7 +32,7 @@ class SourceController extends Controller
             if (empty($request->phone) || empty($request->name)) {
                 return response()->json([
                     'code' => 400,
-                    'messages' => 'NOT FOND PHONE OR NAME',
+                    'messages' => 'NOT FOUND PHONE OR NAME',
                 ]);
             }
 
