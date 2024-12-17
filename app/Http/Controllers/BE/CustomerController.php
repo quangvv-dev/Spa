@@ -848,6 +848,9 @@ class CustomerController extends Controller
             ]);
         }
         if (isset($request->cskh_id)) {
+            Task::where('customer_id', $request->ids)->where('task_status_id', StatusCode::NEW_TASK)->update([
+                'user_id' => $request->cskh_id,
+            ]);
             $customer->update([
                 'cskh_id' => $request->cskh_id,
             ]);
