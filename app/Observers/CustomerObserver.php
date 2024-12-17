@@ -3,16 +3,12 @@
 namespace App\Observers;
 
 use App\Constants\DepartmentConstant;
-use App\Constants\NotificationConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Customer;
-use App\Models\HistorySms;
 use App\Models\HistoryStatus;
-use App\Models\Notification;
 use App\Models\RuleOutput;
-use App\Models\SchedulesSms;
 use App\Models\Status;
 use App\Services\FirebaseService;
 use App\Services\TaskService;

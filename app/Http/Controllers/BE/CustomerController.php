@@ -36,6 +36,7 @@ use App\Models\UserFilterGrid;
 use App\Models\WalletHistory;
 use App\Services\CustomerService;
 use App\Models\RuleOutput;
+use App\Services\FirebaseService;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -837,7 +838,7 @@ class CustomerController extends Controller
      *
      * @param Request $request
      */
-    public function updateMultipleStatus(Request $request)
+    public function updateMultipleStatus(Request $request, FirebaseService $firebaseService)
     {
         $customer = Customer::whereIn('id', $request->ids);
 //        $clone = clone $customer;
@@ -854,6 +855,11 @@ class CustomerController extends Controller
             $customer->update([
                 'cskh_id' => $request->cskh_id,
             ]);
+            $data = [
+                'title' => 'Bạn được phân bổ thêm (' . count($request->ids) . ') khách hàng',
+                'url'   => route('customers.index'),
+            ];
+            $firebaseService->setupReference('notification/' . $request->cskh_id, $data);
         }
 
         if (isset($request->telesales_id)) {
